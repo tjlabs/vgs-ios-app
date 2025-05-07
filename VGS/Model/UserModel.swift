@@ -8,3 +8,10 @@ struct UserProfile {
         self.carNumber = carNumber
     }
 }
+
+
+struct SelectCellItem {
+    var carNumber: String = ""
+    var company: String = ""
+    var carType: String = ""
+}
