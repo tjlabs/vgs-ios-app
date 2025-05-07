@@ -25,12 +25,20 @@ class LoginView: UIView {
         return view
     }()
     
+    private var carNumberHintLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.notoSansMedium(size: 32)
+        label.textColor = UIColor(hex: "#BDBDBD")
+        label.textAlignment = .left
+        label.text = "정보를 입력해주세요"
+        return label
+    }()
+    
     private let carNumberTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.notoSansMedium(size: 32)
         textField.textAlignment = .left
         textField.textColor = .black
-        textField.placeholder = "정보를 입력해주세요"
         textField.backgroundColor = .clear
         return textField
     }()
@@ -84,9 +92,9 @@ class LoginView: UIView {
     
     init() {
         super.init(frame: .zero)
-
         setupLayout()
         bindActions()
+        loadUserProfile()
     }
     
     required init?(coder: NSCoder) {
@@ -106,6 +114,12 @@ class LoginView: UIView {
             make.leading.trailing.equalToSuperview().inset(40)
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.height.equalTo(75)
+        }
+        
+        carNumberContainerView.addSubview(carNumberHintLabel)
+        carNumberHintLabel.snp.makeConstraints{ make in
+            make.leading.trailing.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview()
         }
         
         carNumberContainerView.addSubview(carNumberTextField)
@@ -156,9 +170,28 @@ class LoginView: UIView {
     }
     
     private func bindActions() {
+        bindTextField()
         setupKeyboardDismissal()
         setupSaveAction()
+        setupLoginAction()
     }
+    
+    private func bindTextField() {
+        carNumberTextField.rx.text.orEmpty
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] text in
+                guard let self = self else { return }
+                self.carNumberHintLabel.isHidden = !text.isEmpty
+                // 유효성 검사 통과 후 다시 색상 초기화
+                if !text.isEmpty {
+                    self.lineView.backgroundColor = .black
+                    self.carNumberHintLabel.textColor = UIColor(hex: "#BDBDBD")
+                    self.carNumberHintLabel.text = "정보를 입력해주세요"
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
     
     private func setupKeyboardDismissal() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -194,5 +227,56 @@ class LoginView: UIView {
                 self.checkBoxImageView.transform = .identity
             }
         })
+    }
+    
+    private func loadUserProfile() {
+        UserManager.shared.loadProfileFromCache()
+        if UserManager.shared.isLoadFromCache {
+            self.carNumberTextField.text = UserManager.shared.userProfile.carNumber
+            handleCheckboxToggle()
+        }
+    }
+    
+    private func setupLoginAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLoginButton))
+        loginButton.isUserInteractionEnabled = true
+        loginButton.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleLoginButton() {
+        _ = validateUser()
+        UIView.animate(withDuration: 0.1,
+                       animations: {
+            self.loginButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.loginButton.transform = .identity
+            }
+        })
+    }
+    
+    private func validateUser() -> Bool {
+        guard let text = carNumberTextField.text, !text.isEmpty else {
+            applyInvalidUserUI()
+            return false
+        }
+
+        let containsWhitespace = text.contains { $0.isWhitespace }
+        let containsSpecialCharacters = text.range(of: "[^가-힣a-zA-Z0-9]", options: .regularExpression) != nil
+        
+        if containsWhitespace || containsSpecialCharacters {
+            applyInvalidUserUI()
+            return false
+        }
+
+        return true
+    }
+    
+    private func applyInvalidUserUI() {
+        carNumberTextField.text = ""
+        lineView.backgroundColor = .red
+        carNumberHintLabel.textColor = .red
+        carNumberHintLabel.text = "잘못된 입력"
+        carNumberHintLabel.isHidden = false
     }
 }
