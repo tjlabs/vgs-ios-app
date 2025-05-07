@@ -232,7 +232,9 @@ class LoginView: UIView {
     private func loadUserProfile() {
         UserManager.shared.loadProfileFromCache()
         if UserManager.shared.isLoadFromCache {
+            print("LoginView : userProfile = \(UserManager.shared.userProfile)")
             self.carNumberTextField.text = UserManager.shared.userProfile.carNumber
+            self.carNumberHintLabel.isHidden = true
             handleCheckboxToggle()
         }
     }
@@ -244,7 +246,7 @@ class LoginView: UIView {
     }
     
     @objc func handleLoginButton() {
-        _ = validateUser()
+        let isValid = validateUser()
         UIView.animate(withDuration: 0.1,
                        animations: {
             self.loginButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -253,6 +255,12 @@ class LoginView: UIView {
                 self.loginButton.transform = .identity
             }
         })
+        
+        if isValid {
+            UserManager.shared.userProfile.carNumber = self.carNumberTextField.text ?? ""
+            UserManager.shared.saveProfileToCache()
+            showSelectView()
+        }
     }
     
     private func validateUser() -> Bool {
@@ -278,5 +286,19 @@ class LoginView: UIView {
         carNumberHintLabel.textColor = .red
         carNumberHintLabel.text = "잘못된 입력"
         carNumberHintLabel.isHidden = false
+    }
+    
+    private func showSelectView() {
+        let cellItems: [SelectCellItem] = [SelectCellItem(carNumber: "07도3687", company: "TJLABS", carType: "래미콘"),
+                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
+                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
+                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
+                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
+                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘")]
+        let selctView = SelectView(items: cellItems)
+        addSubview(selctView)
+        selctView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
     }
 }
