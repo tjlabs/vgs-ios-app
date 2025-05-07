@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		051B9445EF41089A7D1DC26B /* Pods_VGS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC46623DD0295E631EBD08F0 /* Pods_VGS.framework */; };
+		0C6E3FF16A854355DC2E77E8 /* Pods_VGSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B5D39F7958E128CDF20268 /* Pods_VGSTests.framework */; };
+		9D654482674D91959632C0AB /* Pods_VGS_VGSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92700F37C95BC784FA5A7391 /* Pods_VGS_VGSUITests.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B33A9E3E2DCAF44000E093E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,9 +30,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0275F270C22CD6CD1EE86C49 /* Pods-VGSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGSTests.debug.xcconfig"; path = "Target Support Files/Pods-VGSTests/Pods-VGSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		05B5D39F7958E128CDF20268 /* Pods_VGSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VGSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FC8EEAC7D1F7B22ECE5605A /* Pods-VGS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS.release.xcconfig"; path = "Target Support Files/Pods-VGS/Pods-VGS.release.xcconfig"; sourceTree = "<group>"; };
+		3895C93C936673679D2F3DBB /* Pods-VGS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS.debug.xcconfig"; path = "Target Support Files/Pods-VGS/Pods-VGS.debug.xcconfig"; sourceTree = "<group>"; };
+		3A2BEC5FE8FEAC52999B3530 /* Pods-VGS-VGSUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.debug.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		47CDE3E678343F8AAEAB6E4D /* Pods-VGSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGSTests.release.xcconfig"; path = "Target Support Files/Pods-VGSTests/Pods-VGSTests.release.xcconfig"; sourceTree = "<group>"; };
+		66FB55932848D3BBA6EABF7F /* Pods-VGS-VGSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.release.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.release.xcconfig"; sourceTree = "<group>"; };
+		92700F37C95BC784FA5A7391 /* Pods_VGS_VGSUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VGS_VGSUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E272DCAF43D00E093E6 /* VGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E3D2DCAF44000E093E6 /* VGSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E472DCAF44000E093E6 /* VGSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC46623DD0295E631EBD08F0 /* Pods_VGS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VGS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -65,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051B9445EF41089A7D1DC26B /* Pods_VGS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C6E3FF16A854355DC2E77E8 /* Pods_VGSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,12 +96,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D654482674D91959632C0AB /* Pods_VGS_VGSUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84B9FC8ECB82495BA6BC69CA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FC46623DD0295E631EBD08F0 /* Pods_VGS.framework */,
+				92700F37C95BC784FA5A7391 /* Pods_VGS_VGSUITests.framework */,
+				05B5D39F7958E128CDF20268 /* Pods_VGSTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B33A9E1E2DCAF43D00E093E6 = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +120,8 @@
 				B33A9E402DCAF44000E093E6 /* VGSTests */,
 				B33A9E4A2DCAF44000E093E6 /* VGSUITests */,
 				B33A9E282DCAF43D00E093E6 /* Products */,
+				FACCFB10123CDE363CB56999 /* Pods */,
+				84B9FC8ECB82495BA6BC69CA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +135,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		FACCFB10123CDE363CB56999 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3895C93C936673679D2F3DBB /* Pods-VGS.debug.xcconfig */,
+				1FC8EEAC7D1F7B22ECE5605A /* Pods-VGS.release.xcconfig */,
+				3A2BEC5FE8FEAC52999B3530 /* Pods-VGS-VGSUITests.debug.xcconfig */,
+				66FB55932848D3BBA6EABF7F /* Pods-VGS-VGSUITests.release.xcconfig */,
+				0275F270C22CD6CD1EE86C49 /* Pods-VGSTests.debug.xcconfig */,
+				47CDE3E678343F8AAEAB6E4D /* Pods-VGSTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,9 +155,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B33A9E502DCAF44000E093E6 /* Build configuration list for PBXNativeTarget "VGS" */;
 			buildPhases = (
+				A872B214E74EEE478649C6A7 /* [CP] Check Pods Manifest.lock */,
 				B33A9E232DCAF43D00E093E6 /* Sources */,
 				B33A9E242DCAF43D00E093E6 /* Frameworks */,
 				B33A9E252DCAF43D00E093E6 /* Resources */,
+				748DD01829DC93F014326896 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -124,8 +169,6 @@
 				B33A9E292DCAF43D00E093E6 /* VGS */,
 			);
 			name = VGS;
-			packageProductDependencies = (
-			);
 			productName = VGS;
 			productReference = B33A9E272DCAF43D00E093E6 /* VGS.app */;
 			productType = "com.apple.product-type.application";
@@ -134,6 +177,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B33A9E552DCAF44000E093E6 /* Build configuration list for PBXNativeTarget "VGSTests" */;
 			buildPhases = (
+				C14DF78AC947941404E8E7EB /* [CP] Check Pods Manifest.lock */,
 				B33A9E392DCAF44000E093E6 /* Sources */,
 				B33A9E3A2DCAF44000E093E6 /* Frameworks */,
 				B33A9E3B2DCAF44000E093E6 /* Resources */,
@@ -147,8 +191,6 @@
 				B33A9E402DCAF44000E093E6 /* VGSTests */,
 			);
 			name = VGSTests;
-			packageProductDependencies = (
-			);
 			productName = VGSTests;
 			productReference = B33A9E3D2DCAF44000E093E6 /* VGSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,9 +199,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B33A9E582DCAF44000E093E6 /* Build configuration list for PBXNativeTarget "VGSUITests" */;
 			buildPhases = (
+				739E840BE6CAF9D8CA2832E7 /* [CP] Check Pods Manifest.lock */,
 				B33A9E432DCAF44000E093E6 /* Sources */,
 				B33A9E442DCAF44000E093E6 /* Frameworks */,
 				B33A9E452DCAF44000E093E6 /* Resources */,
+				9E5A5FC3A63FDF49BB841FA0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,8 +214,6 @@
 				B33A9E4A2DCAF44000E093E6 /* VGSUITests */,
 			);
 			name = VGSUITests;
-			packageProductDependencies = (
-			);
 			productName = VGSUITests;
 			productReference = B33A9E472DCAF44000E093E6 /* VGSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -244,6 +286,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		739E840BE6CAF9D8CA2832E7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VGS-VGSUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		748DD01829DC93F014326896 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VGS/Pods-VGS-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VGS/Pods-VGS-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VGS/Pods-VGS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9E5A5FC3A63FDF49BB841FA0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A872B214E74EEE478649C6A7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VGS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C14DF78AC947941404E8E7EB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VGSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B33A9E232DCAF43D00E093E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -284,12 +429,14 @@
 /* Begin XCBuildConfiguration section */
 		B33A9E512DCAF44000E093E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3895C93C936673679D2F3DBB /* Pods-VGS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G75UAV755N;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -324,12 +471,14 @@
 		};
 		B33A9E522DCAF44000E093E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1FC8EEAC7D1F7B22ECE5605A /* Pods-VGS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G75UAV755N;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -483,6 +632,7 @@
 		};
 		B33A9E562DCAF44000E093E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0275F270C22CD6CD1EE86C49 /* Pods-VGSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -502,6 +652,7 @@
 		};
 		B33A9E572DCAF44000E093E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47CDE3E678343F8AAEAB6E4D /* Pods-VGSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -521,6 +672,7 @@
 		};
 		B33A9E592DCAF44000E093E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A2BEC5FE8FEAC52999B3530 /* Pods-VGS-VGSUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -538,6 +690,7 @@
 		};
 		B33A9E5A2DCAF44000E093E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 66FB55932848D3BBA6EABF7F /* Pods-VGS-VGSUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
