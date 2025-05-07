@@ -13,8 +13,12 @@ class UserManager {
     func loadProfileFromCache() {
         let defaults = UserDefaults.standard
         if let carNumber = defaults.string(forKey: "VgsUserCarNumber") {
-            userProfile.carNumber = carNumber
-            isLoadFromCache = true
+            if carNumber != "" {
+                userProfile.carNumber = carNumber
+                isLoadFromCache = true
+            } else {
+                isLoadFromCache = false
+            }
         } else {
             isLoadFromCache = false
         }
