@@ -7,9 +7,11 @@ import RxRelay
 import Then
 
 class SelectView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    var onCellItemTapped: ((VehicleInfo) -> Void)?
+    
     private let disposeBag = DisposeBag()
     
-    var selectCellItems = [SelectCellItem]()
+    var vehicleInfoList = [VehicleInfo]()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -38,9 +40,9 @@ class SelectView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFl
         return collectionView
     }()
     
-    init(items: [SelectCellItem]) {
+    init(vehicleInfoList: [VehicleInfo]) {
         super.init(frame: .zero)
-        self.selectCellItems = items
+        self.vehicleInfoList = vehicleInfoList
         
         setupLayout()
         bindActions()
@@ -68,22 +70,38 @@ class SelectView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFl
         
     }
     
+    private func mapToSelectCellItems(vehicleInfoList: [VehicleInfo]) -> [SelectCellItem] {
+        var items = [SelectCellItem]()
+        
+        for info in vehicleInfoList {
+            let item = SelectCellItem(vehicleNumber: info.vehicle_reg_no, company: info.company_name, vehicleType: info.vehicle_type_name)
+            items.append(item)
+        }
+        
+        return items
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return selectCellItems.count
+        return vehicleInfoList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelectCollectionViewCell.reuseIdentifier, for: indexPath) as! SelectCollectionViewCell
-        let item = selectCellItems[indexPath.row]
+        let item = vehicleInfoList[indexPath.row]
         cell.configure(data: item)
         
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = vehicleInfoList[indexPath.row]
+        onCellItemTapped?(item)
+    }
+    
     // MARK: - UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width
-        let height: CGFloat = 200
+        let height: CGFloat = 160
         
         return CGSize(width: width, height: height)
     }

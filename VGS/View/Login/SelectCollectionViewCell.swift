@@ -17,6 +17,31 @@ class SelectCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private let cellItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private var vehicleNumberLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.notoSansMedium(size: 34)
+        label.textColor = UIColor(hex: "#E47325")
+        label.textAlignment = .left
+        return label
+    }()
+    
+    private var vehicleInfoLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.notoSansMedium(size: 34)
+        label.textColor = UIColor(hex: "#E47325")
+        label.textAlignment = .left
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -36,8 +61,19 @@ class SelectCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(30)
             make.top.bottom.equalToSuperview().inset(10)
         }
+        
+        cellView.addSubview(cellItemStackView)
+        cellItemStackView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(15)
+            make.leading.trailing.equalToSuperview().inset(25)
+        }
+        
+        cellItemStackView.addArrangedSubview(vehicleNumberLabel)
+        cellItemStackView.addArrangedSubview(vehicleInfoLabel)
     }
     
-    func configure(data: SelectCellItem) {
+    func configure(data: VehicleInfo) {
+        vehicleNumberLabel.text = data.vehicle_reg_no
+        vehicleInfoLabel.text = data.company_name + " / " + data.vehicle_type_name
     }
 }

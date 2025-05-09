@@ -8,6 +8,11 @@ import Then
 
 class LoginView: UIView {
     private let disposeBag = DisposeBag()
+    
+    var onLoginSuccessed: (() -> Void)?
+    var onCellSelected: ((VehicleInfo) -> Void)?
+    
+    private var selectView: SelectView?
     var isChecked = false
     
     private let titleLabel: UILabel = {
@@ -19,13 +24,13 @@ class LoginView: UIView {
         return label
     }()
     
-    private let carNumberContainerView: UIView = {
+    private let vehicleNumberContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
     
-    private var carNumberHintLabel: UILabel = {
+    private var vehicleNumberHintLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.notoSansMedium(size: 32)
         label.textColor = UIColor(hex: "#BDBDBD")
@@ -34,7 +39,7 @@ class LoginView: UIView {
         return label
     }()
     
-    private let carNumberTextField: UITextField = {
+    private let vehicleNumberTextField: UITextField = {
         let textField = UITextField()
         textField.font = UIFont.notoSansMedium(size: 32)
         textField.textAlignment = .left
@@ -109,26 +114,26 @@ class LoginView: UIView {
             make.height.equalTo(64)
         }
         
-        addSubview(carNumberContainerView)
-        carNumberContainerView.snp.makeConstraints{ make in
+        addSubview(vehicleNumberContainerView)
+        vehicleNumberContainerView.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview().inset(40)
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.height.equalTo(75)
         }
         
-        carNumberContainerView.addSubview(carNumberHintLabel)
-        carNumberHintLabel.snp.makeConstraints{ make in
+        vehicleNumberContainerView.addSubview(vehicleNumberHintLabel)
+        vehicleNumberHintLabel.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview().inset(10)
             make.top.bottom.equalToSuperview()
         }
         
-        carNumberContainerView.addSubview(carNumberTextField)
-        carNumberTextField.snp.makeConstraints{ make in
+        vehicleNumberContainerView.addSubview(vehicleNumberTextField)
+        vehicleNumberTextField.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview().inset(10)
             make.top.bottom.equalToSuperview()
         }
         
-        carNumberContainerView.addSubview(lineView)
+        vehicleNumberContainerView.addSubview(lineView)
         lineView.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.height.equalTo(1.5)
@@ -139,7 +144,7 @@ class LoginView: UIView {
         saveUserContainerView.snp.makeConstraints { make in
             make.height.equalTo(42)
             make.width.equalTo(240)
-            make.top.equalTo(carNumberContainerView.snp.bottom).offset(10)
+            make.top.equalTo(vehicleNumberContainerView.snp.bottom).offset(10)
             make.trailing.equalToSuperview().inset(40)
         }
         
@@ -177,16 +182,16 @@ class LoginView: UIView {
     }
     
     private func bindTextField() {
-        carNumberTextField.rx.text.orEmpty
+        vehicleNumberTextField.rx.text.orEmpty
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] text in
                 guard let self = self else { return }
-                self.carNumberHintLabel.isHidden = !text.isEmpty
+                self.vehicleNumberHintLabel.isHidden = !text.isEmpty
                 // 유효성 검사 통과 후 다시 색상 초기화
                 if !text.isEmpty {
                     self.lineView.backgroundColor = .black
-                    self.carNumberHintLabel.textColor = UIColor(hex: "#BDBDBD")
-                    self.carNumberHintLabel.text = "정보를 입력해주세요"
+                    self.vehicleNumberHintLabel.textColor = UIColor(hex: "#BDBDBD")
+                    self.vehicleNumberHintLabel.text = "정보를 입력해주세요"
                 }
             })
             .disposed(by: disposeBag)
@@ -233,8 +238,8 @@ class LoginView: UIView {
         UserManager.shared.loadProfileFromCache()
         if UserManager.shared.isLoadFromCache {
             print("LoginView : userProfile = \(UserManager.shared.userProfile)")
-            self.carNumberTextField.text = UserManager.shared.userProfile.carNumber
-            self.carNumberHintLabel.isHidden = true
+            self.vehicleNumberTextField.text = UserManager.shared.userProfile.carNumber
+            self.vehicleNumberHintLabel.isHidden = true
             handleCheckboxToggle()
         }
     }
@@ -256,15 +261,35 @@ class LoginView: UIView {
             }
         })
         
+        let vehicleNumber = self.vehicleNumberTextField.text ?? ""
+        
         if isValid {
-            UserManager.shared.userProfile.carNumber = self.carNumberTextField.text ?? ""
-            UserManager.shared.saveProfileToCache()
-            showSelectView()
+            LoginManager.shared.getSearchList(url: LOGIN_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
+                if statusCode == 200 {
+                    UserManager.shared.userProfile.carNumber = vehicleNumber
+                    UserManager.shared.saveProfileToCache()
+                    
+                    if let result = LoginManager.shared.decodeSearchListResult(from: returnedString) {
+                        let vehicleInfoList = result.list
+                        if result.total > 1 {
+                            // 2개 이상
+                            showSelectView(vehicleInfoList: vehicleInfoList)
+                        } else {
+                            // 1개
+                            showSelectView(vehicleInfoList: vehicleInfoList)
+                        }
+                    } else {
+                        print("디코딩에 실패했습니다.")
+                    }
+                } else {
+                    print("통신에 실패했습니다.")
+                }
+            })
         }
     }
     
     private func validateUser() -> Bool {
-        guard let text = carNumberTextField.text, !text.isEmpty else {
+        guard let text = vehicleNumberTextField.text, !text.isEmpty else {
             applyInvalidUserUI()
             return false
         }
@@ -281,24 +306,33 @@ class LoginView: UIView {
     }
     
     private func applyInvalidUserUI() {
-        carNumberTextField.text = ""
+        vehicleNumberTextField.text = ""
         lineView.backgroundColor = .red
-        carNumberHintLabel.textColor = .red
-        carNumberHintLabel.text = "잘못된 입력"
-        carNumberHintLabel.isHidden = false
+        vehicleNumberHintLabel.textColor = .red
+        vehicleNumberHintLabel.text = "잘못된 입력"
+        vehicleNumberHintLabel.isHidden = false
     }
     
-    private func showSelectView() {
-        let cellItems: [SelectCellItem] = [SelectCellItem(carNumber: "07도3687", company: "TJLABS", carType: "래미콘"),
-                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
-                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
-                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
-                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘"),
-                                           SelectCellItem(carNumber: "123가3687", company: "WOW", carType: "래미콘")]
-        let selctView = SelectView(items: cellItems)
-        addSubview(selctView)
-        selctView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
+    private func showSelectView(vehicleInfoList: [VehicleInfo]) {
+        self.onLoginSuccessed?()
+
+        selectView?.removeFromSuperview()
+
+        let selectView = SelectView(vehicleInfoList: vehicleInfoList)
+        self.selectView = selectView
+
+        addSubview(selectView)
+        selectView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+        
+        selectView.onCellItemTapped = { [self] selectedVehicle in
+            self.onCellSelected?(selectedVehicle)
+        }
+    }
+    
+    public func removeSelectViewIfNeeded() {
+        selectView?.removeFromSuperview()
+        selectView = nil
     }
 }

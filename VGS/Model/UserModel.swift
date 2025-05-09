@@ -11,7 +11,7 @@ struct UserProfile {
 
 
 struct SelectCellItem {
-    var carNumber: String = ""
-    var company: String = ""
-    var carType: String = ""
+    var vehicleNumber: String
+    var company: String
+    var vehicleType: String
 }
