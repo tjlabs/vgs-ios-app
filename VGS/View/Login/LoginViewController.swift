@@ -50,12 +50,16 @@ class LoginViewController: UIViewController {
     
     private func bindActions() {
         topView.onBackArrowTapped = { [weak self] in
-            self?.loginView.removeSelectViewIfNeeded()
-            self?.topView.setArrowBackHidden(isHidden: true)
+            UIView.animate(withDuration: 1.0, animations: {
+                self?.loginView.removeSelectViewIfNeeded()
+                self?.topView.setArrowBackHidden(isHidden: true)
+            })
         }
         
         loginView.onLoginSuccessed = { [weak self] in
-            self?.topView.setArrowBackHidden(isHidden: false)
+            UIView.animate(withDuration: 1.0, animations: {
+                self?.topView.setArrowBackHidden(isHidden: false)
+            })
         }
         
         loginView.onCellSelected = { [self] selectedVehicle in
@@ -65,6 +69,7 @@ class LoginViewController: UIViewController {
     
     private func moveToInfoVC(vehicleInfo: VehicleInfo) {
         guard let infoVC = self.storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController else { return }
+        infoVC.vehicleInfo = vehicleInfo
         self.navigationController?.pushViewController(infoVC, animated: true)
     }
 }

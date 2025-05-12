@@ -73,6 +73,10 @@ class LoginView: UIView {
         label.textColor = .black
         label.textAlignment = .right
         label.text = "내 정보 저장하기"
+        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byClipping
         return label
     }()
     
@@ -265,17 +269,24 @@ class LoginView: UIView {
         
         if isValid {
             LoginManager.shared.getSearchList(url: LOGIN_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
+                print("(LoginVC) getSearchList : \(statusCode) , \(returnedString)")
                 if statusCode == 200 {
                     UserManager.shared.userProfile.carNumber = vehicleNumber
                     UserManager.shared.saveProfileToCache()
                     
                     if let result = LoginManager.shared.decodeSearchListResult(from: returnedString) {
-                        let vehicleInfoList = result.list
-                        if result.total > 1 {
+//                        let vehicleInfoList = result.list
+                        let vehicleInfo: VehicleInfo = VehicleInfo(id: "leo", no: 1.0, access_reg_no: 1.0, company_no: 1.0, vehicle_no: 1.0, driver_no: 1.0, const_charger_no: 1.0, mat_charger_no: 130, access_start_date: "today", access_end_date: "tomorrow", vehicle_class: "d", work_type_no: 1.0, company_name: "d", company_contact: "d", vehicle_reg_no: "d", driver_name: "d", driver_contact: "d", const_charger_name: "d", const_charger_contact: "d", mat_charger_name: "d", mat_charger_contact: "d", pre_reg_wo: true, reg_permit_wo: true, tag_issue_wo: true, sk_manager_permit_wo: true, mat_manager_permit_wo: true, system_manager_permit_wo: true, stay_permit_hour: 1.0, request_div: "d", visit_div: "d", visit_div_name: "d", visit_site: "d", mat_list: "d", in_request_wo: true, in_permit_wo: true, request_div_name: "d", vehicle_type_name: "d", vehicle_class_name: "d", work_type_name: "d", vehicle_type: "d", tag_issue_no: "d", vehicle_region_div: "d", vehicle_region_div_name: "d", target_gps_x: 1.0, target_gps_y: 1.0, gate_gps_x: 1.0, gate_gps_y: 1.0, output_order: 1.0, use_wo: 1.0, del_wo: 1.0, insert_user_no: 1.0, insert_datetime: "d", update_user_no: 1.0, update_datetime: "d", delete_user_no: 1.0, delete_datetime: "d", insert_user_name: "d", update_user_name: "d", delete_user_name: "d", use_wo_name: "d", del_wo_name: "d", total_count: 1.0)
+                        let vehicleInfoList = [vehicleInfo]
+                        let counts = Int(result.total)
+                        if counts > 1 {
                             // 2개 이상
                             showSelectView(vehicleInfoList: vehicleInfoList)
-                        } else {
+                        } else if counts == 1 {
                             // 1개
+                            showSelectView(vehicleInfoList: vehicleInfoList)
+                        } else {
+                            // Empty
                             showSelectView(vehicleInfoList: vehicleInfoList)
                         }
                     } else {
