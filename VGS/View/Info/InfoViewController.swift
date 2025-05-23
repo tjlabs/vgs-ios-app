@@ -70,7 +70,7 @@ class InfoViewController: UIViewController {
         
         setupLayout()
         bindActions()
-        topView.setArrowBackHidden(isHidden: false)
+        topView.setArrowBackOption(isHidden: false, title: "차량 선택하기")
     }
     
     override func viewWillAppear(_ animated: Bool) {

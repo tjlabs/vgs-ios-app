@@ -17,7 +17,7 @@ class LoginViewController: UIViewController {
         
         setupLayout()
         bindActions()
-        topView.setArrowBackHidden(isHidden: true)
+        topView.setArrowBackOption(isHidden: true, title: "다시 검색하기")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,13 +52,13 @@ class LoginViewController: UIViewController {
         topView.onBackArrowTapped = { [weak self] in
             UIView.animate(withDuration: 1.0, animations: {
                 self?.loginView.removeSelectViewIfNeeded()
-                self?.topView.setArrowBackHidden(isHidden: true)
+                self?.topView.setArrowBackOption(isHidden: true, title: "다시 검색하기")
             })
         }
         
         loginView.onLoginSuccessed = { [weak self] in
             UIView.animate(withDuration: 1.0, animations: {
-                self?.topView.setArrowBackHidden(isHidden: false)
+                self?.topView.setArrowBackOption(isHidden: false, title: "다시 검색하기")
             })
         }
         
