@@ -179,6 +179,12 @@ class VehicleInfoView: UIView {
     }
     
     private func bindActions() {
-        
+        VehicleInfoManager.shared.vehicleInfoRelay
+            .compactMap { $0 }
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] info in
+                print("(VehicleInfoView) info = \(info)")
+            }
+            .disposed(by: disposeBag)
     }
 }

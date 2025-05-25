@@ -1,19 +1,20 @@
 
 import Foundation
+import RxRelay
 
 class VehicleInfoManager {
     static let shared = VehicleInfoManager()
     
-    var info: VehicleInfo?
+    private init() {}
     
-    init() { }
+    let vehicleInfoRelay = BehaviorRelay<VehicleInfo?>(value: nil)
     
     func setVehicleInfo(info: VehicleInfo) {
-        self.info = info
-        print("(VehicleInfoManager) setVehicleInfo : \(self.info)")
+        vehicleInfoRelay.accept(info)
+        print("(VehicleInfoManager) setVehicleInfo : \(info)")
     }
     
     func getVehicleInfo() -> VehicleInfo? {
-        return self.info
+        return vehicleInfoRelay.value
     }
 }

@@ -186,7 +186,7 @@ class InfoViewController: UIViewController {
     
     @objc func handleStartButton() {
         if isChecked {
-            if let vehicleInfo = VehicleInfoManager.shared.info {
+            if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
                 moveToMainVC(vehicleInfo: vehicleInfo)
             }
         } else {
