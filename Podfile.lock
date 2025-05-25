@@ -1,4 +1,13 @@
 PODS:
+  - KNSDK-UI (1.10.9):
+    - LocationCocoaPod (= 1.103.82)
+    - RealmSwift (= 10.49.3)
+  - LocationCocoaPod (1.103.82)
+  - Realm (10.49.3):
+    - Realm/Headers (= 10.49.3)
+  - Realm/Headers (10.49.3)
+  - RealmSwift (10.49.3):
+    - Realm (= 10.49.3)
   - RxCocoa (6.5.0):
     - RxRelay (= 6.5.0)
     - RxSwift (= 6.5.0)
@@ -9,6 +18,7 @@ PODS:
   - Then (3.0.0)
 
 DEPENDENCIES:
+  - KNSDK-UI
   - RxCocoa (~> 6.5.0)
   - RxSwift (~> 6.5.0)
   - SnapKit
@@ -16,6 +26,10 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - KNSDK-UI
+    - LocationCocoaPod
+    - Realm
+    - RealmSwift
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -23,12 +37,16 @@ SPEC REPOS:
     - Then
 
 SPEC CHECKSUMS:
+  KNSDK-UI: 45c80cacc1ce368cb2a5649b7db8f7295fce9648
+  LocationCocoaPod: c7a1a983360063c0acb333a096b4ca124623c7c9
+  Realm: d7cfad3146a7cb9caa00799a216ff0d80c33f36f
+  RealmSwift: 06fb2d9cf029b837fe76136446199906b096470a
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: c41c4ab57782f00ef9dc51a3428914a1a31f1d2a
+PODFILE CHECKSUM: 7597645cd1b32a0b610eaf47d66d1783ae7a2ef1
 
 COCOAPODS: 1.16.2

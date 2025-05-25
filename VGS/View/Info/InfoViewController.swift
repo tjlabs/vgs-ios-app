@@ -9,16 +9,16 @@ import Then
 class InfoViewController: UIViewController {
 
     let topView = TopView()
-    let logoView = LogoView()
+//    let logoView = LogoView()
     
     let scrollView = UIScrollView()
     let contentView = UIView()
     let visitorInfoView = VisitorInfoView()
     let vehicleInfoView = VehicleInfoView()
-    let importedMaterialView = ImportedMaterialView()
+//    let importedMaterialView = ImportedMaterialView()
     
     var isChecked = false
-    var vehicleInfo: VehicleInfo?
+    
     // Start
     private let confirmContainerView: UIView = {
         let view = UIView()
@@ -85,17 +85,17 @@ class InfoViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-        view.addSubview(logoView)
-        logoView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(topView.snp.bottom).offset(20)
-            make.height.equalTo(120)
-        }
+//        view.addSubview(logoView)
+//        logoView.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(20)
+//            make.top.equalTo(topView.snp.bottom).offset(20)
+//            make.height.equalTo(120)
+//        }
         
         // 1. Add scrollView to view
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(logoView.snp.bottom).offset(20)
+            make.top.equalTo(topView.snp.bottom).offset(20)
             make.leading.trailing.bottom.equalToSuperview()
         }
 
@@ -120,18 +120,18 @@ class InfoViewController: UIViewController {
             make.height.equalTo(205)
         }
         
-        contentView.addSubview(importedMaterialView)
-        importedMaterialView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(10)
-            make.top.equalTo(vehicleInfoView.snp.bottom).offset(10)
-            make.height.equalTo(205)
-        }
+//        contentView.addSubview(importedMaterialView)
+//        importedMaterialView.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(10)
+//            make.top.equalTo(vehicleInfoView.snp.bottom).offset(10)
+//            make.height.equalTo(205)
+//        }
         
         // // MARK: - Confirm
         contentView.addSubview(confirmContainerView)
         confirmContainerView.snp.makeConstraints { make in
             make.height.equalTo(42)
-            make.top.equalTo(importedMaterialView.snp.bottom).offset(10)
+            make.top.equalTo(vehicleInfoView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(10)
         }
         
@@ -200,7 +200,7 @@ class InfoViewController: UIViewController {
     
     @objc func handleStartButton() {
         if isChecked {
-            if let vehicleInfo = self.vehicleInfo {
+            if let vehicleInfo = VehicleInfoManager.shared.info {
                 moveToMainVC(vehicleInfo: vehicleInfo)
             }
         } else {
@@ -213,7 +213,6 @@ class InfoViewController: UIViewController {
     }
     
     private func moveToMainVC(vehicleInfo: VehicleInfo) {
-        print(vehicleInfo)
         guard let mainVC = self.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as? MainViewController else { return }
         self.navigationController?.pushViewController(mainVC, animated: true)
     }

@@ -46,7 +46,6 @@ struct VehicleInfo: Codable {
     let request_div: String?
     let visit_div: String?
     let visit_div_name: String
-    let visit_site: String
     let mat_list: String
     let in_request_wo: Bool
     let in_permit_wo: Bool
@@ -58,10 +57,20 @@ struct VehicleInfo: Codable {
     let tag_issue_no: String?
     let vehicle_region_div: String
     let vehicle_region_div_name: String
-    let target_gps_x: Double
-    let target_gps_y: Double
-    let gate_gps_x: Double
-    let gate_gps_y: Double
+    let target_x: Double?
+    let target_y: Double?
+    let target_floor_no: Double?
+    let target_building_no: Double?
+    let target_sector_no: Double?
+    let target_floor_code: String?
+    let target_building_code: String?
+    let target_sector_code: String?
+    let target_gate_no: Double?
+    let target_gate_name: String?
+    let destination_spot_no: Double?
+    let destination_spot_name: String?
+    let gate_gps_x: Double?
+    let gate_gps_y: Double?
     let output_order: Double
     let use_wo: Double
     let del_wo: Double

@@ -69,7 +69,8 @@ class LoginViewController: UIViewController {
     
     private func moveToInfoVC(vehicleInfo: VehicleInfo) {
         guard let infoVC = self.storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController else { return }
-        infoVC.vehicleInfo = vehicleInfo
+//        infoVC.vehicleInfo = vehicleInfo
+        VehicleInfoManager.shared.setVehicleInfo(info: vehicleInfo)
         self.navigationController?.pushViewController(infoVC, animated: true)
     }
 }

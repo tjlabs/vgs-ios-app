@@ -31,6 +31,10 @@ class SelectCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.notoSansMedium(size: 34)
         label.textColor = UIColor(hex: "#E47325")
         label.textAlignment = .left
+        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -39,6 +43,10 @@ class SelectCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.notoSansMedium(size: 34)
         label.textColor = UIColor(hex: "#E47325")
         label.textAlignment = .left
+        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
