@@ -85,13 +85,6 @@ class InfoViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-//        view.addSubview(logoView)
-//        logoView.snp.makeConstraints { make in
-//            make.leading.trailing.equalToSuperview().inset(20)
-//            make.top.equalTo(topView.snp.bottom).offset(20)
-//            make.height.equalTo(120)
-//        }
-        
         // 1. Add scrollView to view
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
@@ -119,13 +112,6 @@ class InfoViewController: UIViewController {
             make.top.equalTo(visitorInfoView.snp.bottom).offset(10)
             make.height.equalTo(205)
         }
-        
-//        contentView.addSubview(importedMaterialView)
-//        importedMaterialView.snp.makeConstraints { make in
-//            make.leading.trailing.equalToSuperview().inset(10)
-//            make.top.equalTo(vehicleInfoView.snp.bottom).offset(10)
-//            make.height.equalTo(205)
-//        }
         
         // // MARK: - Confirm
         contentView.addSubview(confirmContainerView)

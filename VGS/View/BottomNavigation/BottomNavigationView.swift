@@ -129,13 +129,11 @@ class BottomNavigationView: UIView {
                     // 출입 정보 -> 길안내
                 }
                 updateNavigationBarItems(with: title)
-                print("(BottomNavigationView) : 출입 정보 tapped")
             case "출입 정보":
                 if currentViewName == "길안내" {
                     // 길안내 -> 출입정보
                 }
                 updateNavigationBarItems(with: title)
-                print("(BottomNavigationView) : 길안내 tapped")
             default:
                 print("Unknown navigation item tapped")
             }
