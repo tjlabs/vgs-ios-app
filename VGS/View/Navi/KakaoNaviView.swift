@@ -74,7 +74,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     func guidanceGuideEnded(_ aGuidance: KNGuidance) {
-        // TO-DO
+        // 목적지 도착
         self.naviView.guidanceGuideEnded(aGuidance, isShowDriveResultDialog: true)
     }
     
@@ -231,8 +231,11 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         let name_start = "Start Point"
         
         // 도착 점은 COEX
-        let latitude_goal = 37.513109
-        let longitude_goal = 127.058375
+//        let latitude_goal = 37.513109
+//        let longitude_goal = 127.058375
+        
+        let latitude_goal = 37.49559667720228
+        let longitude_goal = 127.03842115551231
         let name_goal = "Goal Point"
         
         let vias: [KNPOI] = []

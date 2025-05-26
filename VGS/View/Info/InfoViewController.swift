@@ -185,14 +185,37 @@ class InfoViewController: UIViewController {
         startButton.addGestureRecognizer(tapGesture)
     }
     
+    private func checkValidVisitDuration(info: VehicleInfo) -> Bool {
+        let startDateString = info.access_start_date
+        let endDateString = info.access_end_date
+        
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime] // "Z" 포함된 포맷 지원
+        
+        guard let startDateUTC = formatter.date(from: startDateString),
+              let endDateUTC = formatter.date(from: endDateString) else {
+            return false
+        }
+        
+        let now = Date()
+        return (startDateUTC...endDateUTC).contains(now)
+    }
+    
     @objc func handleStartButton() {
         if isChecked {
             if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
                 startButton.isUserInteractionEnabled = false
-                moveToMainVC(vehicleInfo: vehicleInfo)
+                let isValid = checkValidVisitDuration(info: vehicleInfo)
+                print("(InfoVC) checkValidVisitDuration : isValid = \(isValid)")
+                if isValid {
+                    moveToMainVC(vehicleInfo: vehicleInfo)
+                } else {
+                    startButton.isUserInteractionEnabled = true
+                }
             }
         } else {
-            
+            self.showToastWithIcon(message: "정보 확인에 대해 체크해주세요")
+            startButton.isUserInteractionEnabled = true
         }
     }
     

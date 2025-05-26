@@ -48,10 +48,16 @@ class PositionManager {
         if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
             let input = UserStartInput(access_reg_no: vehicleInfo.access_reg_no, driver_no: vehicleInfo.driver_no, arrive_datetime: time, current_gps_x: lat, current_gps_y: lon, target_gate_no: vehicleInfo.target_gate_no!)
             print("Post input: \(input)")
-            postUserStart(url: USER_START_URL, input: input) { status, message, _ in
-                print("Post Result: [\(status)] \(message)")
-                if status == 200 {
-                    self.isReadyToPut = true
+            postUserStart(url: USER_START_URL, input: input) { [self] statusCode, returnedString, _ in
+                
+                print("Post Result: [\(statusCode)] \(returnedString)")
+                if statusCode == 200 {
+                    if let decodedResult = decodeUserStartResult(from: returnedString) {
+                        position.vgs_his_no = decodedResult.data.vgs_hist_no
+                        position.target_gate_no = decodedResult.data.target_gate_no!
+                        
+                        self.isReadyToPut = true
+                    }
                 }
             }
         }
@@ -141,5 +147,22 @@ class PositionManager {
         sessionConfig.timeoutIntervalForRequest = TIMEOUT_VALUE_POST
         let session = URLSession(configuration: sessionConfig)
         performRequest(request: request, session: session, input: input, completion: completion)
+    }
+    
+    func decodeUserStartResult(from jsonString: String) -> UserStartResult? {
+        guard let data = jsonString.data(using: .utf8) else {
+            print("❌ 문자열 → 데이터 변환 실패")
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+
+        do {
+            let result = try decoder.decode(UserStartResult.self, from: data)
+            return result
+        } catch {
+            print("❌ 디코딩 실패: \(error)")
+            return nil
+        }
     }
 }
