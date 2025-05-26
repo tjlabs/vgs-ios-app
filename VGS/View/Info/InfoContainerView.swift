@@ -9,6 +9,10 @@ import Then
 class InfoContainerView: UIView {
     private let disposeBag = DisposeBag()
     
+    var onLogoutTapped: (() -> Void)?
+    
+    let logoutView = LogoutView()
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     let visitorInfoView = VisitorInfoView()
@@ -26,10 +30,18 @@ class InfoContainerView: UIView {
     }
     
     private func setupLayout() {
+        addSubview(logoutView)
+        logoutView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+            make.height.equalTo(50)
+        }
+        
         // 1. Add scrollView to view
         addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(70)
+            make.top.equalTo(logoutView.snp.bottom).offset(20)
+//            make.top.equalToSuperview().inset(70)
             make.leading.trailing.bottom.equalToSuperview()
         }
 
@@ -56,6 +68,9 @@ class InfoContainerView: UIView {
     }
     
     private func bindActions() {
-        
+        logoutView.onLogoutTapped = {
+            print("(InfoContainerView) logoutTapped")
+            self.onLogoutTapped?()
+        }
     }
 }

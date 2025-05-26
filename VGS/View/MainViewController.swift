@@ -64,5 +64,14 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate {
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(bottomNavigationView.snp.top)
         }
+        
+        bindLogoutAction()
+    }
+    
+    private func bindLogoutAction() {
+        infoContainerView?.onLogoutTapped = {
+            print("(MainVC) logoutTapped")
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
 }
