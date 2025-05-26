@@ -14,7 +14,7 @@ class VehicleInfoView: UIView {
         label.font = UIFont.notoSansBold(size: 30)
         label.textColor = .black
         label.textAlignment = .left
-        label.text = "차량 정보"
+        label.text = "차량/운전자 정보"
         return label
     }()
     
@@ -95,35 +95,35 @@ class VehicleInfoView: UIView {
         return label
     }()
     
-    private let vehicleCompanyStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 10
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.layer.borderColor = UIColor(hex: "#A2A1A1").cgColor
-        stackView.layer.borderWidth = 1.0
-        return stackView
-    }()
-    
-    private let vehicleCompanyTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.text = "업체"
-        label.backgroundColor = UIColor(hex: "#F1F1F1")
-        return label
-    }()
-    
-    private let vehicleCompanyDataLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
-        label.textColor = .black
-        label.textAlignment = .left
-        label.text = "티제이랩스"
-        return label
-    }()
+//    private let vehicleCompanyStackView: UIStackView = {
+//        let stackView = UIStackView()
+//        stackView.axis = .horizontal
+//        stackView.distribution = .fillProportionally
+//        stackView.spacing = 10
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        stackView.layer.borderColor = UIColor(hex: "#A2A1A1").cgColor
+//        stackView.layer.borderWidth = 1.0
+//        return stackView
+//    }()
+//    
+//    private let vehicleCompanyTitleLabel: UILabel = {
+//        let label = UILabel()
+//        label.font = UIFont.notoSansBold(size: 20)
+//        label.textColor = .black
+//        label.textAlignment = .center
+//        label.text = "업체"
+//        label.backgroundColor = UIColor(hex: "#F1F1F1")
+//        return label
+//    }()
+//    
+//    private let vehicleCompanyDataLabel: UILabel = {
+//        let label = UILabel()
+//        label.font = UIFont.notoSansBold(size: 20)
+//        label.textColor = .black
+//        label.textAlignment = .left
+//        label.text = "티제이랩스"
+//        return label
+//    }()
     
     init() {
         super.init(frame: .zero)
@@ -169,13 +169,13 @@ class VehicleInfoView: UIView {
         }
         vehicleTypeStackView.addArrangedSubview(vehicleTypeDataLabel)
         
-        containerStackView.addArrangedSubview(vehicleCompanyStackView)
-        vehicleCompanyStackView.addArrangedSubview(vehicleCompanyTitleLabel)
-        vehicleCompanyTitleLabel.snp.makeConstraints { make in
-            make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(100)
-        }
-        vehicleCompanyStackView.addArrangedSubview(vehicleCompanyDataLabel)
+//        containerStackView.addArrangedSubview(vehicleCompanyStackView)
+//        vehicleCompanyStackView.addArrangedSubview(vehicleCompanyTitleLabel)
+//        vehicleCompanyTitleLabel.snp.makeConstraints { make in
+//            make.top.bottom.leading.equalToSuperview()
+//            make.width.equalTo(100)
+//        }
+//        vehicleCompanyStackView.addArrangedSubview(vehicleCompanyDataLabel)
     }
     
     private func bindActions() {
@@ -183,8 +183,16 @@ class VehicleInfoView: UIView {
             .compactMap { $0 }
             .observe(on: MainScheduler.instance)
             .bind { [weak self] info in
-                print("(VehicleInfoView) info = \(info)")
+                self?.updateVehicleInfo(info: info)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func updateVehicleInfo(info: VehicleInfo) {
+        DispatchQueue.main.async { [self] in
+            // Update UI
+            vehicleNumberDataLabel.text = info.vehicle_reg_no
+            vehicleTypeDataLabel.text = info.vehicle_type_name
+        }
     }
 }

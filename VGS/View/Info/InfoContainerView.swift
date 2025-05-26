@@ -44,14 +44,14 @@ class InfoContainerView: UIView {
         contentView.addSubview(visitorInfoView)
         visitorInfoView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(10)
-            make.height.equalTo(410)
+            make.height.equalTo(375)
         }
         
         contentView.addSubview(vehicleInfoView)
         vehicleInfoView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(10)
             make.top.equalTo(visitorInfoView.snp.bottom).offset(10)
-            make.height.equalTo(205)
+            make.height.equalTo(165)
         }
     }
     

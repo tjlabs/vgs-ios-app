@@ -65,6 +65,10 @@ class LoginViewController: UIViewController {
         loginView.onCellSelected = { [self] selectedVehicle in
             moveToInfoVC(vehicleInfo: selectedVehicle)
         }
+        
+        loginView.onLoginFail = {
+            self.showToastWithIcon(message: "차량 조회에 실패 했습니다")
+        }
     }
     
     private func moveToInfoVC(vehicleInfo: VehicleInfo) {

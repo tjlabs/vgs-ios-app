@@ -50,6 +50,7 @@ class InfoViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = UIColor(hex: "#E47325")
         view.alpha = 0.8
+        view.isUserInteractionEnabled = true
         view.cornerRadius = 15
         view.addShadow(location: .rightBottom, color: .black, opacity: 0.2)
         return view
@@ -103,14 +104,14 @@ class InfoViewController: UIViewController {
         contentView.addSubview(visitorInfoView)
         visitorInfoView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(10)
-            make.height.equalTo(410)
+            make.height.equalTo(375)
         }
         
         contentView.addSubview(vehicleInfoView)
         vehicleInfoView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(10)
             make.top.equalTo(visitorInfoView.snp.bottom).offset(10)
-            make.height.equalTo(205)
+            make.height.equalTo(165)
         }
         
         // // MARK: - Confirm
@@ -187,6 +188,7 @@ class InfoViewController: UIViewController {
     @objc func handleStartButton() {
         if isChecked {
             if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
+                startButton.isUserInteractionEnabled = false
                 moveToMainVC(vehicleInfo: vehicleInfo)
             }
         } else {

@@ -35,7 +35,7 @@ class VisitorInfoView: UIView {
         return stackView
     }()
     
-    private let factoryStackView: UIStackView = {
+    private let gateStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillProportionally
@@ -46,17 +46,17 @@ class VisitorInfoView: UIView {
         return stackView
     }()
     
-    private let factoryTitleLabel: UILabel = {
+    private let gateTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.notoSansBold(size: 20)
         label.textColor = .black
         label.textAlignment = .center
-        label.text = "공사현장 명"
+        label.text = "목적지 게이트"
         label.backgroundColor = UIColor(hex: "#F1F1F1")
         return label
     }()
     
-    private let factoryDataLabel: UILabel = {
+    private let gateDataLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.notoSansBold(size: 20)
         label.textColor = .black
@@ -185,15 +185,6 @@ class VisitorInfoView: UIView {
         return label
     }()
     
-    private let durationInfoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.text = "일일체류시간 8시간"
-        return label
-    }()
-    
     init() {
         super.init(frame: .zero)
         setupLayout()
@@ -222,16 +213,16 @@ class VisitorInfoView: UIView {
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        containerStackView.addArrangedSubview(factoryStackView)
-        factoryStackView.addArrangedSubview(factoryTitleLabel)
-        factoryStackView.snp.makeConstraints { make in
+        containerStackView.addArrangedSubview(gateStackView)
+        gateStackView.addArrangedSubview(gateTitleLabel)
+        gateStackView.snp.makeConstraints { make in
             make.height.equalTo(55)
         }
-        factoryTitleLabel.snp.makeConstraints { make in
+        gateTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
             make.width.equalTo(140)
         }
-        factoryStackView.addArrangedSubview(factoryDataLabel)
+        gateStackView.addArrangedSubview(gateDataLabel)
         
         containerStackView.addArrangedSubview(placeStackView)
         placeStackView.addArrangedSubview(placeTitleLabel)
@@ -273,7 +264,6 @@ class VisitorInfoView: UIView {
             make.height.equalTo(40)
         }
         durationStackView.addArrangedSubview(durationDateLabel)
-        durationStackView.addArrangedSubview(durationInfoLabel)
     }
     
     private func bindActions() {
@@ -281,8 +271,40 @@ class VisitorInfoView: UIView {
             .compactMap { $0 }
             .observe(on: MainScheduler.instance)
             .bind { [weak self] info in
-                print("(VisitorInfoView) info = \(info)")
+                self?.updateVehicleInfo(info: info)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func updateVehicleInfo(info: VehicleInfo) {
+        DispatchQueue.main.async { [self] in
+            // Update UI
+            gateDataLabel.text = info.target_gate_name
+            placeDataLabel.text = info.destination_spot_name
+            factoryManagerDataLabel.text = info.const_charger_name
+            placeManagerDataLabel.text = info.mat_charger_name
+            updateAccessDateLabel(startDateString: info.access_start_date, endDateString: info.access_end_date, label: durationDateLabel)
+        }
+    }
+    
+    func updateAccessDateLabel(startDateString: String, endDateString: String, label: UILabel) {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime] // "Z" 포함된 포맷 지원
+
+        guard let startDateUTC = formatter.date(from: startDateString),
+              let endDateUTC = formatter.date(from: endDateString) else {
+            label.text = "날짜 형식 오류"
+            return
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.locale = Locale(identifier: "ko_KR")
+        outputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul") // KST
+        outputFormatter.dateFormat = "yyyy-MM-dd"
+
+        let startDateKST = outputFormatter.string(from: startDateUTC)
+        let endDateKST = outputFormatter.string(from: endDateUTC)
+
+        label.text = "\(startDateKST) ~ \(endDateKST)"
     }
 }

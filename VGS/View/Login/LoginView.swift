@@ -11,6 +11,7 @@ class LoginView: UIView {
     
     var onLoginSuccessed: (() -> Void)?
     var onCellSelected: ((VehicleInfo) -> Void)?
+    var onLoginFail: (() -> Void)?
     
     private var selectView: SelectView?
     var isChecked = false
@@ -281,16 +282,17 @@ class LoginView: UIView {
                             // 2개 이상
                             showSelectView(vehicleInfoList: vehicleInfoList)
                         } else if counts == 1 {
-                            // 1개
-                            showSelectView(vehicleInfoList: vehicleInfoList)
+//                            self.onLoginFail?()
+                            self.onCellSelected?(vehicleInfoList[0])
                         } else {
-                            // Empty
-                            showSelectView(vehicleInfoList: vehicleInfoList)
+                            self.onLoginFail?()
                         }
                     } else {
+                        self.onLoginFail?()
                         print("디코딩에 실패했습니다.")
                     }
                 } else {
+                    self.onLoginFail?()
                     print("통신에 실패했습니다.")
                 }
             })

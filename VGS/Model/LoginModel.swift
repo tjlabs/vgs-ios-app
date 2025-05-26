@@ -86,4 +86,80 @@ struct VehicleInfo: Codable {
     let use_wo_name: String?
     let del_wo_name: String?
     let total_count: Double
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decodeIfPresent(String.self, forKey: .id) ?? "알 수 없음"
+        no = try container.decodeIfPresent(Double.self, forKey: .no) ?? -1
+        access_reg_no = try container.decodeIfPresent(Double.self, forKey: .access_reg_no) ?? -1
+        company_no = try container.decodeIfPresent(Double.self, forKey: .company_no) ?? -1
+        vehicle_no = try container.decodeIfPresent(Double.self, forKey: .vehicle_no) ?? -1
+        driver_no = try container.decodeIfPresent(Double.self, forKey: .driver_no) ?? -1
+        const_charger_no = try container.decodeIfPresent(Double.self, forKey: .const_charger_no) ?? -1
+        mat_charger_no = try container.decodeIfPresent(Double.self, forKey: .mat_charger_no) ?? -1
+        access_start_date = try container.decodeIfPresent(String.self, forKey: .access_start_date) ?? "알 수 없음"
+        access_end_date = try container.decodeIfPresent(String.self, forKey: .access_end_date) ?? "알 수 없음"
+        vehicle_class = try container.decodeIfPresent(String.self, forKey: .vehicle_class) ?? "알 수 없음"
+        work_type_no = try container.decodeIfPresent(Double.self, forKey: .work_type_no) ?? -1
+        company_name = try container.decodeIfPresent(String.self, forKey: .company_name) ?? "알 수 없음"
+        company_contact = try container.decodeIfPresent(String.self, forKey: .company_contact) ?? "알 수 없음"
+        vehicle_reg_no = try container.decodeIfPresent(String.self, forKey: .vehicle_reg_no) ?? "알 수 없음"
+        driver_name = try container.decodeIfPresent(String.self, forKey: .driver_name) ?? "알 수 없음"
+        driver_contact = try container.decodeIfPresent(String.self, forKey: .driver_contact) ?? "알 수 없음"
+        const_charger_name = try container.decodeIfPresent(String.self, forKey: .const_charger_name) ?? "알 수 없음"
+        const_charger_contact = try container.decodeIfPresent(String.self, forKey: .const_charger_contact) ?? "알 수 없음"
+        mat_charger_name = try container.decodeIfPresent(String.self, forKey: .mat_charger_name) ?? "알 수 없음"
+        mat_charger_contact = try container.decodeIfPresent(String.self, forKey: .mat_charger_contact) ?? "알 수 없음"
+        pre_reg_wo = try container.decodeIfPresent(Bool.self, forKey: .pre_reg_wo) ?? false
+        reg_permit_wo = try container.decodeIfPresent(Bool.self, forKey: .reg_permit_wo) ?? false
+        tag_issue_wo = try container.decodeIfPresent(Bool.self, forKey: .tag_issue_wo) ?? false
+        sk_manager_permit_wo = try container.decodeIfPresent(Bool.self, forKey: .sk_manager_permit_wo) ?? false
+        mat_manager_permit_wo = try container.decodeIfPresent(Bool.self, forKey: .mat_manager_permit_wo) ?? false
+        system_manager_permit_wo = try container.decodeIfPresent(Bool.self, forKey: .system_manager_permit_wo) ?? false
+        stay_permit_hour = try container.decodeIfPresent(Double.self, forKey: .stay_permit_hour) ?? -1
+        request_div = try container.decodeIfPresent(String.self, forKey: .request_div) ?? "알 수 없음"
+        visit_div = try container.decodeIfPresent(String.self, forKey: .visit_div) ?? "알 수 없음"
+        visit_div_name = try container.decodeIfPresent(String.self, forKey: .visit_div_name) ?? "알 수 없음"
+        mat_list = try container.decodeIfPresent(String.self, forKey: .mat_list) ?? "알 수 없음"
+        in_request_wo = try container.decodeIfPresent(Bool.self, forKey: .in_request_wo) ?? false
+        in_permit_wo = try container.decodeIfPresent(Bool.self, forKey: .in_permit_wo) ?? false
+        request_div_name = try container.decodeIfPresent(String.self, forKey: .request_div_name) ?? "알 수 없음"
+        vehicle_type_name = try container.decodeIfPresent(String.self, forKey: .vehicle_type_name) ?? "알 수 없음"
+        vehicle_class_name = try container.decodeIfPresent(String.self, forKey: .vehicle_class_name) ?? "알 수 없음"
+        work_type_name = try container.decodeIfPresent(String.self, forKey: .work_type_name) ?? "알 수 없음"
+        vehicle_type = try container.decodeIfPresent(String.self, forKey: .vehicle_type) ?? "알 수 없음"
+        tag_issue_no = try container.decodeIfPresent(String.self, forKey: .tag_issue_no) ?? "알 수 없음"
+        vehicle_region_div = try container.decodeIfPresent(String.self, forKey: .vehicle_region_div) ?? "알 수 없음"
+        vehicle_region_div_name = try container.decodeIfPresent(String.self, forKey: .vehicle_region_div_name) ?? "알 수 없음"
+        target_x = try container.decodeIfPresent(Double.self, forKey: .target_x) ?? -1
+        target_y = try container.decodeIfPresent(Double.self, forKey: .target_y) ?? -1
+        target_floor_no = try container.decodeIfPresent(Double.self, forKey: .target_floor_no) ?? -1
+        target_building_no = try container.decodeIfPresent(Double.self, forKey: .target_building_no) ?? -1
+        target_sector_no = try container.decodeIfPresent(Double.self, forKey: .target_sector_no) ?? -1
+        target_floor_code = try container.decodeIfPresent(String.self, forKey: .target_floor_code) ?? "알 수 없음"
+        target_building_code = try container.decodeIfPresent(String.self, forKey: .target_building_code) ?? "알 수 없음"
+        target_sector_code = try container.decodeIfPresent(String.self, forKey: .target_sector_code) ?? "알 수 없음"
+        target_gate_no = try container.decodeIfPresent(Double.self, forKey: .target_gate_no) ?? -1
+        target_gate_name = try container.decodeIfPresent(String.self, forKey: .target_gate_name) ?? "알 수 없음"
+        destination_spot_no = try container.decodeIfPresent(Double.self, forKey: .destination_spot_no) ?? -1
+        destination_spot_name = try container.decodeIfPresent(String.self, forKey: .destination_spot_name) ?? "알 수 없음"
+        gate_gps_x = try container.decodeIfPresent(Double.self, forKey: .gate_gps_x) ?? -1
+        gate_gps_y = try container.decodeIfPresent(Double.self, forKey: .gate_gps_y) ?? -1
+        output_order = try container.decodeIfPresent(Double.self, forKey: .output_order) ?? -1
+        use_wo = try container.decodeIfPresent(Double.self, forKey: .use_wo) ?? -1
+        del_wo = try container.decodeIfPresent(Double.self, forKey: .del_wo) ?? -1
+        insert_user_no = try container.decodeIfPresent(Double.self, forKey: .insert_user_no) ?? -1
+        insert_datetime = try container.decodeIfPresent(String.self, forKey: .insert_datetime) ?? "알 수 없음"
+        update_user_no = try container.decodeIfPresent(Double.self, forKey: .update_user_no) ?? -1
+        update_datetime = try container.decodeIfPresent(String.self, forKey: .update_datetime) ?? "알 수 없음"
+        delete_user_no = try container.decodeIfPresent(Double.self, forKey: .delete_user_no) ?? -1
+        delete_datetime = try container.decodeIfPresent(String.self, forKey: .delete_datetime) ?? "알 수 없음"
+        insert_user_name = try container.decodeIfPresent(String.self, forKey: .insert_user_name) ?? "알 수 없음"
+        update_user_name = try container.decodeIfPresent(String.self, forKey: .update_user_name) ?? "알 수 없음"
+        delete_user_name = try container.decodeIfPresent(String.self, forKey: .delete_user_name) ?? "알 수 없음"
+        use_wo_name = try container.decodeIfPresent(String.self, forKey: .use_wo_name) ?? "알 수 없음"
+        del_wo_name = try container.decodeIfPresent(String.self, forKey: .del_wo_name) ?? "알 수 없음"
+        total_count = try container.decodeIfPresent(Double.self, forKey: .total_count) ?? -1
+    }
 }
