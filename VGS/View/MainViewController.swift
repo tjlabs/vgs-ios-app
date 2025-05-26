@@ -93,12 +93,18 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     private func showDialogView() {
         let dialogView = DialogView()
         dialogView.onConfirm = { [weak self] in
-            print("Confirmed checkout")
+            self?.moveToOutdoorNaviVC()
         }
         
         view.addSubview(dialogView)
         dialogView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+    
+    private func moveToOutdoorNaviVC() {
+        guard let outdoorNaviVC = self.storyboard?.instantiateViewController(withIdentifier: "OutdoorNaviViewController") as? OutdoorNaviViewController else { return }
+        outdoorNaviVC.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(outdoorNaviVC, animated: true)
     }
 }

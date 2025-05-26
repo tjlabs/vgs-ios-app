@@ -25,8 +25,8 @@ class DialogView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Profile"
-        label.font = UIFont.notoSansBold(size: 18)
+        label.text = "목적지 도착"
+        label.font = UIFont.notoSansBold(size: 24)
         label.textAlignment = .center
         label.textColor = .black
         return label
@@ -84,18 +84,18 @@ class DialogView: UIView {
         contentView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview().inset(30)
-            make.height.equalTo(130)
+            make.height.equalTo(180)
         }
 
-//        contentView.addSubview(titleLabel)
-//        titleLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(20)
-//            make.leading.trailing.equalToSuperview().inset(10)
-//        }
+        contentView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.trailing.equalToSuperview().inset(10)
+        }
         
         contentView.addSubview(messageLabel)
         messageLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
