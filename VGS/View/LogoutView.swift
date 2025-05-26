@@ -70,7 +70,6 @@ class LogoutView: UIView {
     }
     
     @objc private func logoutTapped() {
-        print("(LogoutView) logoutTapped")
         onLogoutTapped?()
     }
 }

@@ -9,7 +9,6 @@ struct UserProfile {
     }
 }
 
-
 struct SelectCellItem {
     var vehicleNumber: String
     var company: String

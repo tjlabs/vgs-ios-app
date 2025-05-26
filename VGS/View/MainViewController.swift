@@ -70,7 +70,6 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate {
     
     private func bindLogoutAction() {
         infoContainerView?.onLogoutTapped = {
-            print("(MainVC) logoutTapped")
             self.navigationController?.popToRootViewController(animated: true)
         }
     }

@@ -69,7 +69,6 @@ class InfoContainerView: UIView {
     
     private func bindActions() {
         logoutView.onLogoutTapped = {
-            print("(InfoContainerView) logoutTapped")
             self.onLogoutTapped?()
         }
     }

@@ -80,11 +80,19 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     func guidance(_ aGuidance: KNGuidance, didUpdate aRoutes: [KNRoute], multiRouteInfo aMultiRouteInfo: KNMultiRouteInfo?) {
         // TO-DO
+        
         var remainingTime: Int32 = 0
         for route in aRoutes {
             remainingTime += route.totalTime
             print("(VGS) : Route = \(route) // Time = \(route.totalTime)")
         }
+        
+        if !isStartReported && remainingTime != 0 {
+            let estimatedArrivalTime = calArrivalTimeString(secondsToArrival: remainingTime)
+            PositionManager.shared.updateEstimatedArrivalTime(estimatedArrivalTime)
+            isStartReported = true
+        }
+//        self.kakaoNaviPos.
         self.naviView.guidance(aGuidance, didUpdate: aRoutes, multiRouteInfo: aMultiRouteInfo)
     }
     
@@ -123,7 +131,38 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     func guidance(_ aGuidance: KNGuidance, didUpdate aLocationGuide: KNGuide_Location) {
-        // TO-DO
+        var isCurLocExist: Bool = false
+        if let curLocation = aLocationGuide.location {
+            if let curLatLon = convertKATECToWGS84(pos: curLocation.pos) {
+                let longitude: Double = curLatLon.x
+                let latitude: Double = curLatLon.y
+                let now = Date()
+                let elapsed = now.timeIntervalSince(locationStartTime)
+                if elapsed >= 10 {
+                    PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                } else {
+                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
+                }
+                isCurLocExist = true
+            }
+        }
+        
+        if !isCurLocExist {
+            if let latLon = convertKATECToWGS84(pos: DoublePoint(x: aLocationGuide.gpsMatched.pos.x, y: aLocationGuide.gpsMatched.pos.y)) {
+                let longitude: Double = latLon.x
+                let latitude: Double = latLon.y
+                let now = Date()
+                let elapsed = now.timeIntervalSince(locationStartTime)
+                if elapsed >= 10 {
+                    PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                } else {
+                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
+                }
+            }
+        }
+        let speed: Int32 = aLocationGuide.gpsMatched.speed
+        let heading: Int32 = aLocationGuide.gpsMatched.angle
+
         self.naviView.guidance(aGuidance, didUpdate: aLocationGuide)
     }
     
@@ -144,6 +183,9 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     var routeGuidance = KNGuidance()
     var naviVolume: Float = 1.0
     var isGuideEnded: Bool = false
+    
+    var isStartReported: Bool = false
+    private var locationStartTime: Date = Date()
     
     init() {
         super.init(frame: .zero)
@@ -180,17 +222,9 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         containerView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func setNaviViewOption() {
-//        self.naviView.bottomView.isHidden = true
-//        self.naviView.nextDirView.isHidden = true
-//        self.naviView.curDirView.isHidden = true
-    }
+    private func setNaviViewOption() { }
     
     private func setDrive() {
-//        DispatchQueue.main.async { [self] in
-//            destinationNameLabel.text = destinationInfo.name
-//            destinationNameLabel.textColor = .systemCyan
-//        }
         // 시작 점은 TJLABS 회사 위치
         let latitude_start = 37.495758
         let longitude_start = 127.038249
@@ -246,6 +280,8 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 // 경로 요청 성공
                 print("(VGS) Routes requested successfully : \(routes)")
                 if let guidance = KNSDK.sharedInstance()?.sharedGuidance() {
+                    PositionManager.shared.setNaviType(type: .EXTERNAL)
+                    
                     // 각 가이던스 델리게이트 등록
                     guidance.guideStateDelegate = self
                     guidance.routeGuideDelegate = self
@@ -263,6 +299,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     naviView.stateDelegate = self
                     naviView.sndVolume(self.naviVolume)
                     setNaviViewOption()
+                    locationStartTime = Date()
                     containerView.addSubview(naviView)
                 } else {
                     print("(VGS) Error : Cannot get shared guidance")
@@ -279,5 +316,17 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     private func convertKATECToWGS84(pos: DoublePoint) -> DoublePoint? {
         let wgs84Coord = KNSDK.sharedInstance()?.convertKATECToWGS84With(x: Int32(pos.x), y: Int32(pos.y))
         return wgs84Coord
+    }
+    
+    func calArrivalTimeString(secondsToArrival: Int32) -> String {
+        // 현재 시간에 초를 더한 도착 시간 계산
+        let arrivalDate = Date().addingTimeInterval(TimeInterval(secondsToArrival))
+        
+        // ISO 8601 형식으로 포맷 (UTC 기준)
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // UTC 기준
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        return formatter.string(from: arrivalDate)
     }
 }

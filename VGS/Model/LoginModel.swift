@@ -3,7 +3,8 @@ let VGS_TOKEN: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImFwaVN5c3
 
 let BASE_URL: String = "https://hycdev.irfm.tjlabscorp.com/api"
 let LOGIN_URL: String = BASE_URL + "/v2/AccessReg/ListForVGS"
-
+let USER_START_URL: String = BASE_URL + "/v2/VgsHist"
+let USER_POS_URL: String = BASE_URL + "/v2/VgsHist"
 
 struct SearchListResult: Codable {
     let list: [VehicleInfo]
