@@ -1,4 +1,12 @@
 
+enum ArrivalType {
+    case EXTERNAL, OUTDOOR, INDOOR
+}
+
+protocol NaviArrivalDelegate: AnyObject {
+    func isArrival(_ type: ArrivalType)
+}
+
 struct UserStartInput: Codable {
     var access_reg_no: Double = 0
     var driver_no: Double = 0

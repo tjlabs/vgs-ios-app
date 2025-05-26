@@ -75,7 +75,8 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     func guidanceGuideEnded(_ aGuidance: KNGuidance) {
         // 목적지 도착
-        self.naviView.guidanceGuideEnded(aGuidance, isShowDriveResultDialog: true)
+        delegate?.isArrival(.EXTERNAL)
+//        self.naviView.guidanceGuideEnded(aGuidance, isShowDriveResultDialog: true)
     }
     
     func guidance(_ aGuidance: KNGuidance, didUpdate aRoutes: [KNRoute], multiRouteInfo aMultiRouteInfo: KNMultiRouteInfo?) {
@@ -186,6 +187,8 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     var isStartReported: Bool = false
     private var locationStartTime: Date = Date()
+    
+    weak var delegate: NaviArrivalDelegate?
     
     init() {
         super.init(frame: .zero)

@@ -6,7 +6,22 @@ import RxSwift
 import RxRelay
 import Then
 
-class MainViewController: UIViewController, BottomNavigationViewDelegate {
+class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviArrivalDelegate {
+    
+    func isArrival(_ type: ArrivalType) {
+        switch(type) {
+        case .EXTERNAL:
+            // TO-DO
+            print("(MainVC) External Navi Ended")
+            self.showDialogView()
+        case .OUTDOOR:
+            print("(MainVC) Outdoor Navi Ended")
+            // TO-DO
+        case .INDOOR:
+            print("(MainVC) Indoor Navi Ended")
+            // TO-DO:
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -14,6 +29,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate {
         setupLayout()
         
         bottomNavigationView.delegate = self
+        kakaoNaviView.delegate = self
     }
     
     private var bottomNavigationHeight: CGFloat = 100
@@ -71,6 +87,18 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate {
     private func bindLogoutAction() {
         infoContainerView?.onLogoutTapped = {
             self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
+    private func showDialogView() {
+        let dialogView = DialogView()
+        dialogView.onConfirm = { [weak self] in
+            print("Confirmed checkout")
+        }
+        
+        view.addSubview(dialogView)
+        dialogView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }

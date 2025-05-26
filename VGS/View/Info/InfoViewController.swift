@@ -202,6 +202,15 @@ class InfoViewController: UIViewController {
     }
     
     @objc func handleStartButton() {
+        UIView.animate(withDuration: 0.1,
+                       animations: {
+            self.startButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.startButton.transform = .identity
+            }
+        })
+        
         if isChecked {
             if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
                 startButton.isUserInteractionEnabled = false
