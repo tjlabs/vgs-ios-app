@@ -30,18 +30,18 @@ class InfoContainerView: UIView {
     }
     
     private func setupLayout() {
-        addSubview(logoutView)
-        logoutView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.height.equalTo(50)
-        }
+//        addSubview(logoutView)
+//        logoutView.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview()
+//            make.top.equalTo(safeAreaLayoutGuide.snp.top)
+//            make.height.equalTo(50)
+//        }
         
         // 1. Add scrollView to view
         addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(logoutView.snp.bottom).offset(20)
-//            make.top.equalToSuperview().inset(70)
+//            make.top.equalTo(logoutView.snp.bottom).offset(20)
+            make.top.equalToSuperview().inset(70)
             make.leading.trailing.bottom.equalToSuperview()
         }
 

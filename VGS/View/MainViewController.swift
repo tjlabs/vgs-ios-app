@@ -44,15 +44,21 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     }
     
     private func setupLayout() {
-        view.addSubview(kakaoNaviView)
-        kakaoNaviView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalToSuperview()
-        }
+//        view.addSubview(kakaoNaviView)
+//        kakaoNaviView.snp.makeConstraints { make in
+//            make.top.bottom.leading.trailing.equalToSuperview()
+//        }
         
 //        view.addSubview(outdoorNaviView)
 //        outdoorNaviView.snp.makeConstraints { make in
 //            make.top.bottom.leading.trailing.equalToSuperview()
 //        }
+        
+        view.addSubview(kakaoNaviView)
+        kakaoNaviView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(self.bottomNavigationHeight-20)
+        }
         
         view.addSubview(bottomNavigationView)
         bottomNavigationView.snp.makeConstraints { make in

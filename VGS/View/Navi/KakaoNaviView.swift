@@ -1,8 +1,9 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
-class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDelegate, KNGuidance_GuideStateDelegate, KNGuidance_RouteGuideDelegate, KNGuidance_VoiceGuideDelegate, KNGuidance_SafetyGuideDelegate, KNGuidance_LocationGuideDelegate, KNGuidance_CitsGuideDelegate {
+class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDelegate, KNGuidance_GuideStateDelegate, KNGuidance_RouteGuideDelegate, KNGuidance_VoiceGuideDelegate, KNGuidance_SafetyGuideDelegate, KNGuidance_LocationGuideDelegate, KNGuidance_CitsGuideDelegate, CLLocationManagerDelegate {
     
     func naviViewGuideEnded(_ aNaviView: KNNaviView) {
         // TO-DO
@@ -45,6 +46,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     func guidanceGuideStarted(_ aGuidance: KNGuidance) {
         // TO-DO
+        print("(VGS) guidanceGuideStarted : \(aGuidance)")
         self.naviView.guidanceGuideStarted(aGuidance)
     }
     
@@ -54,7 +56,47 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     func guidanceOut(ofRoute aGuidance: KNGuidance) {
-        // TO-DO
+        print("🚗 사용자 경로 이탈 감지: 재탐색 시작")
+        guard let currentCoord = currentCoordinate else { return }
+
+        let latitude_start = currentCoord.latitude
+        let longitude_start = currentCoord.longitude
+        let name_start = currentAddress
+
+        var latitude_goal = 37.49559667720228
+        var longitude_goal = 127.03842115551231
+        var name_goal = "Goal Point"
+
+        if let info = VehicleInfoManager.shared.getVehicleInfo() {
+            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
+            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
+            name_goal = info.target_gate_name ?? "정문"
+        }
+
+        guard let sdkInstance = KNSDK.sharedInstance() else { return }
+
+        guard let startKATEC = convertWGS84ToKATEC(lon: longitude_start, lat: latitude_start),
+                let goalKATEC = convertWGS84ToKATEC(lon: longitude_goal, lat: latitude_goal) else {
+            print("🛑 좌표 변환 실패")
+            return
+        }
+
+        let start = KNPOI(name: name_start, x: startKATEC.x, y: startKATEC.y)
+        let goal = KNPOI(name: name_goal, x: goalKATEC.x, y: goalKATEC.y)
+        let vias: [KNPOI] = []
+
+        sdkInstance.makeTrip(withStart: start, goal: goal, vias: vias) { [weak self] (error, trip) in
+            guard let self = self else { return }
+            if let error = error {
+                print("🛑 재탐색 실패: \(error)")
+                return
+            }
+
+            if let trip = trip {
+                print("🔁 경로 재생성 성공")
+                self.routeGuidance.start(with: trip, priority: self.routePriority, avoidOptions: self.routeAvoidOption.rawValue)
+            }
+        }
         self.naviView.guidanceOut(ofRoute: aGuidance)
     }
     
@@ -80,7 +122,6 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     func guidance(_ aGuidance: KNGuidance, didUpdate aRoutes: [KNRoute], multiRouteInfo aMultiRouteInfo: KNMultiRouteInfo?) {
-        // TO-DO
         
         var remainingTime: Int32 = 0
         for route in aRoutes {
@@ -93,7 +134,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
             PositionManager.shared.updateEstimatedArrivalTime(estimatedArrivalTime)
             isStartReported = true
         }
-//        self.kakaoNaviPos.
+
         self.naviView.guidance(aGuidance, didUpdate: aRoutes, multiRouteInfo: aMultiRouteInfo)
     }
     
@@ -139,8 +180,9 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 let latitude: Double = curLatLon.y
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
-                if elapsed >= 10 {
+                if elapsed >= 5 {
                     PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+//                    delegate?.isArrival(.EXTERNAL)
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
                 }
@@ -154,8 +196,12 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 let latitude: Double = latLon.y
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
-                if elapsed >= 10 {
+                if elapsed >= 5 {
                     PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                    if isStartReported {
+//                        delegate?.isArrival(.EXTERNAL)
+                        isStartReported = true
+                    }
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
                 }
@@ -163,7 +209,9 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         }
         let speed: Int32 = aLocationGuide.gpsMatched.speed
         let heading: Int32 = aLocationGuide.gpsMatched.angle
-
+        
+        print("(VGS) 📍 현 위치: \(aLocationGuide.gpsMatched.pos)")
+        
         self.naviView.guidance(aGuidance, didUpdate: aLocationGuide)
     }
     
@@ -185,21 +233,32 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     var naviVolume: Float = 1.0
     var isGuideEnded: Bool = false
     
+    var isAuthGranted: Bool = false
     var isStartReported: Bool = false
     private var locationStartTime: Date = Date()
     
     weak var delegate: NaviArrivalDelegate?
     
+    // Core Location
+    private let locationManager = CLLocationManager()
+    private var currentCoordinate: CLLocationCoordinate2D?
+    private var currentAddress: String = "현재 위치"
+    
     init() {
         super.init(frame: .zero)
-        authKNSDK(completion: { [self] knError in
-            if knError == nil {
-                setupLayout()
-                setDrive()
-            } else {
-                print("(VGS) Auth : \(knError)")
-            }
-        })
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
+        isStartReported = false
+//        authKNSDK(completion: { [self] knError in
+//            if knError == nil {
+//                setupLayout()
+//                setDrive()
+//            } else {
+//                print("(VGS) Auth : \(knError)")
+//            }
+//        })
     }
     
     required init?(coder: NSCoder) {
@@ -228,19 +287,31 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     private func setNaviViewOption() { }
     
     private func setDrive() {
+        print("(VGS) setDrive : currentCoord = \(currentCoordinate)")
         // 시작 점은 TJLABS 회사 위치
-        let latitude_start = 37.495758
-        let longitude_start = 127.038249
-        let name_start = "Start Point"
+        let latitude_start = currentCoordinate?.latitude ?? 37.495758
+        let longitude_start = currentCoordinate?.longitude ?? 127.038249
+        let name_start = currentAddress
+        
+//        let latitude_start = 37.495758
+//        let longitude_start = 127.038249
+//        let name_start = "Start Point"
         
         // 도착 점은 COEX
 //        let latitude_goal = 37.513109
 //        let longitude_goal = 127.058375
         
-        let latitude_goal = 37.49559667720228
-        let longitude_goal = 127.03842115551231
-        let name_goal = "Goal Point"
+        // 도착점은 현장
+        var latitude_goal = 37.49559667720228
+        var longitude_goal = 127.03842115551231
+        var name_goal = "Goal Point"
         
+        if let info = VehicleInfoManager.shared.getVehicleInfo() {
+            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
+            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
+            name_goal = info.target_gate_name ?? "정문"
+        }
+
         let vias: [KNPOI] = []
         
         guard let sdkInstance = KNSDK.sharedInstance() else {
@@ -300,13 +371,14 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     // 주행 UI 생성
                     naviView = KNNaviView(guidance: guidance, trip: trip, routeOption: routePriority, avoidOption: routeAvoidOption.rawValue)
                     naviView.frame = containerView.bounds
-//                    naviView.frame = self.view.bounds
                     naviView.guideStateDelegate = self
                     naviView.stateDelegate = self
                     naviView.sndVolume(self.naviVolume)
                     setNaviViewOption()
                     locationStartTime = Date()
                     containerView.addSubview(naviView)
+                    
+                    guidance.start(with: trip, priority: routePriority, avoidOptions: routeAvoidOption.rawValue)
                 } else {
                     print("(VGS) Error : Cannot get shared guidance")
                 }
@@ -334,5 +406,41 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         return formatter.string(from: arrivalDate)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+
+        currentCoordinate = location.coordinate
+        print("(VGS) currentCoordinate = \(currentCoordinate)")
+        if !isAuthGranted {
+            reverseGeocode(location)
+            isAuthGranted = true
+        }
+        
+        locationManager.stopUpdatingLocation()
+    }
+    
+    private func reverseGeocode(_ location: CLLocation) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
+            guard let self = self else { return }
+            if let placemark = placemarks?.first {
+                if let name = placemark.name {
+                    self.currentAddress = name
+                }
+            }
+            print("(VGS) currentAddress = \(currentAddress)")
+            
+            // 이제 네비게이션 시작 가능
+            authKNSDK { knError in
+                if knError == nil {
+                    DispatchQueue.main.async {
+                        self.setupLayout()
+                        self.setDrive()
+                    }
+                }
+            }
+        }
     }
 }
