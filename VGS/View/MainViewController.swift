@@ -30,6 +30,8 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         
         bottomNavigationView.delegate = self
         kakaoNaviView.delegate = self
+        
+        startTimer()
     }
     
     private var bottomNavigationHeight: CGFloat = 100
@@ -37,6 +39,9 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     let kakaoNaviView = KakaoNaviView()
     var infoContainerView: InfoContainerView?
 //    let outdoorNaviView = OutdoorNaviView()
+    
+    var positionTimer: DispatchSourceTimer?
+    let TIMER_INTERVAL: TimeInterval = 5.0
     
     private func setBottomNavigationHeight() {
         let totalHeight = view.frame.height
@@ -99,6 +104,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     private func showDialogView() {
         let dialogView = DialogView()
         dialogView.onConfirm = { [weak self] in
+            self?.kakaoNaviView.removeFromSuperview()
             self?.moveToOutdoorNaviVC()
         }
         
@@ -109,8 +115,34 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     }
     
     private func moveToOutdoorNaviVC() {
+        PositionManager.shared.setNaviType(type: .OUTDOOR)
         guard let outdoorNaviVC = self.storyboard?.instantiateViewController(withIdentifier: "OutdoorNaviViewController") as? OutdoorNaviViewController else { return }
         outdoorNaviVC.modalPresentationStyle = .fullScreen
         self.navigationController?.present(outdoorNaviVC, animated: true)
+    }
+    
+    // Timer
+    private func startTimer() {
+        if (self.positionTimer == nil) {
+            let queue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".positionTimer")
+            self.positionTimer = DispatchSource.makeTimerSource(queue: queue)
+            self.positionTimer!.schedule(deadline: .now(), repeating: TIMER_INTERVAL)
+            self.positionTimer!.setEventHandler { [weak self] in
+                guard let self = self else { return }
+                self.positionTimerUpdate()
+            }
+            self.positionTimer!.resume()
+        }
+    }
+    
+    private func stopTimer() {
+        self.positionTimer?.cancel()
+        self.positionTimer = nil
+    }
+    
+    private func positionTimerUpdate() {
+        if kakaoNaviView.isStartReported {
+            PositionManager.shared.sendData()
+        }
     }
 }

@@ -15,8 +15,12 @@ class PositionManager {
     var position = UserPosition()
     
     private var estimatedArrivalTime: String?
+    private var updatedArrivalTime: String?
+    
     private var currentLat: Double?
     private var currentLon: Double?
+    var currentHeading: Double?
+    
     private var hasPosted = false
     
     private var isReadyToPut = false
@@ -25,6 +29,15 @@ class PositionManager {
     
     func setNaviType(type: NaviType) {
         self.naviType = type
+        
+        switch(self.naviType) {
+        case .EXTERNAL:
+            print("(PositionManager) setNaviType : EXTERNAL")
+        case .OUTDOOR:
+            print("(PositionManager) setNaviType : OUTDOOR")
+        case .INDOOR:
+            print("(PositionManager) setNaviType : INDOOR")
+        }
     }
     
     func updateEstimatedArrivalTime(_ time: String) {
@@ -32,10 +45,37 @@ class PositionManager {
         tryPostIfReady()
     }
     
+    func updateArrivalTime(_ time: String) {
+        self.updatedArrivalTime = time
+        self.position.arrive_datetime = time
+    }
+    
     func updateCurrentLocation(lat: Double, lon: Double) {
+//        print("(PositionManager) \(self.naviType) , lat = \(lat) , lon = \(lon)")
         self.currentLat = lat
         self.currentLon = lon
+        self.position.current_gps_x = lat
+        self.position.current_gps_y = lon
         tryPostIfReady()
+    }
+    
+    func sendData() {
+        if isReadyToPut {
+            let input = self.position
+            let url = USER_POS_URL + "/\(input.vgs_hist_no)"
+            switch(self.naviType) {
+            case .EXTERNAL:
+                print("(PositionManager) Send Data in EXTERNAL // \(input)")
+                putUserPos(url: url, input: input, completion: { [self] statusCode, returnedString, inputData in
+                })
+            case .OUTDOOR:
+                print("(PositionManager) Send Data in OUTDOOR // \(input)")
+                putUserPos(url: url, input: input, completion: { [self] statusCode, returnedString, inputData in
+                })
+            case .INDOOR:
+                print("(PositionManager) Send Data in INDOOR")
+            }
+        }
     }
     
     private func tryPostIfReady() {

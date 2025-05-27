@@ -74,6 +74,11 @@ class DialogView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setDialogString(title: String, message: String) {
+        titleLabel.text = title
+        messageLabel.text = title
+    }
+    
     private func setupLayout() {
         addSubview(darkView)
         darkView.snp.makeConstraints { make in

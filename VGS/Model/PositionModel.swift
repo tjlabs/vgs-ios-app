@@ -92,16 +92,23 @@ struct UserInitData: Codable {
 }
 
 struct UserPosition: Codable {
-    var vgs_hist_no: Double = 0
-    var arrive_datetime: String = ""
-    var current_gps_x: Double = 0
-    var current_gps_y: Double = 0
-    var target_gate_no: Double = 0
-    var speed: Double = 0
-    var current_location: String = ""
-    var sector_code: String = ""
-    var building_code: String = ""
-    var floor_code: String = ""
-    var current_x: Double = 0
-    var current_y: Double = 0
+//    var vgs_hist_no: Double
+//    var arrive_datetime: String = ""
+//    var current_gps_x: Double = 0
+//    var current_gps_y: Double = 0
+//    var target_gate_no: Double = 0
+//    var speed: Double = 0
+//    var current_location: String = "알 수 없음"
+    var vgs_hist_no: Double?
+    var arrive_datetime: String?
+    var current_gps_x: Double?
+    var current_gps_y: Double?
+    var target_gate_no: Double?
+    var speed: Double?
+    var current_location: String?
+//    var sector_code: String?
+//    var building_code: String?
+//    var floor_code: String?
+//    var current_x: Double?
+//    var current_y: Double?
 }

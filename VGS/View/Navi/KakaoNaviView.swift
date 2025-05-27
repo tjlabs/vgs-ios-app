@@ -117,6 +117,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     func guidanceGuideEnded(_ aGuidance: KNGuidance) {
         // 목적지 도착
+        isGuideEnded = true
         delegate?.isArrival(.EXTERNAL)
 //        self.naviView.guidanceGuideEnded(aGuidance, isShowDriveResultDialog: true)
     }
@@ -133,6 +134,11 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
             let estimatedArrivalTime = calArrivalTimeString(secondsToArrival: remainingTime)
             PositionManager.shared.updateEstimatedArrivalTime(estimatedArrivalTime)
             isStartReported = true
+        }
+        
+        if isStartReported {
+            let estimatedArrivalTime = calArrivalTimeString(secondsToArrival: remainingTime)
+            PositionManager.shared.updateArrivalTime(estimatedArrivalTime)
         }
 
         self.naviView.guidance(aGuidance, didUpdate: aRoutes, multiRouteInfo: aMultiRouteInfo)
@@ -176,12 +182,17 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         var isCurLocExist: Bool = false
         if let curLocation = aLocationGuide.location {
             if let curLatLon = convertKATECToWGS84(pos: curLocation.pos) {
+                PositionManager.shared.position.current_location = curLocation.roadName ?? "알 수 없음"
                 let longitude: Double = curLatLon.x
                 let latitude: Double = curLatLon.y
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
                 if elapsed >= 5 {
-                    PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+//                    isGuideEnded = true
+//                    routeGuidance.stop()
+                    if !isGuideEnded {
+                        PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                    }
 //                    delegate?.isArrival(.EXTERNAL)
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
@@ -197,10 +208,8 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
                 if elapsed >= 5 {
-                    PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
-                    if isStartReported {
-//                        delegate?.isArrival(.EXTERNAL)
-                        isStartReported = true
+                    if !isGuideEnded {
+                        PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
                     }
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
@@ -209,8 +218,10 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         }
         let speed: Int32 = aLocationGuide.gpsMatched.speed
         let heading: Int32 = aLocationGuide.gpsMatched.angle
+        PositionManager.shared.position.speed = Double(speed)
+        PositionManager.shared.currentHeading = Double(heading)
         
-        print("(VGS) 📍 현 위치: \(aLocationGuide.gpsMatched.pos)")
+        print("(VGS) 📍 현 위치: \(aLocationGuide.gpsMatched.pos) // speed = \(speed) // heading = \(heading)")
         
         self.naviView.guidance(aGuidance, didUpdate: aLocationGuide)
     }
@@ -288,7 +299,6 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     private func setDrive() {
         print("(VGS) setDrive : currentCoord = \(currentCoordinate)")
-        // 시작 점은 TJLABS 회사 위치
         let latitude_start = currentCoordinate?.latitude ?? 37.495758
         let longitude_start = currentCoordinate?.longitude ?? 127.038249
         let name_start = currentAddress
