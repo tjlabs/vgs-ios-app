@@ -7,7 +7,7 @@ protocol NaviArrivalDelegate: AnyObject {
     func isArrival(_ type: ArrivalType)
 }
 
-struct UserStartInput: Codable {
+struct UserInitInput: Codable {
     var access_reg_no: Double = 0
     var driver_no: Double = 0
     var arrive_datetime: String = ""
@@ -25,15 +25,15 @@ struct UserStartInput: Codable {
     }
 }
 
-struct UserStartResult: Codable {
-    let data: UserStartData
+struct UserInitResult: Codable {
+    let data: UserInitData
     let success: Bool
     let code: Int
     let errors: String?
     let message: String
 }
 
-struct UserStartData: Codable {
+struct UserInitData: Codable {
     let id: String
     let no: Double
     let vgs_hist_no: Double

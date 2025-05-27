@@ -46,13 +46,13 @@ class PositionManager {
         hasPosted = true
 
         if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
-            let input = UserStartInput(access_reg_no: vehicleInfo.access_reg_no, driver_no: vehicleInfo.driver_no, arrive_datetime: time, current_gps_x: lat, current_gps_y: lon, target_gate_no: vehicleInfo.target_gate_no!)
+            let input = UserInitInput(access_reg_no: vehicleInfo.access_reg_no, driver_no: vehicleInfo.driver_no, arrive_datetime: time, current_gps_x: lat, current_gps_y: lon, target_gate_no: vehicleInfo.target_gate_no!)
             print("Post input: \(input)")
-            postUserStart(url: USER_START_URL, input: input) { [self] statusCode, returnedString, _ in
+            postUserInit(url: USER_INIT_URL, input: input) { [self] statusCode, returnedString, _ in
                 
                 print("Post Result: [\(statusCode)] \(returnedString)")
                 if statusCode == 200 {
-                    if let decodedResult = decodeUserStartResult(from: returnedString) {
+                    if let decodedResult = decodeUserInitResult(from: returnedString) {
                         position.vgs_his_no = decodedResult.data.vgs_hist_no
                         position.target_gate_no = decodedResult.data.target_gate_no!
                         
@@ -121,7 +121,7 @@ class PositionManager {
         }.resume()
     }
     
-    func postUserStart(url: String, input: UserStartInput, completion: @escaping (Int, String, UserStartInput) -> Void) {
+    func postUserInit(url: String, input: UserInitInput, completion: @escaping (Int, String, UserInitInput) -> Void) {
         guard let body = encodeJson(input),
               let request = makeRequest(url: url, body: body) else {
             DispatchQueue.main.async { completion(406, "Invalid URL or failed to encode JSON", input) }
@@ -149,7 +149,7 @@ class PositionManager {
         performRequest(request: request, session: session, input: input, completion: completion)
     }
     
-    func decodeUserStartResult(from jsonString: String) -> UserStartResult? {
+    func decodeUserInitResult(from jsonString: String) -> UserInitResult? {
         guard let data = jsonString.data(using: .utf8) else {
             print("❌ 문자열 → 데이터 변환 실패")
             return nil
@@ -158,7 +158,7 @@ class PositionManager {
         let decoder = JSONDecoder()
 
         do {
-            let result = try decoder.decode(UserStartResult.self, from: data)
+            let result = try decoder.decode(UserInitResult.self, from: data)
             return result
         } catch {
             print("❌ 디코딩 실패: \(error)")

@@ -2,8 +2,8 @@
 let VGS_TOKEN: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImFwaVN5c3RlbVVzZXI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwaVN5c3RlbVVzZXI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIwZDUxYTI0YS04NWNhLTQ4OWItODZmYy03MDE3NjBjNjQ4YjIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiI17JuUIOuqqSAwOCAyMDI1IDA5OjIxOjAyIOyYpOyghCIsIm5iZiI6MTc0NjYwOTY2MiwiZXhwIjoxNzQ5MjAxNjYyLCJpc3MiOiJodHRwczovL3RqLnNoaW5qamFuZy5jb20iLCJhdWQiOiJodHRwczovL3RqLnNoaW5qamFuZy5jb20ifQ.2ncWpMJLYoVMoY_K0RLPF1od0VaHvqCh-trXcaaqo8M"
 
 let BASE_URL: String = "https://hycdev.irfm.tjlabscorp.com/api"
-let LOGIN_URL: String = BASE_URL + "/v2/AccessReg/ListForVGS"
-let USER_START_URL: String = BASE_URL + "/v2/VgsHist"
+let USER_SEARCH_URL: String = BASE_URL + "/v2/AccessReg/ListForVGS"
+let USER_INIT_URL: String = BASE_URL + "/v2/VgsHist"
 let USER_POS_URL: String = BASE_URL + "/v2/VgsHist"
 
 struct SearchListResult: Codable {
@@ -163,4 +163,18 @@ struct VehicleInfo: Codable {
         del_wo_name = try container.decodeIfPresent(String.self, forKey: .del_wo_name) ?? "알 수 없음"
         total_count = try container.decodeIfPresent(Double.self, forKey: .total_count) ?? -1
     }
+}
+
+struct UserProfile {
+    var carNumber: String = ""
+    
+    init(carNumber: String) {
+        self.carNumber = carNumber
+    }
+}
+
+struct SelectCellItem {
+    var vehicleNumber: String
+    var company: String
+    var vehicleType: String
 }

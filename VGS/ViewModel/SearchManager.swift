@@ -1,8 +1,8 @@
 
 import Foundation
 
-class LoginManager {
-    static let shared = LoginManager()
+class SearchManager {
+    static let shared = SearchManager()
     
     static let TIMEOUT_VALUE_POST = 5.0
 
@@ -10,7 +10,7 @@ class LoginManager {
     private let sessions: [URLSession]
     
     init() {
-        self.sessions = LoginManager.createSessionPool()
+        self.sessions = SearchManager.createSessionPool()
     }
     
     // MARK: - Helper Methods
@@ -37,8 +37,8 @@ class LoginManager {
 
         // 세션 구성
         let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForResource = LoginManager.TIMEOUT_VALUE_POST
-        sessionConfig.timeoutIntervalForRequest = LoginManager.TIMEOUT_VALUE_POST
+        sessionConfig.timeoutIntervalForResource = SearchManager.TIMEOUT_VALUE_POST
+        sessionConfig.timeoutIntervalForRequest = SearchManager.TIMEOUT_VALUE_POST
         let session = URLSession(configuration: sessionConfig)
 
         // 데이터 태스크 실행

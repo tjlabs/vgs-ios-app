@@ -6,12 +6,12 @@ import RxSwift
 import RxRelay
 import Then
 
-class LoginView: UIView {
+class UserSerchView: UIView {
     private let disposeBag = DisposeBag()
     
-    var onLoginSuccessed: (() -> Void)?
+    var onSearchSuccessed: (() -> Void)?
     var onCellSelected: ((VehicleInfo) -> Void)?
-    var onLoginFail: (() -> Void)?
+    var onSearchFail: (() -> Void)?
     
     private var selectView: SelectView?
     var isChecked = false
@@ -81,7 +81,7 @@ class LoginView: UIView {
         return label
     }()
     
-    private let loginButton: UIView = {
+    private let searchButton: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: "#E47325")
         view.alpha = 0.8
@@ -90,7 +90,7 @@ class LoginView: UIView {
         return view
     }()
     
-    private let loginButtonTitleLabel: UILabel = {
+    private let searchButtonTitleLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.font = UIFont.notoSansBold(size: 48)
@@ -166,15 +166,15 @@ class LoginView: UIView {
             make.top.bottom.trailing.equalToSuperview()
         }
         
-        addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
+        addSubview(searchButton)
+        searchButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(40)
             make.height.equalTo(90)
             make.bottom.equalToSuperview().inset(60)
         }
         
-        loginButton.addSubview(loginButtonTitleLabel)
-        loginButtonTitleLabel.snp.makeConstraints { make in
+        searchButton.addSubview(searchButtonTitleLabel)
+        searchButtonTitleLabel.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview().inset(5)
         }
     }
@@ -183,7 +183,7 @@ class LoginView: UIView {
         bindTextField()
         setupKeyboardDismissal()
         setupSaveAction()
-        setupLoginAction()
+        setupSearchAction()
     }
     
     private func bindTextField() {
@@ -249,33 +249,33 @@ class LoginView: UIView {
         }
     }
     
-    private func setupLoginAction() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLoginButton))
-        loginButton.isUserInteractionEnabled = true
-        loginButton.addGestureRecognizer(tapGesture)
+    private func setupSearchAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSearchButton))
+        searchButton.isUserInteractionEnabled = true
+        searchButton.addGestureRecognizer(tapGesture)
     }
     
-    @objc func handleLoginButton() {
+    @objc func handleSearchButton() {
         let isValid = validateUser()
         UIView.animate(withDuration: 0.1,
                        animations: {
-            self.loginButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            self.searchButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         }, completion: { _ in
             UIView.animate(withDuration: 0.1) {
-                self.loginButton.transform = .identity
+                self.searchButton.transform = .identity
             }
         })
         
         let vehicleNumber = self.vehicleNumberTextField.text ?? ""
         
         if isValid {
-            LoginManager.shared.getSearchList(url: LOGIN_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
-                print("(LoginVC) getSearchList : \(statusCode) , \(returnedString)")
+            SearchManager.shared.getSearchList(url: USER_SEARCH_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
+                print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
                 if statusCode == 200 {
                     UserManager.shared.userProfile.carNumber = vehicleNumber
                     UserManager.shared.saveProfileToCache()
                     
-                    if let result = LoginManager.shared.decodeSearchListResult(from: returnedString) {
+                    if let result = SearchManager.shared.decodeSearchListResult(from: returnedString) {
                         let vehicleInfoList = result.list
                         let counts = Int(result.total)
                         if counts > 1 {
@@ -285,15 +285,15 @@ class LoginView: UIView {
 //                            self.onLoginFail?()
                             self.onCellSelected?(vehicleInfoList[0])
                         } else {
-                            self.onLoginFail?()
+                            self.onSearchFail?()
                         }
                     } else {
-                        self.onLoginFail?()
-                        print("디코딩에 실패했습니다.")
+                        self.onSearchFail?()
+                        print("(SearchView) 디코딩에 실패했습니다.")
                     }
                 } else {
-                    self.onLoginFail?()
-                    print("통신에 실패했습니다.")
+                    self.onSearchFail?()
+                    print("(SearchView) 통신에 실패했습니다.")
                 }
             })
         }
@@ -325,7 +325,7 @@ class LoginView: UIView {
     }
     
     private func showSelectView(vehicleInfoList: [VehicleInfo]) {
-        self.onLoginSuccessed?()
+        self.onSearchSuccessed?()
 
         selectView?.removeFromSuperview()
 

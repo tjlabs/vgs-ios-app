@@ -6,11 +6,11 @@ import RxSwift
 import RxRelay
 import Then
 
-class LoginViewController: UIViewController {
+class UserSearchViewController: UIViewController {
     
     let topView = TopView()
     let logoView = LogoView()
-    let loginView = LoginView()
+    let userSearchView = UserSerchView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +40,8 @@ class LoginViewController: UIViewController {
             make.height.equalTo(120)
         }
         
-        view.addSubview(loginView)
-        loginView.snp.makeConstraints{ make in
+        view.addSubview(userSearchView)
+        userSearchView.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(20)
             make.top.equalTo(logoView.snp.bottom)
@@ -51,22 +51,22 @@ class LoginViewController: UIViewController {
     private func bindActions() {
         topView.onBackArrowTapped = { [weak self] in
             UIView.animate(withDuration: 1.0, animations: {
-                self?.loginView.removeSelectViewIfNeeded()
+                self?.userSearchView.removeSelectViewIfNeeded()
                 self?.topView.setArrowBackOption(isHidden: true, title: "다시 검색하기")
             })
         }
         
-        loginView.onLoginSuccessed = { [weak self] in
+        userSearchView.onSearchSuccessed = { [weak self] in
             UIView.animate(withDuration: 1.0, animations: {
                 self?.topView.setArrowBackOption(isHidden: false, title: "다시 검색하기")
             })
         }
         
-        loginView.onCellSelected = { [self] selectedVehicle in
+        userSearchView.onCellSelected = { [self] selectedVehicle in
             moveToInfoVC(vehicleInfo: selectedVehicle)
         }
         
-        loginView.onLoginFail = {
+        userSearchView.onSearchFail = {
             self.showToastWithIcon(message: "차량 조회에 실패 했습니다")
         }
     }
