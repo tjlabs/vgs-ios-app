@@ -92,7 +92,7 @@ struct UserInitData: Codable {
 }
 
 struct UserPosition: Codable {
-    var vgs_his_no: Double = 0
+    var vgs_hist_no: Double = 0
     var arrive_datetime: String = ""
     var current_gps_x: Double = 0
     var current_gps_y: Double = 0

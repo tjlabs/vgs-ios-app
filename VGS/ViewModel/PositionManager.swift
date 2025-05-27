@@ -7,6 +7,7 @@ enum NaviType {
 
 class PositionManager {
     static let shared = PositionManager()
+    private let userInitKey = "VgsUserInit"
     
     let TIMEOUT_VALUE_POST = 5.0
     
@@ -44,16 +45,27 @@ class PositionManager {
                 let lon = currentLon else { return }
 
         hasPosted = true
-
+        
         if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
+            if let cachedData = loadFromCache() {
+                if cachedData.access_reg_no == vehicleInfo.access_reg_no && cachedData.driver_no == vehicleInfo.driver_no {
+                    position.vgs_hist_no = cachedData.vgs_hist_no
+                    position.target_gate_no = cachedData.target_gate_no!
+                    self.isReadyToPut = true
+                    print("(PositionManager) Already Initialized")
+                    return
+                }
+            }
+            
             let input = UserInitInput(access_reg_no: vehicleInfo.access_reg_no, driver_no: vehicleInfo.driver_no, arrive_datetime: time, current_gps_x: lat, current_gps_y: lon, target_gate_no: vehicleInfo.target_gate_no!)
-            print("Post input: \(input)")
+            print("(PositionManager) Post input: \(input)")
             postUserInit(url: USER_INIT_URL, input: input) { [self] statusCode, returnedString, _ in
                 
-                print("Post Result: [\(statusCode)] \(returnedString)")
+                print("(PositionManager) Post Result: [\(statusCode)] \(returnedString)")
                 if statusCode == 200 {
                     if let decodedResult = decodeUserInitResult(from: returnedString) {
-                        position.vgs_his_no = decodedResult.data.vgs_hist_no
+                        saveToCache(decodedResult.data)
+                        position.vgs_hist_no = decodedResult.data.vgs_hist_no
                         position.target_gate_no = decodedResult.data.target_gate_no!
                         
                         self.isReadyToPut = true
@@ -164,5 +176,37 @@ class PositionManager {
             print("❌ 디코딩 실패: \(error)")
             return nil
         }
+    }
+    
+    func saveToCache(_ data: UserInitData) {
+        do {
+            let encodedData = try JSONEncoder().encode(data)
+            let jsonString = String(data: encodedData, encoding: .utf8)
+            UserDefaults.standard.set(jsonString, forKey: userInitKey)
+            print("✅ UserInitData 저장 완료")
+        } catch {
+            print("❌ UserInitData 저장 실패: \(error)")
+        }
+    }
+
+    func loadFromCache() -> UserInitData? {
+        guard let jsonString = UserDefaults.standard.string(forKey: userInitKey),
+                let jsonData = jsonString.data(using: .utf8) else {
+            return nil
+        }
+
+        do {
+            let data = try JSONDecoder().decode(UserInitData.self, from: jsonData)
+            print("✅ UserInitData 불러오기 성공")
+            return data
+        } catch {
+            print("❌ UserInitData 불러오기 실패: \(error)")
+            return nil
+        }
+    }
+
+    func clearCache() {
+        UserDefaults.standard.removeObject(forKey: userInitKey)
+        print("🧹 UserInitData 캐시 제거 완료")
     }
 }

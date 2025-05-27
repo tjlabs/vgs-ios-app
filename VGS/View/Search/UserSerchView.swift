@@ -104,7 +104,7 @@ class UserSerchView: UIView {
         super.init(frame: .zero)
         setupLayout()
         bindActions()
-        loadUserProfile()
+        loadUserCarNumber()
     }
     
     required init?(coder: NSCoder) {
@@ -239,11 +239,11 @@ class UserSerchView: UIView {
         })
     }
     
-    private func loadUserProfile() {
-        UserManager.shared.loadProfileFromCache()
-        if UserManager.shared.isLoadFromCache {
-            print("LoginView : userProfile = \(UserManager.shared.userProfile)")
-            self.vehicleNumberTextField.text = UserManager.shared.userProfile.carNumber
+    private func loadUserCarNumber() {
+        VehicleInfoManager.shared.loadCarNumberFromCache()
+        if VehicleInfoManager.shared.isLoadFromCache {
+            print("(UserSearchView) : userCarNumber = \(VehicleInfoManager.shared.userCarNumber)")
+            self.vehicleNumberTextField.text = VehicleInfoManager.shared.userCarNumber
             self.vehicleNumberHintLabel.isHidden = true
             handleCheckboxToggle()
         }
@@ -272,17 +272,17 @@ class UserSerchView: UIView {
             SearchManager.shared.getSearchList(url: USER_SEARCH_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
                 print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
                 if statusCode == 200 {
-                    UserManager.shared.userProfile.carNumber = vehicleNumber
-                    UserManager.shared.saveProfileToCache()
+                    VehicleInfoManager.shared.userCarNumber = vehicleNumber
+                    VehicleInfoManager.shared.saveCarNumberToCache()
                     
                     if let result = SearchManager.shared.decodeSearchListResult(from: returnedString) {
                         let vehicleInfoList = result.list
+                        
                         let counts = Int(result.total)
                         if counts > 1 {
                             // 2개 이상
                             showSelectView(vehicleInfoList: vehicleInfoList)
                         } else if counts == 1 {
-//                            self.onLoginFail?()
                             self.onCellSelected?(vehicleInfoList[0])
                         } else {
                             self.onSearchFail?()
