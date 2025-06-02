@@ -41,17 +41,19 @@ class PositionManager {
     }
     
     func updateEstimatedArrivalTime(_ time: String) {
+        print("(PositionManager) arrivalTime : updateEstimatedArrivalTime = \(time)")
         self.estimatedArrivalTime = time
         tryPostIfReady()
     }
     
     func updateArrivalTime(_ time: String) {
+        print("(PositionManager) arrivalTime : updateArrivalTime = \(time)")
         self.updatedArrivalTime = time
         self.position.arrive_datetime = time
     }
     
     func updateCurrentLocation(lat: Double, lon: Double) {
-//        print("(PositionManager) \(self.naviType) , lat = \(lat) , lon = \(lon)")
+//        print("(PositionManager) updateCurrentLocation : \(self.naviType) , lat = \(lat) , lon = \(lon)")
         self.currentLat = lat
         self.currentLon = lon
         self.position.current_gps_x = lat
@@ -89,6 +91,8 @@ class PositionManager {
         if let vehicleInfo = VehicleInfoManager.shared.getVehicleInfo() {
             if let cachedData = loadFromCache() {
                 if cachedData.access_reg_no == vehicleInfo.access_reg_no && cachedData.driver_no == vehicleInfo.driver_no {
+                    position.driver_no = cachedData.driver_no
+                    position.access_reg_no = cachedData.access_reg_no
                     position.vgs_hist_no = cachedData.vgs_hist_no
                     position.target_gate_no = cachedData.target_gate_no!
                     self.isReadyToPut = true

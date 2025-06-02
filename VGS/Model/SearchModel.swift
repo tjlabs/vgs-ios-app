@@ -2,6 +2,7 @@
 let VGS_TOKEN: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImFwaVN5c3RlbVVzZXI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFwaVN5c3RlbVVzZXI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIwZDUxYTI0YS04NWNhLTQ4OWItODZmYy03MDE3NjBjNjQ4YjIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiI17JuUIOuqqSAwOCAyMDI1IDA5OjIxOjAyIOyYpOyghCIsIm5iZiI6MTc0NjYwOTY2MiwiZXhwIjoxNzQ5MjAxNjYyLCJpc3MiOiJodHRwczovL3RqLnNoaW5qamFuZy5jb20iLCJhdWQiOiJodHRwczovL3RqLnNoaW5qamFuZy5jb20ifQ.2ncWpMJLYoVMoY_K0RLPF1od0VaHvqCh-trXcaaqo8M"
 
 let BASE_URL: String = "https://hycdev.irfm.tjlabscorp.com/api"
+//let BASE_URL: String = "https://hyy.irfm.tjlabscorp.com/api"
 let USER_SEARCH_URL: String = BASE_URL + "/v2/AccessReg/ListForVGS"
 let USER_INIT_URL: String = BASE_URL + "/v2/VgsHist"
 let USER_POS_URL: String = BASE_URL + "/v2/VgsHist"

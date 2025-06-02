@@ -36,7 +36,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
     
     private let requestButton = UIView().then {
         $0.backgroundColor = UIColor(hex: "#E47325")
-        $0.alpha = 0.8
+        $0.alpha = 1.0
         $0.cornerRadius = 15
         $0.addShadow(location: .rightBottom, color: .black, opacity: 0.2)
     }
@@ -48,6 +48,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         $0.textAlignment = .center
         $0.text = "진입 요청"
     }
+    
     let mapView = TJLabsNaviView()
     
     let mapper = PerspectiveMapper()
@@ -64,7 +65,9 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        imageMapMarker = UIImage(named: "map_marker")
+        
+        view.backgroundColor = .black
+        startOutdoor()
         setupLayout()
         bindActions()
         setupNaviView()
@@ -134,7 +137,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         mapView.configureFrame(to: mainView)
         mainView.addSubview(mapView)
     }
-
+    
     private func bindActions() {
         setupRequestButtonAction()
 //        scrollView.delegate = self
@@ -145,21 +148,10 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         requestButton.isUserInteractionEnabled = true
         requestButton.addGestureRecognizer(tapGesture)
     }
-
-//    @objc func handleRequestButton() {
-//        UIView.animate(withDuration: 0.1, animations: {
-//            self.requestButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-//        }, completion: { _ in
-//            UIView.animate(withDuration: 0.1) {
-//                self.requestButton.transform = .identity
-//            }
-//        })
-//        showDialogView()
-//    }
     
     @objc func handleRequestButton() {
-        if !isGuiding {
-            self.navigationController?.popToRootViewController(animated: true)
+        if isGuiding {
+            self.dismiss(animated: true, completion: nil)
         } else {
             UIView.animate(withDuration: 0.1, animations: {
                 self.requestButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -185,11 +177,12 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func showDialogView() {
-        let dialogView = DialogView()
+        let dialogView = DialogView(contentViewHeight: 240)
         dialogView.setDialogString(title: "운행 시작", message: "요청이 승인되었습니다. 현장으로 진입해주세요. 운행 종료 후 종료 버튼을 눌러주세요.")
         dialogView.onConfirm = { [weak self] in
+            self?.isGuiding = true
             self?.mapView.isAuthGrated = true
-            self?.requestButton.backgroundColor = UIColor(hex: "#a9230f")
+            self?.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
             self?.requestButtonTitleLabel.text = "운행 종료"
         }
         
@@ -197,6 +190,13 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         dialogView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+    
+    func startOutdoor() {
+        self.isGuiding = true
+        self.mapView.isAuthGrated = true
+        self.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
+        self.requestButtonTitleLabel.text = "운행 종료"
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {

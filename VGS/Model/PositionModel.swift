@@ -100,6 +100,8 @@ struct UserPosition: Codable {
 //    var speed: Double = 0
 //    var current_location: String = "알 수 없음"
     var vgs_hist_no: Double?
+    var driver_no: Double?
+    var access_reg_no: Double?
     var arrive_datetime: String?
     var current_gps_x: Double?
     var current_gps_y: Double?

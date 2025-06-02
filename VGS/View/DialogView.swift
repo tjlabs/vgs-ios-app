@@ -6,6 +6,7 @@ class DialogView: UIView {
     var onConfirm: (() -> Void)?
     var onCancel: (() -> Void)?
  
+    var contentViewHeight: CGFloat?
     private lazy var darkView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -65,8 +66,9 @@ class DialogView: UIView {
         return button
     }()
     
-    init() {
+    init(contentViewHeight: CGFloat) {
         super.init(frame: .zero)
+        self.contentViewHeight = contentViewHeight
         setupLayout()
     }
     
@@ -76,7 +78,7 @@ class DialogView: UIView {
     
     func setDialogString(title: String, message: String) {
         titleLabel.text = title
-        messageLabel.text = title
+        messageLabel.text = message
     }
     
     private func setupLayout() {
@@ -89,7 +91,7 @@ class DialogView: UIView {
         contentView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalToSuperview().inset(30)
-            make.height.equalTo(180)
+            make.height.equalTo(self.contentViewHeight ?? 180)
         }
 
         contentView.addSubview(titleLabel)

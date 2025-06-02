@@ -62,15 +62,19 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         let latitude_start = currentCoord.latitude
         let longitude_start = currentCoord.longitude
         let name_start = currentAddress
-
-        var latitude_goal = 37.49559667720228
-        var longitude_goal = 127.03842115551231
-        var name_goal = "Goal Point"
+        
+        var latitude_goal = 37.16270985567856
+        var longitude_goal = 127.32467624370436
+        var name_goal = "GATE#6"
+        
+//        var latitude_start = latitude_goal
+//        var longitude_start = longitude_goal
+//        var name_start = name_goal
 
         if let info = VehicleInfoManager.shared.getVehicleInfo() {
-            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
-            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
-            name_goal = info.target_gate_name ?? "정문"
+            latitude_goal = Double(info.gate_gps_x ?? 37.16270985567856)
+            longitude_goal = Double(info.gate_gps_y ?? 127.32467624370436)
+            name_goal = info.target_gate_name ?? "GATE#6"
         }
 
         guard let sdkInstance = KNSDK.sharedInstance() else { return }
@@ -190,9 +194,11 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 if elapsed >= 5 {
 //                    isGuideEnded = true
 //                    routeGuidance.stop()
+                    
                     if !isGuideEnded {
                         PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
                     }
+                    
 //                    delegate?.isArrival(.EXTERNAL)
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
@@ -203,14 +209,20 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         
         if !isCurLocExist {
             if let latLon = convertKATECToWGS84(pos: DoublePoint(x: aLocationGuide.gpsMatched.pos.x, y: aLocationGuide.gpsMatched.pos.y)) {
+                PositionManager.shared.position.current_location = "알 수 없음"
                 let longitude: Double = latLon.x
                 let latitude: Double = latLon.y
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
                 if elapsed >= 5 {
+//                    isGuideEnded = true
+//                    routeGuidance.stop()
+                    
                     if !isGuideEnded {
                         PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
                     }
+                    
+//                    delegate?.isArrival(.EXTERNAL)
                 } else {
                     print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
                 }
@@ -236,6 +248,22 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         view.backgroundColor = .clear
         return view
     }()
+    
+    private let forceGuidanceEndButton = UIView().then {
+        $0.backgroundColor = UIColor.black
+        $0.alpha = 1.0
+        $0.cornerRadius = 15
+    }
+    
+    private let forceGuidanceEndButtonTitle = UILabel().then {
+        $0.backgroundColor = .clear
+        $0.font = UIFont.notoSansBold(size: 20)
+        $0.textColor = .white
+        $0.textAlignment = .center
+        $0.adjustsFontSizeToFitWidth = true
+        $0.minimumScaleFactor = 0.2
+        $0.text = "영내 도착"
+    }
     
     var naviView = KNNaviView.init()
     var routePriority: KNRoutePriority = .time
@@ -293,16 +321,47 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
 //            make.bottom.equalToSuperview().inset(20)
         }
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let totalHeight = frame.height
+        addSubview(forceGuidanceEndButton)
+        forceGuidanceEndButton.snp.makeConstraints { make in
+            make.width.equalTo(140)
+            make.height.equalTo(totalHeight*0.06)
+            make.trailing.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(60)
+        }
+        
+        forceGuidanceEndButton.addSubview(forceGuidanceEndButtonTitle)
+        forceGuidanceEndButtonTitle.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(5)
+        }
     }
     
     private func setNaviViewOption() { }
     
+    private func setupForceGuidanceEndButtonAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleForceGuidanceEndButton))
+        forceGuidanceEndButton.isUserInteractionEnabled = true
+        forceGuidanceEndButton.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleForceGuidanceEndButton() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.forceGuidanceEndButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1, animations: {
+                self.forceGuidanceEndButton.transform = .identity
+            }, completion: { _ in
+                self.routeGuidance.stop()
+                self.isStartReported = true
+                self.isGuideEnded = true
+                self.delegate?.isArrival(.EXTERNAL)
+            })
+        })
+    }
+    
     private func setDrive() {
-        print("(VGS) setDrive : currentCoord = \(currentCoordinate)")
-        let latitude_start = currentCoordinate?.latitude ?? 37.495758
-        let longitude_start = currentCoordinate?.longitude ?? 127.038249
-        let name_start = currentAddress
-        
+        // Test Drive
 //        let latitude_start = 37.495758
 //        let longitude_start = 127.038249
 //        let name_start = "Start Point"
@@ -310,17 +369,23 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         // 도착 점은 COEX
 //        let latitude_goal = 37.513109
 //        let longitude_goal = 127.058375
+//        let name_goal = "Goal Point"
+        
+        print("(VGS) setDrive : currentCoord = \(currentCoordinate)")
+        let latitude_start = currentCoordinate?.latitude ?? 37.495758
+        let longitude_start = currentCoordinate?.longitude ?? 127.038249
+        let name_start = currentAddress
+
+        let latitude_goal = 37.16270985567856
+        let longitude_goal = 127.32467624370436
+        let name_goal = "GATE#6"
         
         // 도착점은 현장
-        var latitude_goal = 37.49559667720228
-        var longitude_goal = 127.03842115551231
-        var name_goal = "Goal Point"
-        
-        if let info = VehicleInfoManager.shared.getVehicleInfo() {
-            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
-            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
-            name_goal = info.target_gate_name ?? "정문"
-        }
+//        if let info = VehicleInfoManager.shared.getVehicleInfo() {
+//            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
+//            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
+//            name_goal = info.target_gate_name ?? "정문"
+//        }
 
         let vias: [KNPOI] = []
         
@@ -362,6 +427,12 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
             guard let self = self else { return }
             if let error = aError {
                 // 경로 요청 실패
+//                isAuthGranted = true
+//                isStartReported = true
+//                
+//                isGuideEnded = true
+//                delegate?.isArrival(.EXTERNAL)
+                
                 print("(VGS) Failed to request route : \(String(describing: aError))")
             } else if let routes = aRoutes {
                 // 경로 요청 성공
@@ -406,18 +477,6 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         return wgs84Coord
     }
     
-    func calArrivalTimeString(secondsToArrival: Int32) -> String {
-        // 현재 시간에 초를 더한 도착 시간 계산
-        let arrivalDate = Date().addingTimeInterval(TimeInterval(secondsToArrival))
-        
-        // ISO 8601 형식으로 포맷 (UTC 기준)
-        let formatter = ISO8601DateFormatter()
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // UTC 기준
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        
-        return formatter.string(from: arrivalDate)
-    }
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
 
@@ -444,9 +503,14 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
             
             // 이제 네비게이션 시작 가능
             authKNSDK { knError in
+                DispatchQueue.main.async {
+                    self.setupLayout()
+                    self.setupForceGuidanceEndButtonAction()
+                }
                 if knError == nil {
                     DispatchQueue.main.async {
-                        self.setupLayout()
+//                        self.setupLayout()
+//                        self.setupForceGuidanceEndButtonAction()
                         self.setDrive()
                     }
                 }
