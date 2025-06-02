@@ -34,7 +34,7 @@ class SearchManager {
         var request = URLRequest(url: fullURL)
         request.httpMethod = "GET"
         request.setValue("Bearer \(VGS_TOKEN)", forHTTPHeaderField: "Authorization")
-
+        
         // 세션 구성
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForResource = SearchManager.TIMEOUT_VALUE_POST

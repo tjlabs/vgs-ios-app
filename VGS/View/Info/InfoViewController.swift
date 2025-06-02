@@ -223,7 +223,9 @@ class InfoViewController: UIViewController {
                 }
             }
         } else {
-            self.showToastWithIcon(message: "정보 확인에 대해 체크해주세요")
+            DispatchQueue.main.async {
+                self.showToastWithIcon(message: "정보 확인에 대해 체크해주세요")
+            }
             startButton.isUserInteractionEnabled = true
         }
     }
