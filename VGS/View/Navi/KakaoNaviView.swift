@@ -429,7 +429,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 // 경로 요청 실패
 //                isAuthGranted = true
 //                isStartReported = true
-//                
+//
 //                isGuideEnded = true
 //                delegate?.isArrival(.EXTERNAL)
                 

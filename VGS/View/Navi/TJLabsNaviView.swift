@@ -78,7 +78,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     private let zoomButton = TJLabsZoomButton()
     private var imageMapMarker: UIImage?
     private let userCoordTag = 999
-    private let USER_CENTER_OFFSET: CGFloat = 50
+    private let USER_CENTER_OFFSET: CGFloat = 60
     private var mode: MapMode = .MAP_ONLY
     private var prePixelCoord: CGPoint?
     private var preHeading: Double?
@@ -276,7 +276,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         guard let location = locations.last else { return }
 
         currentCoordinate = location.coordinate
-        let pixelCoord = mapper.latLonToPixel(lat: currentCoordinate!.latitude, lon: currentCoordinate!.longitude)
+//        let pixelCoord = mapper.latLonToPixel(lat: currentCoordinate!.latitude, lon: currentCoordinate!.longitude)
 //        let latitude_start = 37.495758
 //        let longitude_start = 127.038249
 //        
@@ -476,7 +476,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             guard let viewPoint = convertImagePointToViewPoint(imagePoint: logicalCoord, in: mapImageView) else { return }
 
             let marker = self.imageMapMarker
-            let coordSize: CGFloat = 20
+            let coordSize: CGFloat = 15
             let pointView = UIImageView(image: marker)
             pointView.frame = CGRect(x: 0, y: 0, width: coordSize, height: coordSize)
             pointView.center = viewPoint

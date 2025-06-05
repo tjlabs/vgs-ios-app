@@ -65,6 +65,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.isIdleTimerDisabled = true
         
         view.backgroundColor = .black
         startOutdoor()

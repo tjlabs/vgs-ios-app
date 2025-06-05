@@ -69,10 +69,12 @@ class PositionManager {
             case .EXTERNAL:
                 print("(PositionManager) Send Data in EXTERNAL // \(input)")
                 putUserPos(url: url, input: input, completion: { [self] statusCode, returnedString, inputData in
+//                    print("(PositionManager) Send Data Result EXTERNAL // \(statusCode) // \(returnedString)")
                 })
             case .OUTDOOR:
                 print("(PositionManager) Send Data in OUTDOOR // \(input)")
                 putUserPos(url: url, input: input, completion: { [self] statusCode, returnedString, inputData in
+//                    print("(PositionManager) Send Data Result EXTERNAL // \(statusCode) // \(returnedString)")
                 })
             case .INDOOR:
                 print("(PositionManager) Send Data in INDOOR")

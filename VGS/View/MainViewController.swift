@@ -25,6 +25,8 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         setBottomNavigationHeight()
         setupLayout()
         
