@@ -25,7 +25,7 @@ class PositionManager {
     
     private var isReadyToPut = false
     
-    init() { }
+    init() {}
     
     func setNaviType(type: NaviType) {
         self.naviType = type
@@ -131,6 +131,8 @@ class PositionManager {
     }
     
     private func makeRequest(url: String, method: String = "POST", body: Data?) -> URLRequest? {
+        let VGS_TOKEN = Bundle.main.infoDictionary?["VGS_TOKEN"] as? String ?? ""
+        
         guard let url = URL(string: url) else { return nil }
         var request = URLRequest(url: url)
 

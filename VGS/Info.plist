@@ -60,5 +60,7 @@
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>VGS_TOKEN</key>
+	<string>$(VGS_TOKEN)</string>
 </dict>
 </plist>

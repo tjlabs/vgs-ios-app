@@ -22,6 +22,8 @@ class SearchManager {
     }
     
     func getSearchList(url: String, input: String, completion: @escaping (Int, String) -> Void) {
+        let VGS_TOKEN = Bundle.main.infoDictionary?["VGS_TOKEN"] as? String ?? ""
+        
         // URL 구성
         var urlComponents = URLComponents(string: url)
         urlComponents?.queryItems = [URLQueryItem(name: "searchTxt", value: input)]
