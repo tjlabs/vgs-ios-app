@@ -9,67 +9,7 @@ import CoreLocation
 
 class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
-    var pathIndex = 0
-//    let path: [[Double]] = [
-//        [37.495851, 127.039205, 248.7366],
-//        [37.495823, 127.039116, 248.7366],
-//        [37.495796, 127.039027, 248.7366],
-//        [37.495768, 127.038937, 248.7366],
-//        [37.495741, 127.038848, 248.7365],
-//        [37.495713, 127.038759, 248.7365],
-//        [37.495686, 127.038670, 248.7365],
-//        [37.495658, 127.038581, 248.7365],
-//        [37.495631, 127.038492, 248.7364],
-//        [37.495603, 127.038402, 248.7364]
-//    ]
-    
-//    let path: [[Double]] = [
-//        [37.157610, 127.313240, 353.2426],
-//        [37.157734, 127.313222, 353.2426],
-//        [37.157859, 127.313203, 353.2426],
-//        [37.157983, 127.313185, 353.2426],
-//        [37.158107, 127.313166, 353.2426],
-//        [37.158231, 127.313148, 353.2426],
-//        [37.158356, 127.313129, 353.2426],
-//        [37.158480, 127.313111, 353.2426],
-//        [37.158604, 127.313092, 353.2426],
-//        [37.158728, 127.313074, 353.2426]
-//    ]
-    
-    let path: [[Double]] = [
-        [37.16270985567856, 127.32467624370436, 124.7120503792903],
-        [37.162710534609275, 127.32467515015725, 124.71204971969877],
-        [37.16271018246635, 127.32467665685088, 124.71205063623313],
-        [37.16271018246635, 127.32467665685088, 124.71205063623313],
-        [37.16271044218412, 127.32467619367775, 124.71205035649263],
-        [37.16271076199389, 127.32467668908194, 124.71205066363609],
-        [37.16271097118801, 127.32467531372112, 124.71204982550177],
-        [37.16270654397672, 127.32467957044813, 124.71205236932087],
-        [37.16270062821983, 127.32468692339177, 124.71205678643543],
-        [37.162692706030604, 127.32469706077413, 124.22203990710454],
-        [37.16268549370767, 127.32470986172754, 123.28092434607214],
-        [37.162676043654415, 127.32472546375098, 121.01406151121176],
-        [37.162666487342115, 127.3247386884861, 115.96637666939148],
-        [37.16265621176693, 127.32475723705299, 110.3690985812159],
-        [37.162646737902534, 127.32478056035544, 106.82800849145826],
-        [37.16264049240031, 127.3248061129753, 106.16870751024834],
-        [37.162632556383365, 127.32483653031058, 105.27150437944243],
-        [37.16262438905095, 127.32486801213402, 103.3887292013572],
-        [37.162616149644606, 127.32490161068813, 100.8102692055981],
-        [37.16260807102221, 127.32493820723907, 97.58182739876406],
-        [37.16260252441103, 127.3249738243618, 95.10634372067409],
-        [37.16259889969092, 127.32501319724804, 93.07702657348148],
-        [37.16259709807327, 127.32505095618572, 92.15207095365952],
-        [37.16259632153605, 127.325082776914, 91.83493155256701],
-        [37.16259617207322, 127.32510804571133, 91.78188874134167],
-        [37.162595791541975, 127.32512649711984, 91.4411448211676],
-        [37.162595232457406, 127.32514521592721, 91.0556237273662],
-        [37.162595149478804, 127.3251758124345, 90.36611887284744],
-        [37.16259312112324, 127.32521862312596, 87.4573620329856],
-        [37.162594556360965, 127.32526991594145, 86.55353988060864]
-    ]
-    
-    var isAuthGrated: Bool = false
+    var isAuthGranted: Bool = false
     
     private var mapImageView = UIImageView()
     private let scrollView = UIScrollView()
@@ -276,22 +216,19 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         guard let location = locations.last else { return }
 
         currentCoordinate = location.coordinate
-//        let pixelCoord = mapper.latLonToPixel(lat: currentCoordinate!.latitude, lon: currentCoordinate!.longitude)
-//        let latitude_start = 37.495758
-//        let longitude_start = 127.038249
-//        
-//        let pixelCoord = mapper.latLonToPixel(lat: latitude_start, lon: longitude_start)
-//        print("(TJLabsNaviView) Position : \(pixelCoord)")
-        
-        if !mapImageView.isHidden && isAuthGrated {
-            let coord = [currentCoordinate!.latitude, currentCoordinate!.longitude]
+        if !mapImageView.isHidden && isAuthGranted {
+            var coord = [currentCoordinate!.latitude, currentCoordinate!.longitude]
+            var curCourse = location.course
             
             // Simulation
-//            let coord = path[pathIndex]
-//            pathIndex += 1
-//            if pathIndex > path.count-1 {
-//                pathIndex = path.count-1
-//            }
+            if SimulationPath.isSimulation {
+                coord = SimulationPath.path[SimulationPath.pathIndex]
+                SimulationPath.pathIndex += 1
+                
+                if SimulationPath.pathIndex > SimulationPath.path.count-1 {
+                    SimulationPath.pathIndex = SimulationPath.path.count-1
+                }
+            }
             
             PositionManager.shared.updateCurrentLocation(lat: coord[0], lon: coord[1])
             let speedKmh = location.speed*3.6
@@ -300,7 +237,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                 let velocityString = String(Int(round(speedKmh)))
                 self.velocityLabel.setText(text: velocityString)
             }
-            var curCourse = location.course
+            
             if curCourse == -1.0 {
                 curCourse = preCourse
                 PositionManager.shared.currentHeading = preCourse

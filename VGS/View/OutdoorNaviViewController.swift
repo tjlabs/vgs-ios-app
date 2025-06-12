@@ -182,7 +182,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         dialogView.setDialogString(title: "운행 시작", message: "요청이 승인되었습니다. 현장으로 진입해주세요. 운행 종료 후 종료 버튼을 눌러주세요.")
         dialogView.onConfirm = { [weak self] in
             self?.isGuiding = true
-            self?.mapView.isAuthGrated = true
+            self?.mapView.isAuthGranted = true
             self?.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
             self?.requestButtonTitleLabel.text = "운행 종료"
         }
@@ -195,7 +195,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
     
     func startOutdoor() {
         self.isGuiding = true
-        self.mapView.isAuthGrated = true
+        self.mapView.isAuthGranted = true
         self.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
         self.requestButtonTitleLabel.text = "운행 종료"
     }
