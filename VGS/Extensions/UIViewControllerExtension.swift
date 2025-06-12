@@ -25,7 +25,7 @@ extension UIViewController {
         let messageLabel = PaddingLabel()
         messageLabel.text = message
         messageLabel.textColor = .white
-        messageLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        messageLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         messageLabel.adjustsFontSizeToFitWidth = true
         messageLabel.minimumScaleFactor = 0.5
         messageLabel.lineBreakMode = .byTruncatingTail
@@ -35,12 +35,12 @@ extension UIViewController {
         // StackView
         let stackView = UIStackView(arrangedSubviews: [iconImageView, messageLabel])
         stackView.axis = .horizontal
-        stackView.spacing = 10
+        stackView.spacing = 5
         stackView.alignment = .center
 
         toastView.addSubview(stackView)
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(20)
+            make.edges.equalToSuperview().inset(10)
         }
 
         view.addSubview(toastView)

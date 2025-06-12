@@ -68,7 +68,8 @@ class UserSearchViewController: UIViewController {
         
         userSearchView.onSearchFail = {
             DispatchQueue.main.async {
-                self.showToastWithIcon(message: "차량 조회에 실패 했습니다")
+//                self.showToastWithIcon(message: "차량 조회에 실패 했습니다")
+                self.showToastWithIcon(message: "검색 결과가 없습니다.\n차량 번호를 다시 한번 확인해주세요.")
             }
         }
     }

@@ -11,6 +11,7 @@ class UserSerchView: UIView {
     
     var onSearchSuccessed: (() -> Void)?
     var onCellSelected: ((VehicleInfo) -> Void)?
+    var onSearchInvalid: ((String) -> Void)?
     var onSearchFail: (() -> Void)?
     
     private var selectView: SelectView?
@@ -301,7 +302,8 @@ class UserSerchView: UIView {
     
     private func validateUser() -> Bool {
         guard let text = vehicleNumberTextField.text, !text.isEmpty else {
-            applyInvalidUserUI()
+            self.onSearchFail?()
+//            applyInvalidUserUI()
             return false
         }
 
@@ -309,7 +311,8 @@ class UserSerchView: UIView {
         let containsSpecialCharacters = text.range(of: "[^가-힣a-zA-Z0-9]", options: .regularExpression) != nil
         
         if containsWhitespace || containsSpecialCharacters {
-            applyInvalidUserUI()
+            self.onSearchFail?()
+//            applyInvalidUserUI()
             return false
         }
 
