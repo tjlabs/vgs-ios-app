@@ -106,7 +106,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         containerView.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(120)
+            make.bottom.equalToSuperview().inset(100)
         }
         
 //        containerView.addSubview(scrollView)
@@ -124,7 +124,7 @@ class OutdoorNaviViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(requestButton)
         requestButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(90)
+            make.height.equalTo(70)
             make.bottom.equalToSuperview().inset(20)
         }
 

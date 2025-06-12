@@ -223,6 +223,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             // Simulation
             if SimulationPath.isSimulation {
                 coord = SimulationPath.path[SimulationPath.pathIndex]
+                curCourse = coord[2]
                 SimulationPath.pathIndex += 1
                 
                 if SimulationPath.pathIndex > SimulationPath.path.count-1 {
@@ -245,7 +246,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                 PositionManager.shared.currentHeading = curCourse
                 preCourse = location.course
             }
-            print("(GPS Check) \(currentCoordinate!.latitude),\(currentCoordinate!.longitude),\(PositionManager.shared.currentHeading!)")
+//            print("(GPS Check) \(currentCoordinate!.latitude),\(currentCoordinate!.longitude),\(PositionManager.shared.currentHeading!)")
+            print("(GPS Check) \(coord)")
             
             let converted = mapper.latLonToPixel(lat: coord[0], lon: coord[1])
             var convertedHeading = (90.91 - curCourse).truncatingRemainder(dividingBy: 360)
