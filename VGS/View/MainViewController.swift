@@ -40,7 +40,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     let bottomNavigationView = BottomNavigationView()
     let kakaoNaviView = KakaoNaviView()
     var infoContainerView: InfoContainerView?
-//    let outdoorNaviView = OutdoorNaviView()
+    let outdoorNaviView = OutdoorNaviView()
     
     var positionTimer: DispatchSourceTimer?
     let TIMER_INTERVAL: TimeInterval = 5.0
@@ -56,10 +56,11 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
 //            make.top.bottom.leading.trailing.equalToSuperview()
 //        }
         
-//        view.addSubview(outdoorNaviView)
-//        outdoorNaviView.snp.makeConstraints { make in
-//            make.top.bottom.leading.trailing.equalToSuperview()
-//        }
+        view.addSubview(outdoorNaviView)
+        outdoorNaviView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(self.bottomNavigationHeight-20)
+        }
         
         view.addSubview(kakaoNaviView)
         kakaoNaviView.snp.makeConstraints { make in
@@ -107,7 +108,8 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         let dialogView = DialogView(contentViewHeight: 180)
         dialogView.onConfirm = { [weak self] in
             self?.kakaoNaviView.removeFromSuperview()
-            self?.moveToOutdoorNaviVC()
+            self?.outdoorNaviView.setIsHidden(isHidden: false)
+//            self?.moveToOutdoorNaviVC()
         }
         
         view.addSubview(dialogView)

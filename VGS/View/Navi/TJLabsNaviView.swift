@@ -38,31 +38,33 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        loadOutdoorRoad()
         
-        setupAssets()
-        setupLayout()
-        setupLocation()
-        setupButtons()
-        setupButtonActions()
-        setupLabels()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        loadOutdoorRoad()
-        
-        setupAssets()
-        setupLayout()
-        setupLocation()
-        setupButtons()
-        setupButtonActions()
-        setupLabels()
+//        loadOutdoorRoad()
+//        
+//        setupAssets()
+//        setupLayout()
+//        setupLocation()
+//        setupButtons()
+//        setupButtonActions()
+//        setupLabels()
     }
     
     func configureFrame(to matchView: UIView) {
         self.frame = matchView.bounds
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        loadOutdoorRoad()
+        
+        setupAssets()
+        setupLayout()
+        setupLocation()
+        setupButtons()
+        setupButtonActions()
+        setupLabels()
     }
     
     func loadOutdoorRoad() {
