@@ -249,9 +249,10 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         return view
     }()
     
-    private let forceGuidanceEndButton = UIView().then {
+    private var forceGuidanceEndButton = UIView().then {
         $0.backgroundColor = UIColor.black
         $0.alpha = 1.0
+        $0.isHidden = true
         $0.cornerRadius = 15
     }
     
@@ -458,7 +459,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     setNaviViewOption()
                     locationStartTime = Date()
                     containerView.addSubview(naviView)
-                    
+                    self.forceGuidanceEndButton.isHidden = false
                     guidance.start(with: trip, priority: routePriority, avoidOptions: routeAvoidOption.rawValue)
                 } else {
                     print("(VGS) Error : Cannot get shared guidance")

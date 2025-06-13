@@ -156,7 +156,6 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     }
     
     private func changeButtonState(curState: ButtonState) {
-        print("changeButtonState : curState = \(curState)")
         if curState == .NONE {
             // NONE -> REQUEST
             self.curButtonState = .REQUEST
@@ -177,12 +176,14 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             self.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
             self.driverStateButtonTitleLabel.text = "운행 종료"
         } else {
+            // EXIT !!
+            self.isGuiding = false
             self.curButtonState = .NONE
-            self.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
-            self.driverStateButtonTitleLabel.text = "NONE"
-            self.removeFromSuperview()
+            self.driverStateButton.backgroundColor = .black
+            self.driverStateButtonTitleLabel.textColor = .white
+            self.driverStateButtonTitleLabel.text = "앱 종료"
+            self.forceQuit()
         }
-        print("changeButtonState : change to = \(self.curButtonState)")
     }
     
     private func requestAuth() {
@@ -191,6 +192,13 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
             self.showDialogView()
+        }
+    }
+    
+    private func forceQuit() {
+        UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            exit(0)
         }
     }
 }
