@@ -16,6 +16,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     private var velocityLabel = TJLabsVelocityLabel()
     private let myLocationButton = TJLabsMyLocationButton()
     private let zoomButton = TJLabsZoomButton()
+    private let overSpeedFlashView = UIView()
+    
     private var imageMapMarker: UIImage?
     private let userCoordTag = 999
     private let USER_CENTER_OFFSET: CGFloat = 60
@@ -24,6 +26,12 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     private var preHeading: Double?
     private let TIME_FOR_REST: Int = 3000
     private var mapModeChangedTime = 0
+    
+    // Speed Limit
+    var currentSpeed: Double = 0
+    private let LIMIT_SPEED: Double = 30 // Kmh
+    var flashTimer: DispatchSourceTimer?
+    let TIMER_INTERVAL: TimeInterval = 1.5
     
     // Core Location
     let mapper = PerspectiveMapper()
@@ -65,6 +73,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         setupButtons()
         setupButtonActions()
         setupLabels()
+        setupFlashView()
+        startTimer()
     }
     
     func loadOutdoorRoad() {
@@ -80,6 +90,18 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     private func setupLayout() {
         setupMapImageView()
         plotOutdoorRoad(outdoorRoad: self.OutdoorRoad)
+    }
+    
+    private func setupFlashView() {
+        overSpeedFlashView.backgroundColor = UIColor(hex: "#E91E1E").withAlphaComponent(0.4)
+        overSpeedFlashView.isUserInteractionEnabled = false
+        overSpeedFlashView.alpha = 0
+        addSubview(overSpeedFlashView)
+        bringSubviewToFront(overSpeedFlashView)
+
+        overSpeedFlashView.snp.makeConstraints { make in
+            make.edges.equalTo(mapImageView)
+        }
     }
     
     private func setupMapImageView() {
@@ -235,7 +257,9 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             
             PositionManager.shared.updateCurrentLocation(lat: coord[0], lon: coord[1])
             let speedKmh = location.speed*3.6
+//            let speedKmh: Double = 35
             PositionManager.shared.position.speed = speedKmh
+            self.currentSpeed = speedKmh
             DispatchQueue.main.async {
                 let velocityString = String(Int(round(speedKmh)))
                 self.velocityLabel.setText(text: velocityString)
@@ -292,6 +316,26 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                 plotUserCoordWithZoomAndRotation(pixelCoord: pixelCoord, heading: heading)
             } else {
                 plotUserCoord(pixelCoord: pixelCoord, heading: heading)
+            }
+        }
+    }
+    
+    private func checkLimitSpeed(speedKmh: Double) {
+        if speedKmh >= LIMIT_SPEED {
+            flashMapRed()
+        }
+    }
+    
+    private func flashMapRed() {
+        DispatchQueue.main.async { [self] in
+            guard overSpeedFlashView.alpha == 0 else { return }
+
+            UIView.animate(withDuration: 0.2, animations: {
+                self.overSpeedFlashView.alpha = 1.0
+            }) { _ in
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.overSpeedFlashView.alpha = 0.0
+                })
             }
         }
     }
@@ -494,5 +538,28 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         let viewY = offsetY + imagePoint.y * scaleY
 
         return CGPoint(x: viewX, y: viewY)
+    }
+    
+    // Flash Timer
+    private func startTimer() {
+        if (self.flashTimer == nil) {
+            let queue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".positionTimer")
+            self.flashTimer = DispatchSource.makeTimerSource(queue: queue)
+            self.flashTimer!.schedule(deadline: .now(), repeating: TIMER_INTERVAL)
+            self.flashTimer!.setEventHandler { [weak self] in
+                guard let self = self else { return }
+                self.flashTimerUpdate()
+            }
+            self.flashTimer!.resume()
+        }
+    }
+    
+    public func stopTimer() {
+        self.flashTimer?.cancel()
+        self.flashTimer = nil
+    }
+    
+    func flashTimerUpdate() {
+        self.checkLimitSpeed(speedKmh: self.currentSpeed)
     }
 }

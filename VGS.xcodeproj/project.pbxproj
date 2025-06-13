@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */; };
 		73CF818A34D4B5A17815D7FD /* Pods_VGS_VGSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2FC649EE7F3767B21A4FE85 /* Pods_VGS_VGSUITests.framework */; };
+		B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */; };
+		B38964922DFBBEFB00563C45 /* VSMSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */; };
+		B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; };
+		B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4C4EE88B4F834DDB541EBE8 /* Pods_VGSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0821ED6873831102289EF530 /* Pods_VGSTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +35,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B38964972DFBBEFB00563C45 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */,
+				B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */,
+				B38964922DFBBEFB00563C45 /* VSMSDK.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0821ED6873831102289EF530 /* Pods_VGSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VGSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ED4C66A2A84DD7B1C953596 /* Pods-VGS-VGSUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.debug.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -46,6 +68,9 @@
 		B34EC4EB2DE02F4100531DBB /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.19/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
 		B34EC4EC2DE02F4100531DBB /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.19/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
 		B34EC7262DE0510600531DBB /* KN-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KN-Bridging-Header.h"; sourceTree = "<group>"; };
+		B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
+		B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
+		B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
 		D0069715B92AFDE72915F2B6 /* Pods-VGS-VGSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.release.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E7F04E2DB3A04757C616EF13 /* Pods-VGSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGSTests.debug.xcconfig"; path = "Target Support Files/Pods-VGSTests/Pods-VGSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E85DD6410C5846038FEE4B63 /* Pods-VGS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS.debug.xcconfig"; path = "Target Support Files/Pods-VGS/Pods-VGS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -87,7 +112,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */,
 				536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */,
+				B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */,
+				B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,10 +143,13 @@
 			children = (
 				B33A9FC62DCB392F00E093E6 /* TmapNaviSDK.xcframework */,
 				B34EC4EB2DE02F4100531DBB /* TmapNaviSDK.xcframework */,
+				B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */,
 				B33A9FC72DCB392F00E093E6 /* TmapUISDK.xcframework */,
+				B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */,
 				B33A9FC52DCB392F00E093E6 /* VSMSDK.xcframework */,
 				B34EC4EA2DE02F4100531DBB /* TmapUISDK.xcframework */,
 				B34EC4EC2DE02F4100531DBB /* VSMSDK.xcframework */,
+				B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */,
 				71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */,
 				B2FC649EE7F3767B21A4FE85 /* Pods_VGS_VGSUITests.framework */,
 				0821ED6873831102289EF530 /* Pods_VGSTests.framework */,
@@ -174,6 +205,7 @@
 				B33A9E242DCAF43D00E093E6 /* Frameworks */,
 				B33A9E252DCAF43D00E093E6 /* Resources */,
 				0D21F94070046DCE50506358 /* [CP] Embed Pods Frameworks */,
+				B38964972DFBBEFB00563C45 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

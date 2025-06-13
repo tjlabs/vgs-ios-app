@@ -29,21 +29,36 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         
         setBottomNavigationHeight()
         setupLayout()
+        bindActions()
         
         bottomNavigationView.delegate = self
         kakaoNaviView.delegate = self
         
         startTimer()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.locationCheck),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        locationCheck()
     }
     
     private var bottomNavigationHeight: CGFloat = 100
     let bottomNavigationView = BottomNavigationView()
     let kakaoNaviView = KakaoNaviView()
+    let tmapNaviView = TMapNaviView()
+    
     var infoContainerView: InfoContainerView?
     let outdoorNaviView = OutdoorNaviView()
     
     var positionTimer: DispatchSourceTimer?
     let TIMER_INTERVAL: TimeInterval = 5.0
+    
+    private var locationAlert: UIAlertController? = nil
     
     private func setBottomNavigationHeight() {
         let totalHeight = view.frame.height
@@ -75,6 +90,12 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         }
     }
     
+    private func bindActions() {
+        tmapNaviView.onContinueDrive = { msg in
+            print("MainViewController : TMap 이어가기 호출")
+        }
+    }
+    
     func didTapNavigationItem(_ title: String, from previousTitle: String) {
         if previousTitle == "출입 정보" && title == "길안내" {
             // 출입 정보 → 길안내 전환 처리
@@ -97,6 +118,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         
         bindLogoutAction()
     }
+    
     
     private func bindLogoutAction() {
         infoContainerView?.onLogoutTapped = {
@@ -150,6 +172,73 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     private func positionTimerUpdate() {
         if kakaoNaviView.isStartReported {
             PositionManager.shared.sendData()
+        }
+    }
+    
+    
+    // Permission Alert
+    func hideLocationAlert() {
+        guard self.locationAlert != nil else {
+            return
+        }
+        print("hide location permission alert")
+        self.dismiss(animated: false)
+        
+        self.locationAlert = nil
+    }
+    
+    func showLocationAlert(){
+        guard self.locationAlert == nil else { return }
+        
+        let alert = UIAlertController(title: "위치 권한 및 정확한 위치를 허용해 주세요.",
+                                         message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.",
+                                         preferredStyle: UIAlertController.Style.alert)
+        print("show location permission alert")
+        let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default){
+            (action: UIAlertAction) in
+            let url = URL.init(string: UIApplication.openSettingsURLString)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url!)
+            } else {
+                UIApplication.shared.openURL(url!)
+            }
+            self.locationAlert = nil
+        }
+        let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+            (action: UIAlertAction) in
+            self.locationAlert = nil
+            exit(0)
+        }
+        alert.addAction(logNoAction)
+        alert.addAction(logOkAction)
+        self.present(alert, animated: true, completion: {
+            print("Alert show complete")
+            self.locationAlert = alert
+        })
+    }
+    
+    @objc func locationCheck(){
+        let status = CLLocationManager.authorizationStatus()
+        
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치권한 설정이 '안함'으로 되어있습니다.",
+                                          message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.",
+                                          preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+                (action: UIAlertAction) in
+                exit(0)
+            }
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
         }
     }
 }

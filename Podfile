@@ -7,10 +7,30 @@ target 'VGS' do
   # Pods for VGS
   pod 'SnapKit' 
   pod 'Then' 
-  pod 'RxSwift', '~> 6.5.0'
-  pod 'RxCocoa', '~> 6.5.0'
-  pod 'Kingfisher', '7.10.0'
+  #pod 'RxSwift', '~> 6.5.0'
+  #pod 'RxCocoa', '~> 6.5.0'
+  #pod 'Kingfisher', '7.10.0'
   pod 'KNSDK-UI'
+
+  pod 'CombineExt'
+  pod 'Solar'
+  pod 'Interpolate'
+  pod 'TinyConstraints'
+  pod 'PinLayout'
+  pod 'Alamofire'
+  pod 'KeychainAccess'
+  pod 'MarqueeLabel'
+  pod 'FlexLayout'
+  pod 'CombineCocoa'
+  pod 'Kingfisher'
+  pod 'CocoaSecurity'
+  pod 'AloeStackView'
+  pod 'RxGesture'
+  pod 'SwiftReorder'
+  pod 'SwiftSimplify'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'ReactorKit'
 
   target 'VGSTests' do
     inherit! :search_paths

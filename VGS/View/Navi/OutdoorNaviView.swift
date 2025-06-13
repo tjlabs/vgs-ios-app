@@ -177,6 +177,7 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             self.driverStateButtonTitleLabel.text = "운행 종료"
         } else {
             // EXIT !!
+            mapView.stopTimer()
             self.isGuiding = false
             self.curButtonState = .NONE
             self.driverStateButton.backgroundColor = .black
