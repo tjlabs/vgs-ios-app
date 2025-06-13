@@ -8,153 +8,143 @@ import TmapNaviSDK
 import VSMSDK
 
 class TMapNaviView: UIView, CLLocationManagerDelegate, UISDKMapViewDelegate {
-    
-    func viewDidLoad(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewWillAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewDidAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewWillDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewDidDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func markerSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
-        // TO-DO
-        return true
-    }
-    
-    func calloutPopupSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
-        // TO-DO
-        return true
-    }
-    
-    
-    var isAuthGranted: Bool = false
-    var isStartReported: Bool = false
-    
-    // Core Location
+
+    private var naviView: VSMNavigationView?
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
     private var currentAddress: String = "현재 위치"
-    
-    
-    var authCancelable: Set<AnyCancellable> = []
-    private var sdkInitComplete: Bool = false
-    var onContinueDrive: ((String) -> Void)?
-    
+
+    private var sdkInitComplete = false
+    private var isAuthGranted = false
+    var isStartReported = false
+
     var apiKey: String = ""
-    var userKey: String = ""
-    var deviceKey: String = ""
-    
-    init() {
-        super.init(frame: .zero)
+    var userKey: String = "test"
+    var deviceKey: String = "iOS"
+
+    var authCancelable: Set<AnyCancellable> = []
+    var onContinueDrive: ((String) -> Void)?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        
-        isStartReported = false
         initSDK()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func initSDK() {
+        if let apiKey = Bundle.main.object(forInfoDictionaryKey: "TMAP_API_KEY") as? String {
+            self.apiKey = apiKey
+        } else {
+            return
+        }
         authCancelable.cancelAll()
-        
+
         TmapUISDKManager.shared.stateSubject
-            .receive(on: DispatchQueue.main, options: nil)
-            .sink(receiveValue: { [weak self] (state) in
-            switch state {
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
                 case .completed:
-                    // SDK의 초기화가 완료되었음을 알림
                     self?.sdkInitComplete = true
-                    UIView.showMessage("(TMapNaviView) SDK초기화가 완료되었습니다.")
+                    UIView.showMessage("(TMapNaviView) SDK초기화 완료")
                     self?.setConfig()
+                    self?.embedNavigationView()
                 case let .savedDriveInfo(str?):
                     self?.onContinueDrive?(str)
                 default:
-                    print("init state: \(state)")
+                    print("SDK State: \(state)")
+                }
             }
-        }).store(in: &authCancelable)
-        
-        //initOption
+            .store(in: &authCancelable)
+
         var initOption = UISDKInitOption()
         initOption.clientDeviceId = UUID().uuidString
-        
         initOption.clientApiKey = apiKey
         initOption.userKey = userKey
         initOption.deviceKey = deviceKey
-
         initOption.uiWindow = UIApplication.shared.windows.first
+
         TmapUISDKManager.shared.initSDK(initOption: initOption)
     }
-    
-    func setConfig() {
-        var sdkConfig = UISDKConfigOption()
-        sdkConfig.carType = .normal                         // 자동차의 종류를 설정합니다.
-        sdkConfig.fuelType = .gas                           // 자동차의 유종을 설정합니다.
-        sdkConfig.showTrafficAccident = true                // map상에서 유고정보(사고정보) 및 교통량의 표시여부를 설정합니다.
-        sdkConfig.mapTextSize = .large                      // map의 text의 크기를 설정합니다.
-        sdkConfig.nightMode = .auto                         // dark mode의 동작여부를 설정합니다.
-        sdkConfig.isUseSpeedReactMapScale = true            // 속도반응형 지도의 사용여부를 설정합니다.
-        sdkConfig.isShowTrafficInRoute = true               // 안내되는 경로상에 교통량의 표시여부를 설정합니다.
-        sdkConfig.showExitPopupWhenStopDriving = true       // 주행 종료시 popup의 출력 여부
-        sdkConfig.useRealTimeAutoReroute = true             // 주행 시 실시간 경로탐색의 실행 여부
-        
-        /*
-        //트럭 옵션
-        //트럭주행 가능 경로의 안내는 아래의 내용과 같이 트럭관련 정보를 이용하여 설정한 뒤 경로요청을 하게 되는 경우, 해당 option에 맞는 주행경로로의 안내가 가능합니다.
-        sdkConfig.truckOption = UISDKTruckOption(truckHeight: 300, //cm
-                                                 truckLoadingWeight: 25000, //kg
-                                                 truckType: .ConstructionTruck)
-         */
-        
-        //custom marker표출을 위한 delegate 설정
-        sdkConfig.mapViewDelegate = self
-        
-        TmapUISDKManager.shared.setConfig(config: sdkConfig)
+
+    private func setConfig() {
+        var config = UISDKConfigOption()
+        config.carType = .normal
+        config.fuelType = .gas
+        config.showTrafficAccident = true
+        config.mapTextSize = .large
+        config.nightMode = .auto
+        config.isUseSpeedReactMapScale = true
+        config.isShowTrafficInRoute = true
+        config.showExitPopupWhenStopDriving = true
+        config.useRealTimeAutoReroute = true
+        config.mapViewDelegate = self
+
+        TmapUISDKManager.shared.setConfig(config: config)
     }
-    
-    // Location Manager
+
+    private func embedNavigationView() {
+        let naviView = VSMNavigationView()
+        self.naviView = naviView
+        addSubview(naviView)
+        naviView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+//        naviView.delegate = self
+    }
+
+    func requestRoute(to destination: Point) {
+        guard sdkInitComplete else {
+            UIView.showMessage("SDK 초기화가 아직 완료되지 않았습니다")
+            return
+        }
+        print("(TMapNaviView) requestRoute")
+
+        TmapUISDKManager.shared.requestRoute(destination: destination)
+    }
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
 
         currentCoordinate = location.coordinate
-        print("(VGS) currentCoordinate = \(currentCoordinate)")
-        if !isAuthGranted {
+        print("(TMapNaviView) 현재 위치: \(String(describing: currentCoordinate))")
+
+        if !isAuthGranted && sdkInitComplete {
+            let destination = Point(longitude: 126.9647294, latitude: 37.5299517, name: "용산역")
+            self.requestRoute(to: destination)
             reverseGeocode(location)
             isAuthGranted = true
-        }
-        
-        locationManager.stopUpdatingLocation()
-    }
-    
-    private func reverseGeocode(_ location: CLLocation) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
-            guard let self = self else { return }
-            if let placemark = placemarks?.first {
-                if let name = placemark.name {
-                    self.currentAddress = name
-                }
-            }
-            print("(VGS) currentAddress = \(currentAddress)")
-            
-            // 이제 네비게이션 시작 가능
+            locationManager.stopUpdatingLocation()
         }
     }
-}
 
+    private func reverseGeocode(_ location: CLLocation) {
+        CLGeocoder().reverseGeocodeLocation(location) { [weak self] placemarks, error in
+            guard let self = self else { return }
+            if let placemark = placemarks?.first, let name = placemark.name {
+                self.currentAddress = name
+                print("(TMapNaviView) 현재 주소: \(name)")
+            }
+        }
+    }
+
+    // MARK: - UISDKMapViewDelegate (선택적으로 구현)
+    func markerSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) -> Bool {
+        return true
+    }
+
+    func calloutPopupSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) -> Bool {
+        return true
+    }
+
+    func viewDidLoad(_ mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) {}
+    func viewWillAppear(_ mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) {}
+    func viewDidAppear(_ mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) {}
+    func viewWillDisappear(_ mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) {}
+    func viewDidDisappear(_ mapView: VSMNavigationView, mapViewType type: MapViewFunctionType) {}
+}

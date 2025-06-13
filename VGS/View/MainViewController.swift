@@ -50,7 +50,6 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     private var bottomNavigationHeight: CGFloat = 100
     let bottomNavigationView = BottomNavigationView()
     let kakaoNaviView = KakaoNaviView()
-    let tmapNaviView = TMapNaviView()
     
     var infoContainerView: InfoContainerView?
     let outdoorNaviView = OutdoorNaviView()
@@ -91,9 +90,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     }
     
     private func bindActions() {
-        tmapNaviView.onContinueDrive = { msg in
-            print("MainViewController : TMap 이어가기 호출")
-        }
+
     }
     
     func didTapNavigationItem(_ title: String, from previousTitle: String) {
