@@ -5,6 +5,10 @@ import RxSwift
 import RxRelay
 import Then
 
+enum ButtonState {
+    case NONE, REQUEST, WAIT, FINISH, EXIT
+}
+
 class OutdoorNaviView: UIView, UIScrollViewDelegate {
 
     private let containerView = UIView().then {
@@ -33,16 +37,16 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
 
     private var userMarkerImageView: UIImageView?
 
-    private let requestButton = UIView().then {
+    private let driverStateButton = UIView().then {
         $0.backgroundColor = UIColor(hex: "#E47325")
         $0.alpha = 1.0
         $0.cornerRadius = 15
         $0.addShadow(location: .rightBottom, color: .black, opacity: 0.2)
     }
 
-    private var requestButtonTitleLabel = UILabel().then {
+    private var driverStateButtonTitleLabel = UILabel().then {
         $0.backgroundColor = .clear
-        $0.font = UIFont.notoSansBold(size: 48)
+        $0.font = UIFont.notoSansBold(size: 42)
         $0.textColor = .white
         $0.textAlignment = .center
         $0.text = "진입 요청"
@@ -56,7 +60,8 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     private var imageMapMarker: UIImage?
 
     private var isGuiding: Bool = false
-
+    private var curButtonState: ButtonState = .NONE
+    
     init() {
         super.init(frame: .zero)
         backgroundColor = .clear
@@ -88,15 +93,15 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             make.bottom.equalToSuperview().inset(110)
         }
 
-        addSubview(requestButton)
-        requestButton.snp.makeConstraints { make in
+        addSubview(driverStateButton)
+        driverStateButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(70)
             make.bottom.equalToSuperview().inset(30)
         }
 
-        requestButton.addSubview(requestButtonTitleLabel)
-        requestButtonTitleLabel.snp.makeConstraints { make in
+        driverStateButton.addSubview(driverStateButtonTitleLabel)
+        driverStateButtonTitleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
         }
     }
@@ -107,47 +112,35 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     }
 
     private func bindActions() {
-        setupRequestButtonAction()
+        setupDriverStateButtonAction()
     }
 
-    private func setupRequestButtonAction() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleRequestButton))
-        requestButton.isUserInteractionEnabled = true
-        requestButton.addGestureRecognizer(tapGesture)
+    private func setupDriverStateButtonAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDriverStateButton))
+        driverStateButton.isUserInteractionEnabled = true
+        driverStateButton.addGestureRecognizer(tapGesture)
     }
 
-    @objc private func handleRequestButton() {
-        if isGuiding {
-            self.removeFromSuperview()
-        } else {
+    @objc private func handleDriverStateButton() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.driverStateButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
             UIView.animate(withDuration: 0.1, animations: {
-                self.requestButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                self.driverStateButton.transform = .identity
             }, completion: { _ in
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.requestButton.transform = .identity
-                }, completion: { _ in
-                    self.requestAuth()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                        self.showDialogView()
-                    }
-                })
+                self.changeButtonState(curState: self.curButtonState)
             })
-        }
+        })
     }
 
-    private func requestAuth() {
-        self.requestButton.backgroundColor = UIColor(hex: "#2c2c2c")
-        self.requestButtonTitleLabel.text = "대기중..."
-    }
 
     private func showDialogView() {
-        let dialogView = DialogView(contentViewHeight: 240)
-        dialogView.setDialogString(title: "운행 시작", message: "요청이 승인되었습니다. 현장으로 진입해주세요. 운행 종료 후 종료 버튼을 눌러주세요.")
+        let dialogView = DialogView(contentViewHeight: 260)
+        dialogView.setDialogString(title: "운행 시작", message: "요청이 승인되었습니다. 현장으로 진입해주세요.\n작업 종료 후 종료 버튼을 눌러주세요.")
         dialogView.onConfirm = { [weak self] in
             self?.isGuiding = true
             self?.mapView.isAuthGranted = true
-            self?.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
-            self?.requestButtonTitleLabel.text = "운행 종료"
+            self?.changeButtonState(curState: self!.curButtonState)
         }
 
         self.addSubview(dialogView)
@@ -159,7 +152,45 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     func startOutdoor() {
         self.isGuiding = true
         self.mapView.isAuthGranted = true
-        self.requestButton.backgroundColor = UIColor(hex: "#85FF0000")
-        self.requestButtonTitleLabel.text = "운행 종료"
+        changeButtonState(curState: self.curButtonState)
+    }
+    
+    private func changeButtonState(curState: ButtonState) {
+        print("changeButtonState : curState = \(curState)")
+        if curState == .NONE {
+            // NONE -> REQUEST
+            self.curButtonState = .REQUEST
+            self.driverStateButton.backgroundColor = UIColor(hex: "#E47325")
+            self.driverStateButtonTitleLabel.text = "진입 요청"
+        } else if curState == .REQUEST {
+            // REQUEST -> WAIT
+            self.curButtonState = .WAIT
+            requestAuth()
+        } else if curState == .WAIT {
+            // WAIT -> FINISH
+            self.curButtonState = .FINISH
+            self.driverStateButton.backgroundColor = UIColor(hex: "#00B050")
+            self.driverStateButtonTitleLabel.text = "작업 종료"
+        } else if curState == .FINISH {
+            // FINISH -> EXIT
+            self.curButtonState = .EXIT
+            self.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
+            self.driverStateButtonTitleLabel.text = "운행 종료"
+        } else {
+            self.curButtonState = .NONE
+            self.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
+            self.driverStateButtonTitleLabel.text = "NONE"
+            self.removeFromSuperview()
+        }
+        print("changeButtonState : change to = \(self.curButtonState)")
+    }
+    
+    private func requestAuth() {
+        self.driverStateButton.backgroundColor = UIColor(hex: "#424242")
+        self.driverStateButtonTitleLabel.text = "대기중"
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.showDialogView()
+        }
     }
 }
