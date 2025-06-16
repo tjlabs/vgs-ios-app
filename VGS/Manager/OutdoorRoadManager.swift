@@ -15,8 +15,8 @@ class OutdoorRoadManager {
     var sectorInfo = SectorResult(pp_csv: "", nodes: [], links: [], routes: [])
     
     var outdoorPathPixels = [Int: [[Int]]]()
-    var outdoorNodes = [Int: [TJLabsNode]]()
-    var outdoorLinks = [Int: [TJLabsLink]]()
+    var outdoorNodes = [Int: [Int: [Int]]]()
+    var outdoorLinks = [Int: [Int: [Int]]]()
     var outdoorRoutes = [Int: [TJLabsRoute]]()
     
     init() { }
@@ -60,14 +60,22 @@ class OutdoorRoadManager {
         })
     }
     
-    func loadOutdoorNodes(sector_id: Int, nodes: [TJLabsNode]) {
-        self.outdoorNodes[sector_id] = nodes
-        NotificationCenter.default.post(name: .outdoorNodesUpdated, object: nil, userInfo: ["nodeKey": sector_id])
-    }
     
-    func loadOutdoorLink(sector_id: Int, links: [TJLabsLink]) {
-        self.outdoorLinks[sector_id] = links
-        NotificationCenter.default.post(name: .outdoorLinksUpdated, object: nil, userInfo: ["linkKey": sector_id])
+    func loadOutdoorNodeLink(sector_id: Int, nodes: [TJLabsNode], links: [TJLabsLink]) {
+        var nodeDict = [Int: [Int]]()
+        var linkDict = [Int: [Int]]()
+        
+        for node in nodes {
+            nodeDict[node.number] = [node.x, node.y]
+        }
+        
+        for link in links {
+            linkDict[link.number] = [link.start_node_number, link.end_node_number]
+        }
+        
+        self.outdoorNodes[sector_id] = nodeDict
+        self.outdoorLinks[sector_id] = linkDict
+        NotificationCenter.default.post(name: .outdoorNodeLinkUpdated, object: nil, userInfo: ["nodeLinkKey": sector_id])
     }
     
     func loadOutdoorRoutes(sector_id: Int, routes: [TJLabsRoute]) {

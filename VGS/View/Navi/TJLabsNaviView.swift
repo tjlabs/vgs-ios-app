@@ -8,6 +8,12 @@ import Then
 import CoreLocation
 import TJLabsAuth
 
+enum RoadType: String {
+    case FRAME = "FRAME"
+    case MAIN = "MAIN"
+    case SUB = "SUB"
+}
+
 class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     var isAuthGranted: Bool = false
@@ -44,6 +50,9 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     // Outdoor Road
 //    var outdoorRoadManager = OutdoorRoadManager()
 //    var OutdoorRoad = [[Double]]()
+    var nodeData = [Int: [Int]]()
+    var linkData = [Int: [Int]]()
+    var routeData = [TJLabsRoute]()
     
     // Auth
     var service_sector_id: Int = 24
@@ -78,7 +87,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     private func getTenantResult() {
         let url = TJLabsAuthConstants.getUserBaseURL() + "/" + USER_PHOENIX_TENANT_SERVER_VERSION + "/tenant"
-        print("(TJLabsNaviView) getTenant : url = \(url)")
+//        print("(TJLabsNaviView) getTenant : url = \(url)")
         TJLabsNaviManager.shared.getTenant(url: url, completion: { [self] statusCode, returnedString in
             if statusCode == 200 {
                 if let decodedResult = TJLabsNaviManager.shared.decodeTenantResult(from: returnedString) {
@@ -103,10 +112,9 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                 if let decodedResult = TJLabsNaviManager.shared.decodeSectorResult(from: returnedString) {
 //                    print("(TJLabsNaviView) getSector decodedResult = \(decodedResult)")
                     self.sectorInfo = decodedResult
-                    let fname = "Outdoor_\(sector_id)"
                     OutdoorRoadManager.shared.loadOutdoorPp(pp_csv: decodedResult.pp_csv, sector_id: sector_id)
-                    OutdoorRoadManager.shared.loadOutdoorNodes(sector_id: sector_id, nodes: decodedResult.nodes)
-                    OutdoorRoadManager.shared.loadOutdoorLink(sector_id: sector_id, links: decodedResult.links)
+                    OutdoorRoadManager.shared.loadOutdoorNodeLink(sector_id: sector_id, nodes: decodedResult.nodes, links: decodedResult.links)
+//                    OutdoorRoadManager.shared.loadOutdoorLink(sector_id: sector_id, links: decodedResult.links)
                     OutdoorRoadManager.shared.loadOutdoorRoutes(sector_id: sector_id, routes: decodedResult.routes)
                 }
             }
@@ -141,7 +149,9 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     private func setupLayout() {
         setupMapImageView()
-//        plotOutdoorRoad(outdoorRoad: self.OutdoorRoad)
+        plotOutdoorRoad(type: .FRAME)
+        plotOutdoorRoad(type: .MAIN)
+        plotOutdoorRoad(type: .SUB)
     }
     
     private func setupFlashView() {
@@ -392,59 +402,76 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
     
-    private func plotOutdoorRoad() {
-        
-    }
-    
-//    private func plotOutdoorRoad(outdoorRoad: [[Double]]) {
-//        print("(plotOutdoorRoad) : \(outdoorRoad)")
-//        DispatchQueue.main.async { [self] in
-//            guard let image = mapImageView.image,
-//                  let cgImage = image.cgImage else {
-//                return
-//            }
+    private func plotOutdoorRoad(type: RoadType) {
+        for (key, value) in self.linkData {
+            let linkNumber = key
+            let startNode = value[0]
+            let endNode = value[1]
+            
+            guard let startCoordArray = self.nodeData[startNode],
+                  let endCoordArray = self.nodeData[endNode],
+                  startCoordArray.count == 2,
+                  endCoordArray.count == 2 else {
+                continue
+            }
 
-//            let pixelSize = CGSize(width: cgImage.width, height: cgImage.height)
-//            let logicalSize = image.size
-//
-//            let scaleX = logicalSize.width / pixelSize.width
-//            let scaleY = logicalSize.height / pixelSize.height
-//            
-//            for coord in OutdoorRoad {
-//                let pixelCoord: CGPoint = CGPoint(x: coord[0], y: coord[1])
-//                let logicalCoord = CGPoint(
-//                    x: pixelCoord.x * scaleX,
-//                    y: pixelCoord.y * scaleY
-//                )
-//                
-//                guard let viewPoint = convertImagePointToViewPoint(imagePoint: logicalCoord, in: mapImageView) else { return }
-//
-//                let markerSize: CGFloat = 10
-//                let pointView = UIView(frame: CGRect(x: viewPoint.x - markerSize / 2, y: viewPoint.y - markerSize / 2, width: markerSize, height: markerSize))
-////                pointView.backgroundColor = .systemYellow
-//                pointView.backgroundColor = UIColor(hex: "#565656")
-////                pointView.layer.cornerRadius = markerSize / 2
-//                pointView.layer.cornerRadius = 3
-//                mapImageView.addSubview(pointView)
-//            }
-//            
-//            for coord in OutdoorRoad {
-//                let pixelCoord: CGPoint = CGPoint(x: coord[0], y: coord[1])
-//                let logicalCoord = CGPoint(
-//                    x: pixelCoord.x * scaleX,
-//                    y: pixelCoord.y * scaleY
-//                )
-//                
-//                guard let viewPoint = convertImagePointToViewPoint(imagePoint: logicalCoord, in: mapImageView) else { return }
-//
-//                let markerSize: CGFloat = 2
-//                let pointView = UIView(frame: CGRect(x: viewPoint.x - markerSize / 2, y: viewPoint.y - markerSize / 2, width: markerSize, height: markerSize))
-//                pointView.backgroundColor = .systemYellow
-//                pointView.layer.cornerRadius = 0.2
-//                mapImageView.addSubview(pointView)
-//            }
-//        }
-//    }
+            let startPixel = CGPoint(x: startCoordArray[0], y: startCoordArray[1])
+            let endPixel = CGPoint(x: endCoordArray[0], y: endCoordArray[1])
+            
+            DispatchQueue.main.async { [self] in
+                guard let image = mapImageView.image,
+                      let cgImage = image.cgImage else {
+                    return
+                }
+                
+                let pixelSize = CGSize(width: cgImage.width, height: cgImage.height)
+                let logicalSize = image.size
+                
+                let scaleX = logicalSize.width / pixelSize.width
+                let scaleY = logicalSize.height / pixelSize.height
+                
+                let startLogical = CGPoint(x: startPixel.x * scaleX, y: startPixel.y * scaleY)
+                let endLogical = CGPoint(x: endPixel.x * scaleX, y: endPixel.y * scaleY)
+                
+                guard let startViewPoint = convertImagePointToViewPoint(imagePoint: startLogical, in: mapImageView),
+                      let endViewPoint = convertImagePointToViewPoint(imagePoint: endLogical, in: mapImageView) else {
+                    return
+                }
+
+                let path = UIBezierPath()
+                path.move(to: startViewPoint)
+                path.addLine(to: endViewPoint)
+
+                let shapeLayer = CAShapeLayer()
+                shapeLayer.path = path.cgPath
+                
+                var lineColor = UIColor.black
+                var lineWidth = 1.0
+                
+                switch (type) {
+                case .FRAME:
+                    lineColor = UIColor(hex: "#000000")
+                    shapeLayer.lineCap = .round
+                    lineWidth = 8.0
+                case .MAIN:
+                    lineColor = UIColor(hex: "#888888")
+                    lineWidth = 6.0
+                    shapeLayer.lineCap = .round
+                case .SUB:
+                    lineColor = UIColor(hex: "#FFD600")
+                    lineWidth = 1.0
+                    shapeLayer.lineDashPattern = [4, 2]
+                }
+                
+                shapeLayer.strokeColor = lineColor.cgColor
+                shapeLayer.lineWidth = lineWidth
+                
+                shapeLayer.name = "link_\(type.rawValue)_\(linkNumber)"
+
+                mapImageView.layer.addSublayer(shapeLayer)
+            }
+        }
+    }
     
     private func plotUserCoord(pixelCoord: CGPoint, heading: Double) {
         DispatchQueue.main.async { [self] in
@@ -622,8 +649,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     // MARK: - Observer
     func notificationCenterAddObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handlePathPixelUpdate(_:)), name: .outdoorPathPixelUpdated, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNodesUpdate(_:)), name: .outdoorNodesUpdated, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleLinksUpdate(_:)), name: .outdoorLinksUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNodeLinkUpdate(_:)), name: .outdoorNodeLinkUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleRoutesUpdate(_:)), name: .outdoorRoutesUpdated, object: nil)
     }
     
@@ -639,26 +665,22 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
 
-    @objc private func handleNodesUpdate(_ notification: Notification) {
-        if let sectorId = notification.userInfo?["nodeKey"] as? Int {
-            if let nodeData = OutdoorRoadManager.shared.outdoorNodes[sectorId] {
-                print("(TJLabsNaviView) nodeData : \(nodeData)")
-            }
-        }
-    }
-
-    @objc private func handleLinksUpdate(_ notification: Notification) {
-        if let sectorId = notification.userInfo?["linkKey"] as? Int {
-            if let linkData = OutdoorRoadManager.shared.outdoorLinks[sectorId] {
-                print("(TJLabsNaviView) linkData : \(linkData)")
-            }
-        }
+    @objc private func handleNodeLinkUpdate(_ notification: Notification) {
+        guard let sectorId = notification.userInfo?["nodeLinkKey"] as? Int,
+              let nodeData = OutdoorRoadManager.shared.outdoorNodes[sectorId],
+              let linkData = OutdoorRoadManager.shared.outdoorLinks[sectorId] else { return }
+        
+//        print("(TJLabsNaviView) nodeData : \(nodeData)")
+//        print("(TJLabsNaviView) linkData : \(linkData)")
+        self.nodeData = nodeData
+        self.linkData = linkData
     }
 
     @objc private func handleRoutesUpdate(_ notification: Notification) {
         if let sectorId = notification.userInfo?["routeKey"] as? Int {
             if let routeData = OutdoorRoadManager.shared.outdoorRoutes[sectorId] {
                 print("(TJLabsNaviView) routeData : \(routeData)")
+                self.routeData = routeData
             }
         }
     }
