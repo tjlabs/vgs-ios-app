@@ -17,6 +17,11 @@
 		B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; };
 		B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BF72DFFFBEF0069CD8A /* FirebaseAnalytics */; };
+		B3F51BFA2DFFFBEF0069CD8A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BF92DFFFBEF0069CD8A /* FirebaseCore */; };
+		B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFB2DFFFBEF0069CD8A /* FirebaseCrashlytics */; };
+		B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFD2DFFFBEF0069CD8A /* FirebaseFirestore */; };
+		B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFF2DFFFBEF0069CD8A /* FirebaseRemoteConfig */; };
 		D4C4EE88B4F834DDB541EBE8 /* Pods_VGSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0821ED6873831102289EF530 /* Pods_VGSTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -119,9 +124,14 @@
 			files = (
 				B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */,
 				536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */,
+				B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */,
 				B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */,
+				B3F51BFA2DFFFBEF0069CD8A /* FirebaseCore in Frameworks */,
+				B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */,
+				B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */,
 				B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */,
 				B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */,
+				B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +323,9 @@
 			);
 			mainGroup = B33A9E1E2DCAF43D00E093E6;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B33A9E282DCAF43D00E093E6 /* Products */;
 			projectDirPath = "";
@@ -503,6 +516,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
@@ -520,7 +534,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tjlabscorp.ios.VGS-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -547,6 +561,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
@@ -564,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tjlabscorp.ios.VGS-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -817,6 +832,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B3F51BF72DFFFBEF0069CD8A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		B3F51BF92DFFFBEF0069CD8A /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		B3F51BFB2DFFFBEF0069CD8A /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		B3F51BFD2DFFFBEF0069CD8A /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		B3F51BFF2DFFFBEF0069CD8A /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B33A9E1F2DCAF43D00E093E6 /* Project object */;
 }
