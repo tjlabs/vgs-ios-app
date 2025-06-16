@@ -2,13 +2,22 @@
 import Foundation
 
 class OutdoorRoadManager {
-    static var isPerformed: Bool = false
+    static let shared = OutdoorRoadManager()
     
-    static var outdoorRoadDataMap = [String: OutdoorRoad]()
+    var isPerformed: Bool = false
+    
+    var outdoorRoadDataMap = [String: OutdoorRoad]()
 //    static var ppDataLoaded = [String: PathPixelDataIsLoaded]()
 //    weak var delegate: PathPixelDelegate?
     
     var region: String = VgsRegion.KOREA.rawValue
+    var tenantInfo = TenantResult(id: 0, name: "", sectors: [])
+    var sectorInfo = SectorResult(pp_csv: "", nodes: [], links: [], routes: [])
+    
+    var outdoorPathPixels = [Int: [[Int]]]()
+    var outdoorNodes = [Int: [TJLabsNode]]()
+    var outdoorLinks = [Int: [TJLabsLink]]()
+    var outdoorRoutes = [Int: [TJLabsRoute]]()
     
     init() { }
     
@@ -16,28 +25,94 @@ class OutdoorRoadManager {
         self.region = region
     }
     
-    func loadOutdoorRoad(fileName: String) -> [[Double]] {
+    func setInfo(tenantInfo: TenantResult, sectorInfo: SectorResult) {
+        self.tenantInfo = tenantInfo
+        self.sectorInfo = sectorInfo
+    }
+    
+    func loadOutdoorPp(pp_csv: String, sector_id: Int) {
+        // TO-DO
+//        let ppLocalUrl = loadOutdoorPpFromFile(key: fname)
+//        if (ppLocalUrl.0) {
+//
+//        } else {
+//
+//        }
+        
+        let fname = "Outdoor_\(sector_id)"
+        let urlComponents = URLComponents(string: pp_csv)
+        FileDownloader.shared.downloadCSVFile(from: (urlComponents?.url)!, fname: fname, completion: { [self] url, error in
+            if error == nil {
+                do {
+                    if let unwrappedUrl = url {
+                        let roadCoord: [[Int]] = parseOutdoorRoadFile(url: unwrappedUrl)
+                        self.outdoorPathPixels[sector_id] = roadCoord
+                        NotificationCenter.default.post(name: .outdoorPathPixelUpdated, object: nil, userInfo: ["pathPixelKey": sector_id])
+                    } else {
+                        print("Error invalid url: \(url)")
+                    }
+                } catch {
+                    print("Error reading file (1):", error.localizedDescription)
+                }
+            } else {
+                print("Error reading file (2)")
+            }
+        })
+    }
+    
+    func loadOutdoorNodes(sector_id: Int, nodes: [TJLabsNode]) {
+        self.outdoorNodes[sector_id] = nodes
+        NotificationCenter.default.post(name: .outdoorNodesUpdated, object: nil, userInfo: ["nodeKey": sector_id])
+    }
+    
+    func loadOutdoorLink(sector_id: Int, links: [TJLabsLink]) {
+        self.outdoorLinks[sector_id] = links
+        NotificationCenter.default.post(name: .outdoorLinksUpdated, object: nil, userInfo: ["linkKey": sector_id])
+    }
+    
+    func loadOutdoorRoutes(sector_id: Int, routes: [TJLabsRoute]) {
+        self.outdoorRoutes[sector_id] = routes
+        NotificationCenter.default.post(name: .outdoorRoutesUpdated, object: nil, userInfo: ["routeKey": sector_id])
+    }
+    
+    public func loadOutdoorPpFromFile(key: String) -> (Bool, URL?) {
+        do {
+            let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let savedURL = documentsURL.appendingPathComponent("\(key).csv")
+            
+            if FileManager.default.fileExists(atPath: savedURL.path) {
+                print("(OutdoorRoadManager) Outdoor Path-Pixel : \(key).csv exists")
+                return (true, savedURL)
+            } else {
+                return (false, nil)
+            }
+        } catch {
+            return (false, nil)
+        }
+    }
+    
+    
+    func loadOutdoorRoadfromFile(fileName: String) -> [[Int]] {
         guard let path = Bundle.main.path(forResource: fileName, ofType: "csv") else {
             print("(OutdoorRoadManager) error : \(fileName)")
-            return [[Double]]()
+            return [[Int]]()
         }
-        let roadCoord:[[Double]] = parseOutdoorRoad(url: URL(fileURLWithPath: path))
+        let roadCoord:[[Int]] = parseOutdoorRoadFile(url: URL(fileURLWithPath: path))
         return roadCoord
     }
     
-    func parseOutdoorRoad(url: URL) -> [[Double]] {
-        var roadXY = [[Double]]()
+    func parseOutdoorRoadFile(url: URL) -> [[Int]] {
+        var roadXY = [[Int]]()
 
         do {
             let content = try String(contentsOf: url)
             let lines = content.components(separatedBy: .newlines)
 
             for line in lines {
-                print("(OutdoorRoadManager) line: \(line)")
                 let values = line.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
                 if values.count == 2,
-                   let x = Double(values[0]),
-                   let y = Double(values[1]) {
+                   let x = Int(values[0]),
+                   let y = Int(values[1]) {
                     roadXY.append([x, y])
                 }
             }

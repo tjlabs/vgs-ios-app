@@ -15,6 +15,8 @@
 		B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; };
 		B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; };
+		B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4C4EE88B4F834DDB541EBE8 /* Pods_VGSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0821ED6873831102289EF530 /* Pods_VGSTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +47,7 @@
 				B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */,
 				B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */,
 				B38964922DFBBEFB00563C45 /* VSMSDK.xcframework in Embed Frameworks */,
+				B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +74,8 @@
 		B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
 		B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
 		B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
+		B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; name = TJLabsAuth.xcframework; path = "../Frameworks/TJLabsAuth-sdk-ios/xcframeworks/TJLabsAuth.xcframework"; sourceTree = "<group>"; };
+		B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; path = TJLabsAuth.xcframework; sourceTree = "<group>"; };
 		D0069715B92AFDE72915F2B6 /* Pods-VGS-VGSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.release.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E7F04E2DB3A04757C616EF13 /* Pods-VGSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGSTests.debug.xcconfig"; path = "Target Support Files/Pods-VGSTests/Pods-VGSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E85DD6410C5846038FEE4B63 /* Pods-VGS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS.debug.xcconfig"; path = "Target Support Files/Pods-VGS/Pods-VGS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -115,6 +120,7 @@
 				B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */,
 				536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */,
 				B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */,
+				B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */,
 				B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,6 +147,8 @@
 		84B9FC8ECB82495BA6BC69CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B38964E92DFBEEE300563C45 /* xcframeworks */,
+				B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */,
 				B33A9FC62DCB392F00E093E6 /* TmapNaviSDK.xcframework */,
 				B34EC4EB2DE02F4100531DBB /* TmapNaviSDK.xcframework */,
 				B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */,
@@ -178,6 +186,15 @@
 				B33A9E472DCAF44000E093E6 /* VGSUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B38964E92DFBEEE300563C45 /* xcframeworks */ = {
+			isa = PBXGroup;
+			children = (
+				B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */,
+			);
+			name = xcframeworks;
+			path = "../Frameworks/TJLabsAuth-sdk-ios/xcframeworks";
 			sourceTree = "<group>";
 		};
 		FACCFB10123CDE363CB56999 /* Pods */ = {

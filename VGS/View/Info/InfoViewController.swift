@@ -96,7 +96,7 @@ class InfoViewController: UIViewController, UISDKMapViewDelegate {
         bindActions()
         topView.setArrowBackOption(isHidden: false, title: "차량 선택하기")
         
-        initSDK()
+//        initSDK()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.locationCheck),
                                                name: UIApplication.willEnterForegroundNotification,

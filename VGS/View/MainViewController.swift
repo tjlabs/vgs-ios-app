@@ -5,6 +5,7 @@ import RxCocoa
 import RxSwift
 import RxRelay
 import Then
+import TJLabsAuth
 
 class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviArrivalDelegate {
     
