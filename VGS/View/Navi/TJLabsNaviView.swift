@@ -1,6 +1,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 import RxCocoa
 import RxSwift
 import RxRelay
@@ -19,6 +20,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     var isAuthGranted: Bool = false
     
     private var mapImageView = UIImageView()
+    private var outdoorMapImage: UIImage?
     private let scrollView = UIScrollView()
     private var velocityLabel = TJLabsVelocityLabel()
     private let myLocationButton = TJLabsMyLocationButton()
@@ -52,7 +54,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
 //    var OutdoorRoad = [[Double]]()
     var nodeData = [Int: [Int]]()
     var linkData = [Int: [Int]]()
-    var routeData = [TJLabsRoute]()
+    var routeData = [Int: [Int]]()
     
     // Auth
     var service_sector_id: Int = 24
@@ -96,6 +98,16 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                     let sectors = decodedResult.sectors
                     for sector in sectors {
                         if sector.id == self.service_sector_id {
+                            let mapImageUrl: String = sector.map_image
+                            self.mapImageView.kf.setImage(with: URL(string: mapImageUrl)) { result in
+                                switch result {
+                                case .success(let value):
+                                    self.outdoorMapImage = value.image
+                                    print("(TJLabsNaviView) mapImage loaded")
+                                case .failure(let error):
+                                    print("(TJLabsNaviView) mapImage load failed: \(error)")
+                                }
+                            }
                             getSectorResult(sector_id: sector.id)
                         }
                     }
@@ -114,7 +126,6 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                     self.sectorInfo = decodedResult
                     OutdoorRoadManager.shared.loadOutdoorPp(pp_csv: decodedResult.pp_csv, sector_id: sector_id)
                     OutdoorRoadManager.shared.loadOutdoorNodeLink(sector_id: sector_id, nodes: decodedResult.nodes, links: decodedResult.links)
-//                    OutdoorRoadManager.shared.loadOutdoorLink(sector_id: sector_id, links: decodedResult.links)
                     OutdoorRoadManager.shared.loadOutdoorRoutes(sector_id: sector_id, routes: decodedResult.routes)
                 }
             }
@@ -144,14 +155,13 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     private func setupAssets() {
         imageMapMarker = UIImage(named: "map_marker")
-        mapImageView.image = UIImage(named: "img_map_skep")
+//        mapImageView.image = UIImage(named: "img_map_skep")
     }
     
     private func setupLayout() {
         setupMapImageView()
-        plotOutdoorRoad(type: .FRAME)
-        plotOutdoorRoad(type: .MAIN)
-        plotOutdoorRoad(type: .SUB)
+        plotOutdoorRoadAll()
+        plotRouteAll(number: 1)
     }
     
     private func setupFlashView() {
@@ -402,6 +412,18 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
     
+    private func plotOutdoorRoadAll() {
+        plotOutdoorRoad(type: .FRAME)
+        plotOutdoorRoad(type: .MAIN)
+        plotOutdoorRoad(type: .SUB)
+        
+    }
+    
+    private func plotRouteAll(number: Int) {
+        plotRoute(number: number, type: .FRAME)
+        plotRoute(number: number, type: .MAIN)
+    }
+    
     private func plotOutdoorRoad(type: RoadType) {
         for (key, value) in self.linkData {
             let linkNumber = key
@@ -473,6 +495,76 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
     
+    private func plotRoute(number: Int, type: RoadType) {
+        guard let nodeNumbers = self.routeData[number], nodeNumbers.count >= 2 else { return }
+
+        DispatchQueue.main.async { [self] in
+            guard let image = mapImageView.image,
+                  let cgImage = image.cgImage else {
+                return
+            }
+
+            let pixelSize = CGSize(width: cgImage.width, height: cgImage.height)
+            let logicalSize = image.size
+            let scaleX = logicalSize.width / pixelSize.width
+            let scaleY = logicalSize.height / pixelSize.height
+
+            let path = UIBezierPath()
+
+            for i in 0..<(nodeNumbers.count - 1) {
+                let startNode = nodeNumbers[i]
+                let endNode = nodeNumbers[i + 1]
+
+                guard let startCoordArray = nodeData[startNode],
+                      let endCoordArray = nodeData[endNode],
+                      startCoordArray.count == 2,
+                      endCoordArray.count == 2 else {
+                    continue
+                }
+
+                let startPixel = CGPoint(x: startCoordArray[0], y: startCoordArray[1])
+                let endPixel = CGPoint(x: endCoordArray[0], y: endCoordArray[1])
+
+                let startLogical = CGPoint(x: startPixel.x * scaleX, y: startPixel.y * scaleY)
+                let endLogical = CGPoint(x: endPixel.x * scaleX, y: endPixel.y * scaleY)
+
+                guard let startViewPoint = convertImagePointToViewPoint(imagePoint: startLogical, in: mapImageView),
+                      let endViewPoint = convertImagePointToViewPoint(imagePoint: endLogical, in: mapImageView) else {
+                    continue
+                }
+
+                path.move(to: startViewPoint)
+                path.addLine(to: endViewPoint)
+            }
+
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.path = path.cgPath
+            
+            var lineColor = UIColor.black
+            var lineWidth = 1.0
+            
+            switch (type) {
+            case .FRAME:
+                lineColor = UIColor(hex: "#244F92")
+                shapeLayer.lineCap = .round
+                lineWidth = 8.0
+            case .MAIN:
+                lineColor = UIColor(hex: "#3773EF")
+                lineWidth = 6.0
+                shapeLayer.lineCap = .round
+            case .SUB:
+                lineWidth = 1.0
+                shapeLayer.lineDashPattern = [4, 2]
+            }
+            
+            shapeLayer.strokeColor = lineColor.cgColor
+            shapeLayer.lineWidth = lineWidth
+            shapeLayer.name = "route_\(type.rawValue)_\(number)"
+
+            mapImageView.layer.addSublayer(shapeLayer)
+        }
+    }
+    
     private func plotUserCoord(pixelCoord: CGPoint, heading: Double) {
         DispatchQueue.main.async { [self] in
             guard let image = mapImageView.image,
@@ -518,7 +610,6 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             preHeading = heading
         }
     }
-    
     
     private func plotUserCoordWithZoomAndRotation(pixelCoord: CGPoint, heading: Double) {
         DispatchQueue.main.async { [self] in

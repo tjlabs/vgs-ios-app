@@ -17,7 +17,7 @@ class OutdoorRoadManager {
     var outdoorPathPixels = [Int: [[Int]]]()
     var outdoorNodes = [Int: [Int: [Int]]]()
     var outdoorLinks = [Int: [Int: [Int]]]()
-    var outdoorRoutes = [Int: [TJLabsRoute]]()
+    var outdoorRoutes = [Int: [Int: [Int]]]()
     
     init() { }
     
@@ -79,7 +79,12 @@ class OutdoorRoadManager {
     }
     
     func loadOutdoorRoutes(sector_id: Int, routes: [TJLabsRoute]) {
-        self.outdoorRoutes[sector_id] = routes
+        var routeDict = [Int: [Int]]()
+        
+        for route in routes {
+            routeDict[route.number] = route.node_numbers
+        }
+        self.outdoorRoutes[sector_id] = routeDict
         NotificationCenter.default.post(name: .outdoorRoutesUpdated, object: nil, userInfo: ["routeKey": sector_id])
     }
     
