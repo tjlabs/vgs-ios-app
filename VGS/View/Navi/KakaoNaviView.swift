@@ -192,16 +192,12 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
                 if elapsed >= 5 {
-//                    isGuideEnded = true
-//                    routeGuidance.stop()
-                    
                     if !isGuideEnded {
                         PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                        checkArrived(curLat: latitude, curLon: longitude)
                     }
-                    
-//                    delegate?.isArrival(.EXTERNAL)
                 } else {
-                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
+//                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
                 }
                 isCurLocExist = true
             }
@@ -215,16 +211,12 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 let now = Date()
                 let elapsed = now.timeIntervalSince(locationStartTime)
                 if elapsed >= 5 {
-//                    isGuideEnded = true
-//                    routeGuidance.stop()
-                    
                     if !isGuideEnded {
                         PositionManager.shared.updateCurrentLocation(lat: latitude, lon: longitude)
+                        checkArrived(curLat: latitude, curLon: longitude)
                     }
-                    
-//                    delegate?.isArrival(.EXTERNAL)
                 } else {
-                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
+//                    print("🕒 위치 업데이트 무시 (기준시간 이내 \(elapsed)초)")
                 }
             }
         }
@@ -233,7 +225,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         PositionManager.shared.position.speed = Double(speed)
         PositionManager.shared.currentHeading = Double(heading)
         
-        print("(VGS) 📍 현 위치: \(aLocationGuide.gpsMatched.pos) // speed = \(speed) // heading = \(heading)")
+//        print("(VGS) 📍 현 위치: \(aLocationGuide.gpsMatched.pos) // speed = \(speed) // heading = \(heading)")
         
         self.naviView.guidance(aGuidance, didUpdate: aLocationGuide)
     }
@@ -359,6 +351,44 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 self.delegate?.isArrival(.EXTERNAL)
             })
         })
+    }
+    
+    private func checkArrived(curLat: Double, curLon: Double) {
+        var isArrived: Bool = false
+        guard let info = VehicleInfoManager.shared.getVehicleInfo() else { return }
+
+        let latitude_goal = Double(info.gate_gps_x ?? 37.164209)
+        let longitude_goal = Double(info.gate_gps_y ?? 127.323388)
+
+        let distance = haversineDistance(lat1: curLat, lon1: curLon,
+                                          lat2: latitude_goal, lon2: longitude_goal)
+
+        if distance <= 20 {
+            isArrived = true
+        }
+
+        if isArrived {
+            self.routeGuidance.stop()
+            self.isStartReported = true
+            self.isGuideEnded = true
+            self.delegate?.isArrival(.EXTERNAL)
+        }
+    }
+    
+    private func haversineDistance(lat1: Double, lon1: Double,
+                                   lat2: Double, lon2: Double) -> Double {
+        let R = 6371000.0
+
+        let dLat = (lat2 - lat1) * .pi / 180
+        let dLon = (lon2 - lon1) * .pi / 180
+
+        let a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(lat1 * .pi / 180) * cos(lat2 * .pi / 180) *
+                sin(dLon / 2) * sin(dLon / 2)
+
+        let c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c
     }
     
     private func setDrive() {
