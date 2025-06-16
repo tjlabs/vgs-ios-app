@@ -22,6 +22,7 @@
 		B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFB2DFFFBEF0069CD8A /* FirebaseCrashlytics */; };
 		B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFD2DFFFBEF0069CD8A /* FirebaseFirestore */; };
 		B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BFF2DFFFBEF0069CD8A /* FirebaseRemoteConfig */; };
+		B3F51C042E0006000069CD8A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51C032E0006000069CD8A /* FirebaseAuth */; };
 		D4C4EE88B4F834DDB541EBE8 /* Pods_VGSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0821ED6873831102289EF530 /* Pods_VGSTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -129,6 +130,7 @@
 				B3F51BFA2DFFFBEF0069CD8A /* FirebaseCore in Frameworks */,
 				B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */,
 				B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */,
+				B3F51C042E0006000069CD8A /* FirebaseAuth in Frameworks */,
 				B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */,
 				B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */,
 				B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */,
@@ -869,6 +871,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
+		};
+		B3F51C032E0006000069CD8A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3F51BF62DFFFBEF0069CD8A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

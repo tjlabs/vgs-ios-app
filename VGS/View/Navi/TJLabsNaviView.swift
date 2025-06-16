@@ -8,6 +8,7 @@ import RxRelay
 import Then
 import CoreLocation
 import TJLabsAuth
+import FirebaseFirestore
 
 enum RoadType: String {
     case FRAME = "FRAME"
@@ -52,6 +53,7 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     // Outdoor Road
 //    var outdoorRoadManager = OutdoorRoadManager()
 //    var OutdoorRoad = [[Double]]()
+    var firestorRoutes = [FirestoreRoute]()
     var nodeData = [Int: [Int]]()
     var linkData = [Int: [Int]]()
     var routeData = [Int: [Int]]()
@@ -74,6 +76,24 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     
     deinit {
         notificationCenterRemoveObserver()
+    }
+    
+    func fetchRoutes(completion: @escaping ([FirestoreRoute]) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("routes").getDocuments { snapshot, error in
+            guard let documents = snapshot?.documents, error == nil else {
+                print("❌ Error fetching routes: \(error?.localizedDescription ?? "Unknown error")")
+                completion([])
+                return
+            }
+            
+            let routes: [FirestoreRoute] = documents.compactMap { document in
+                try? document.data(as: FirestoreRoute.self)
+            }
+            
+            completion(routes)
+        }
     }
     
     private func authTJLabs() {
@@ -161,7 +181,39 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     private func setupLayout() {
         setupMapImageView()
         plotOutdoorRoadAll()
-        plotRouteAll(number: 1)
+        selectRoute { [self] routeNumber in
+            plotRouteAll(number: routeNumber)
+        }
+    }
+    
+    private func selectRoute(completion: @escaping (Int) -> Void) {
+        var defaultRouteNumber = 1
+
+        guard let info = VehicleInfoManager.shared.getVehicleInfo() else {
+            completion(defaultRouteNumber)
+            return
+        }
+        print("(TJLabsNaviView) getVehicleInfo = \(info)")
+
+        guard let target_gate_name = info.target_gate_name,
+              let destination_spot_name = info.destination_spot_name else {
+            completion(defaultRouteNumber)
+            return
+        }
+
+        fetchRoutes { routes in
+            for route in routes {
+                if route.target_gate_name == target_gate_name &&
+                    route.destination_spot_name == destination_spot_name {
+                    print("✅ 일치하는 경로 발견: \(route)")
+                    completion(route.route_number)
+                    return
+                }
+            }
+
+            print("⚠️ 일치하는 경로 없음 → 기본값 반환")
+            completion(defaultRouteNumber)
+        }
     }
     
     private func setupFlashView() {

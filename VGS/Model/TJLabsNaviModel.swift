@@ -37,3 +37,9 @@ struct SectorResult: Codable {
     let links: [TJLabsLink]
     let routes: [TJLabsRoute]
 }
+
+struct FirestoreRoute: Codable {
+    let destination_spot_name: String
+    let target_gate_name: String
+    let route_number: Int
+}

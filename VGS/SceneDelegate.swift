@@ -1,15 +1,29 @@
 
 import UIKit
 import FirebaseCore
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
-        FirebaseApp.configure()
+
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+
+        if Auth.auth().currentUser == nil {
+            Auth.auth().signInAnonymously { authResult, error in
+                if let error = error {
+                    print("익명 로그인 실패: \(error.localizedDescription)")
+                } else if let user = authResult?.user {
+                    print("익명 로그인 성공: UID = \(user.uid)")
+                }
+            }
+        }
+        
         RemoteConfigManager.sharedManager.launching(completionHandler: { (config) in }, forceUpdate: {
             (forceUpdate) in
             if !forceUpdate {

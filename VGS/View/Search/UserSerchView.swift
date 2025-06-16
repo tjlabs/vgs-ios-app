@@ -271,7 +271,7 @@ class UserSerchView: UIView {
         
         if isValid {
             SearchManager.shared.getSearchList(url: USER_SEARCH_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
-                print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
+//                print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
                 if statusCode == 200 {
                     VehicleInfoManager.shared.userCarNumber = vehicleNumber
                     VehicleInfoManager.shared.saveCarNumberToCache()
