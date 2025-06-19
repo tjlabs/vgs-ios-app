@@ -8,14 +8,14 @@ protocol NaviArrivalDelegate: AnyObject {
 }
 
 struct UserInitInput: Codable {
-    var access_reg_no: Double = 0
+    var access_reg_no: Int = 0
     var driver_no: Double = 0
     var arrive_datetime: String = ""
     var current_gps_x: Double = 0
     var current_gps_y: Double = 0
-    var target_gate_no: Double = 0
+    var target_gate_no: Int = 0
     
-    init(access_reg_no: Double, driver_no: Double, arrive_datetime: String, current_gps_x: Double, current_gps_y: Double, target_gate_no: Double) {
+    init(access_reg_no: Int, driver_no: Double, arrive_datetime: String, current_gps_x: Double, current_gps_y: Double, target_gate_no: Int) {
         self.access_reg_no = access_reg_no
         self.driver_no = driver_no
         self.arrive_datetime = arrive_datetime
@@ -37,7 +37,7 @@ struct UserInitData: Codable {
     let id: String
     let no: Double
     let vgs_hist_no: Double
-    let access_reg_no: Double
+    let access_reg_no: Int
     let driver_no: Double
     let target_gate_no: Double?
     let departure_datetime: String?
@@ -66,7 +66,7 @@ struct UserInitData: Codable {
         id = try container.decodeIfPresent(String.self, forKey: .id) ?? "알 수 없음"
         no = try container.decodeIfPresent(Double.self, forKey: .no) ?? -1
         vgs_hist_no = try container.decodeIfPresent(Double.self, forKey: .vgs_hist_no) ?? -1
-        access_reg_no = try container.decodeIfPresent(Double.self, forKey: .access_reg_no) ?? -1
+        access_reg_no = try container.decodeIfPresent(Int.self, forKey: .access_reg_no) ?? -1
         driver_no = try container.decodeIfPresent(Double.self, forKey: .driver_no) ?? -1
         target_gate_no = try container.decodeIfPresent(Double.self, forKey: .target_gate_no) ?? -1
         departure_datetime = try container.decodeIfPresent(String.self, forKey: .departure_datetime) ?? "알 수 없음"
@@ -101,7 +101,7 @@ struct UserPosition: Codable {
 //    var current_location: String = "알 수 없음"
     var vgs_hist_no: Double?
     var driver_no: Double?
-    var access_reg_no: Double?
+    var access_reg_no: Int?
     var arrive_datetime: String?
     var current_gps_x: Double?
     var current_gps_y: Double?

@@ -84,6 +84,7 @@ class PositionManager {
     
     private func tryPostIfReady() {
         guard !hasPosted,
+              !VehicleInfoManager.shared.isPublicUser,
                 let time = estimatedArrivalTime,
                 let lat = currentLat,
                 let lon = currentLon else { return }

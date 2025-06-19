@@ -43,3 +43,10 @@ struct FirestoreRoute: Codable {
     let target_gate_name: String
     let route_number: Int
 }
+
+
+struct FirestorMatchedRoute: Codable {
+    let destination_spot_code: String
+    let target_gate_code: String
+    let route_number: Int
+}

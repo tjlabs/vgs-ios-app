@@ -14,6 +14,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         case .EXTERNAL:
             // TO-DO
             print("(MainVC) External Navi Ended")
+            kakaoNaviView.resetSimulationTapCount()
             self.showDialogView()
         case .OUTDOOR:
             print("(MainVC) Outdoor Navi Ended")
@@ -94,12 +95,13 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
 
     }
     
-    func didTapNavigationItem(_ title: String, from previousTitle: String) {
-        if previousTitle == "출입 정보" && title == "길안내" {
+    func didTapNavigationItem(_ id: Int, from previousId: Int) {
+        // 길안내 : 0 // 출입 정보 : 1
+        if previousId == 1 && id == 0 {
             // 출입 정보 → 길안내 전환 처리
             print("MainViewController: 출입 정보 → 길안내")
             self.infoContainerView?.removeFromSuperview()
-        } else if previousTitle == "길안내" && title == "출입 정보" {
+        } else if previousId == 0 && id == 1 {
             // 길안내 → 출입 정보 전환 처리
             print("MainViewController: 길안내 → 출입 정보")
             controlInfoContainerView()

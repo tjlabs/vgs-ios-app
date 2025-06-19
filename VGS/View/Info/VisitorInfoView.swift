@@ -9,7 +9,7 @@ import Then
 class VisitorInfoView: UIView {
     private let disposeBag = DisposeBag()
     
-    private let titleLabel: UILabel = {
+    private var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.notoSansBold(size: 30)
         label.textColor = .black
@@ -279,12 +279,44 @@ class VisitorInfoView: UIView {
     private func updateVehicleInfo(info: VehicleInfo) {
         DispatchQueue.main.async { [self] in
             // Update UI
-            gateDataLabel.text = info.target_gate_name
-            placeDataLabel.text = info.destination_spot_name
-            factoryManagerDataLabel.text = info.const_charger_name
-            placeManagerDataLabel.text = info.mat_charger_name
-            updateAccessDateLabel(startDateString: info.access_start_date, endDateString: info.access_end_date, label: durationDateLabel)
+            if VehicleInfoManager.shared.isPublicUser {
+                titleLabel.text = "목적지 정보"
+                gateDataLabel.text = info.target_gate_name
+                placeDataLabel.text = info.destination_spot_name
+                factoryManagerDataLabel.text = info.const_charger_name
+                placeManagerDataLabel.text = info.mat_charger_name
+                let start_end = getStartAndEndOfTodayUTC()
+                updateAccessDateLabel(startDateString: start_end.start, endDateString: start_end.end, label: durationDateLabel)
+            } else {
+                gateDataLabel.text = info.target_gate_name
+                placeDataLabel.text = info.destination_spot_name
+                factoryManagerDataLabel.text = info.const_charger_name
+                placeManagerDataLabel.text = info.mat_charger_name
+                updateAccessDateLabel(startDateString: info.access_start_date, endDateString: info.access_end_date, label: durationDateLabel)
+            }
         }
+    }
+    
+    func getStartAndEndOfTodayUTC() -> (start: String, end: String) {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = Date()
+        
+        // 오늘 자정 (00시)
+        let startOfDay = calendar.startOfDay(for: now)
+        
+        // 오늘 24시 = 다음 날 00시
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
+            return ("", "")
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        let startString = formatter.string(from: startOfDay)
+        let endString = formatter.string(from: endOfDay)
+
+        return (startString, endString)
     }
     
     func updateAccessDateLabel(startDateString: String, endDateString: String, label: UILabel) {

@@ -9,12 +9,6 @@
 /* Begin PBXBuildFile section */
 		536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */; };
 		73CF818A34D4B5A17815D7FD /* Pods_VGS_VGSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2FC649EE7F3767B21A4FE85 /* Pods_VGS_VGSUITests.framework */; };
-		B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */; };
-		B38964922DFBBEFB00563C45 /* VSMSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */; };
-		B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; };
-		B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; };
 		B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BF72DFFFBEF0069CD8A /* FirebaseAnalytics */; };
@@ -50,9 +44,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B38964942DFBBEFB00563C45 /* TmapUISDK.xcframework in Embed Frameworks */,
-				B38964962DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Embed Frameworks */,
-				B38964922DFBBEFB00563C45 /* VSMSDK.xcframework in Embed Frameworks */,
 				B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -70,16 +61,7 @@
 		B33A9E272DCAF43D00E093E6 /* VGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E3D2DCAF44000E093E6 /* VGSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E472DCAF44000E093E6 /* VGSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B33A9FC52DCB392F00E093E6 /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.18/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
-		B33A9FC62DCB392F00E093E6 /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.18/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
-		B33A9FC72DCB392F00E093E6 /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.18/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
-		B34EC4EA2DE02F4100531DBB /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.19/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
-		B34EC4EB2DE02F4100531DBB /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.19/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
-		B34EC4EC2DE02F4100531DBB /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.19/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
 		B34EC7262DE0510600531DBB /* KN-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KN-Bridging-Header.h"; sourceTree = "<group>"; };
-		B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
-		B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
-		B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
 		B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; name = TJLabsAuth.xcframework; path = "../Frameworks/TJLabsAuth-sdk-ios/xcframeworks/TJLabsAuth.xcframework"; sourceTree = "<group>"; };
 		B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; path = TJLabsAuth.xcframework; sourceTree = "<group>"; };
 		D0069715B92AFDE72915F2B6 /* Pods-VGS-VGSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.release.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -123,16 +105,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B38964952DFBBEFB00563C45 /* TmapNaviSDK.xcframework in Frameworks */,
 				536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */,
 				B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */,
-				B38964932DFBBEFB00563C45 /* TmapUISDK.xcframework in Frameworks */,
 				B3F51BFA2DFFFBEF0069CD8A /* FirebaseCore in Frameworks */,
 				B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */,
 				B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */,
 				B3F51C042E0006000069CD8A /* FirebaseAuth in Frameworks */,
 				B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */,
-				B38964912DFBBEFB00563C45 /* VSMSDK.xcframework in Frameworks */,
 				B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,15 +140,6 @@
 			children = (
 				B38964E92DFBEEE300563C45 /* xcframeworks */,
 				B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */,
-				B33A9FC62DCB392F00E093E6 /* TmapNaviSDK.xcframework */,
-				B34EC4EB2DE02F4100531DBB /* TmapNaviSDK.xcframework */,
-				B38964902DFBBEFB00563C45 /* TmapNaviSDK.xcframework */,
-				B33A9FC72DCB392F00E093E6 /* TmapUISDK.xcframework */,
-				B389648F2DFBBEFB00563C45 /* TmapUISDK.xcframework */,
-				B33A9FC52DCB392F00E093E6 /* VSMSDK.xcframework */,
-				B34EC4EA2DE02F4100531DBB /* TmapUISDK.xcframework */,
-				B34EC4EC2DE02F4100531DBB /* VSMSDK.xcframework */,
-				B389648E2DFBBEFB00563C45 /* VSMSDK.xcframework */,
 				71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */,
 				B2FC649EE7F3767B21A4FE85 /* Pods_VGS_VGSUITests.framework */,
 				0821ED6873831102289EF530 /* Pods_VGSTests.framework */,
@@ -511,14 +481,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = G75UAV755N;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
@@ -539,6 +510,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tjlabscorp.ios.VGS-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -546,7 +518,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "KN-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -556,14 +528,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = G75UAV755N;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VGS/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "블루투스 신호를 이용하여 사용자에게 위치 정보를 제공하므로, 블루투스 관련 권한 허용이 필요합니다.";
@@ -584,6 +557,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tjlabscorp.ios.VGS-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -591,7 +565,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "KN-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

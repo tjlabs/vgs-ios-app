@@ -96,6 +96,32 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
     
+    func fetchMatchedRoute(target_gate_code: String, destination_spot_code: String, completion: @escaping (FirestorMatchedRoute) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection(target_gate_code).document(destination_spot_code).getDocument { snapshot, error in
+            if let error = error {
+                print("❌ Error fetching route: \(error.localizedDescription)")
+                completion(FirestorMatchedRoute(destination_spot_code: "", target_gate_code: "", route_number: -1))
+                return
+            }
+            
+            guard let data = snapshot?.data(),
+                  let routeNumber = data["route_number"] as? Int else {
+                print("❌ No data or route_number not found")
+                completion(FirestorMatchedRoute(destination_spot_code: "", target_gate_code: "", route_number: -1))
+                return
+            }
+            
+            // ✅ 구조체로 감싸서 반환
+            let route = FirestorMatchedRoute(destination_spot_code: destination_spot_code,
+                                             target_gate_code: target_gate_code,
+                                             route_number: routeNumber)
+            
+            completion(route)
+        }
+    }
+    
     private func authTJLabs() {
         TJLabsAuthConstants.setServerURL(region: AuthRegion.KOREA.rawValue, serverType: "phoenix")
         TJLabsAuthManager.shared.auth(name: "skep", password: "Skep1234!", completion: { statusCode, isSuccess in
@@ -196,24 +222,32 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         print("(TJLabsNaviView) getVehicleInfo = \(info)")
 
         guard let target_gate_name = info.target_gate_name,
-              let destination_spot_name = info.destination_spot_name else {
+              let target_gate_code = info.target_gate_code,
+              let destination_spot_name = info.destination_spot_name,
+              let destination_spot_code = info.destination_spot_code else {
+            print("(TJLabsNaviView) return default route \(defaultRouteNumber)")
             completion(defaultRouteNumber)
             return
         }
 
-        fetchRoutes { routes in
-            for route in routes {
-                if route.target_gate_name == target_gate_name &&
-                    route.destination_spot_name == destination_spot_name {
-                    print("✅ 일치하는 경로 발견: \(route)")
-                    completion(route.route_number)
-                    return
-                }
-            }
-
-            print("⚠️ 일치하는 경로 없음 → 기본값 반환")
-            completion(defaultRouteNumber)
-        }
+//        fetchRoutes { routes in
+//            for route in routes {
+//                if route.target_gate_name == target_gate_name &&
+//                    route.destination_spot_name == destination_spot_name {
+//                    print("✅ 일치하는 경로 발견: \(route)")
+//                    completion(route.route_number)
+//                    return
+//                }
+//            }
+//
+//            print("⚠️ 일치하는 경로 없음 → 기본값 반환")
+//            completion(defaultRouteNumber)
+//        }
+        
+        fetchMatchedRoute(target_gate_code: target_gate_code, destination_spot_code: destination_spot_code, completion: { route in
+            print("✅ 매칭된 경로: \(route)")
+            completion(route.route_number)
+        })
     }
     
     private func setupFlashView() {
@@ -380,7 +414,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             }
             
             PositionManager.shared.updateCurrentLocation(lat: coord[0], lon: coord[1])
-            let speedKmh = location.speed*3.6
+            
+            let speedKmh = SimulationPath.isSimulation ? 12 : location.speed*3.6
 //            let speedKmh: Double = 35
             PositionManager.shared.position.speed = speedKmh
             self.currentSpeed = speedKmh
@@ -472,8 +507,12 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
     }
     
     private func plotRouteAll(number: Int) {
-        plotRoute(number: number, type: .FRAME)
-        plotRoute(number: number, type: .MAIN)
+//        plotRoute(number: number, type: .FRAME)
+//        plotRoute(number: number, type: .MAIN)
+        if !VehicleInfoManager.shared.isPublicUser {
+            plotRoute(number: number, type: .FRAME)
+            plotRoute(number: number, type: .MAIN)
+        }	
     }
     
     private func plotOutdoorRoad(type: RoadType) {

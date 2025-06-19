@@ -21,16 +21,16 @@ struct SearchListResult: Codable {
 struct VehicleInfo: Codable {
     let id: String
     let no: Double
-    let access_reg_no: Double
-    let company_no: Double
-    let vehicle_no: Double
+    let access_reg_no: Int
+    let company_no: Int
+    let vehicle_no: Int
     let driver_no: Double
     let const_charger_no: Double
     let mat_charger_no: Double
     let access_start_date: String
     let access_end_date: String
     let vehicle_class: String?
-    let work_type_no: Double
+    let work_type_no: Int
     let company_name: String
     let company_contact: String?
     let vehicle_reg_no: String
@@ -63,26 +63,31 @@ struct VehicleInfo: Codable {
     let vehicle_region_div_name: String
     let target_x: Double?
     let target_y: Double?
-    let target_floor_no: Double?
-    let target_building_no: Double?
-    let target_sector_no: Double?
+    let target_floor_no: Int?
+    let target_building_no: Int?
+    let target_sector_no: Int?
     let target_floor_code: String?
     let target_building_code: String?
     let target_sector_code: String?
-    let target_gate_no: Double?
+    let target_gate_no: Int?
     let target_gate_name: String?
-    let destination_spot_no: Double?
+    let target_gate_code: String?
+    let destination_spot_no: Int?
     let destination_spot_name: String?
+    let destination_spot_code: String?
+    let buffer_parking_lot_no: Int?
+    let buffer_parking_lot_name: String?
+    let buffer_parking_lot_code: String?
     let gate_gps_x: Double?
     let gate_gps_y: Double?
     let output_order: Double
     let use_wo: Double
     let del_wo: Double
-    let insert_user_no: Double
+    let insert_user_no: Int
     let insert_datetime: String
-    let update_user_no: Double
+    let update_user_no: Int
     let update_datetime: String
-    let delete_user_no: Double?
+    let delete_user_no: Int?
     let delete_datetime: String?
     let insert_user_name: String
     let update_user_name: String
@@ -96,16 +101,16 @@ struct VehicleInfo: Codable {
 
         id = try container.decodeIfPresent(String.self, forKey: .id) ?? "알 수 없음"
         no = try container.decodeIfPresent(Double.self, forKey: .no) ?? -1
-        access_reg_no = try container.decodeIfPresent(Double.self, forKey: .access_reg_no) ?? -1
-        company_no = try container.decodeIfPresent(Double.self, forKey: .company_no) ?? -1
-        vehicle_no = try container.decodeIfPresent(Double.self, forKey: .vehicle_no) ?? -1
+        access_reg_no = try container.decodeIfPresent(Int.self, forKey: .access_reg_no) ?? -1
+        company_no = try container.decodeIfPresent(Int.self, forKey: .company_no) ?? -1
+        vehicle_no = try container.decodeIfPresent(Int.self, forKey: .vehicle_no) ?? -1
         driver_no = try container.decodeIfPresent(Double.self, forKey: .driver_no) ?? -1
         const_charger_no = try container.decodeIfPresent(Double.self, forKey: .const_charger_no) ?? -1
         mat_charger_no = try container.decodeIfPresent(Double.self, forKey: .mat_charger_no) ?? -1
         access_start_date = try container.decodeIfPresent(String.self, forKey: .access_start_date) ?? "알 수 없음"
         access_end_date = try container.decodeIfPresent(String.self, forKey: .access_end_date) ?? "알 수 없음"
         vehicle_class = try container.decodeIfPresent(String.self, forKey: .vehicle_class) ?? "알 수 없음"
-        work_type_no = try container.decodeIfPresent(Double.self, forKey: .work_type_no) ?? -1
+        work_type_no = try container.decodeIfPresent(Int.self, forKey: .work_type_no) ?? -1
         company_name = try container.decodeIfPresent(String.self, forKey: .company_name) ?? "알 수 없음"
         company_contact = try container.decodeIfPresent(String.self, forKey: .company_contact) ?? "알 수 없음"
         vehicle_reg_no = try container.decodeIfPresent(String.self, forKey: .vehicle_reg_no) ?? "알 수 없음"
@@ -138,26 +143,31 @@ struct VehicleInfo: Codable {
         vehicle_region_div_name = try container.decodeIfPresent(String.self, forKey: .vehicle_region_div_name) ?? "알 수 없음"
         target_x = try container.decodeIfPresent(Double.self, forKey: .target_x) ?? -1
         target_y = try container.decodeIfPresent(Double.self, forKey: .target_y) ?? -1
-        target_floor_no = try container.decodeIfPresent(Double.self, forKey: .target_floor_no) ?? -1
-        target_building_no = try container.decodeIfPresent(Double.self, forKey: .target_building_no) ?? -1
-        target_sector_no = try container.decodeIfPresent(Double.self, forKey: .target_sector_no) ?? -1
+        target_floor_no = try container.decodeIfPresent(Int.self, forKey: .target_floor_no) ?? -1
+        target_building_no = try container.decodeIfPresent(Int.self, forKey: .target_building_no) ?? -1
+        target_sector_no = try container.decodeIfPresent(Int.self, forKey: .target_sector_no) ?? -1
         target_floor_code = try container.decodeIfPresent(String.self, forKey: .target_floor_code) ?? "알 수 없음"
         target_building_code = try container.decodeIfPresent(String.self, forKey: .target_building_code) ?? "알 수 없음"
         target_sector_code = try container.decodeIfPresent(String.self, forKey: .target_sector_code) ?? "알 수 없음"
-        target_gate_no = try container.decodeIfPresent(Double.self, forKey: .target_gate_no) ?? -1
+        target_gate_no = try container.decodeIfPresent(Int.self, forKey: .target_gate_no) ?? -1
         target_gate_name = try container.decodeIfPresent(String.self, forKey: .target_gate_name) ?? "알 수 없음"
-        destination_spot_no = try container.decodeIfPresent(Double.self, forKey: .destination_spot_no) ?? -1
+        target_gate_code = try container.decodeIfPresent(String.self, forKey: .target_gate_code) ?? "알 수 없음"
+        destination_spot_no = try container.decodeIfPresent(Int.self, forKey: .destination_spot_no) ?? -1
         destination_spot_name = try container.decodeIfPresent(String.self, forKey: .destination_spot_name) ?? "알 수 없음"
+        destination_spot_code = try container.decodeIfPresent(String.self, forKey: .destination_spot_code) ?? "알 수 없음"
+        buffer_parking_lot_no = try container.decodeIfPresent(Int.self, forKey: .buffer_parking_lot_no) ?? -1
+        buffer_parking_lot_name = try container.decodeIfPresent(String.self, forKey: .buffer_parking_lot_name) ?? "알 수 없음"
+        buffer_parking_lot_code = try container.decodeIfPresent(String.self, forKey: .buffer_parking_lot_code) ?? "알 수 없음"
         gate_gps_x = try container.decodeIfPresent(Double.self, forKey: .gate_gps_x) ?? -1
         gate_gps_y = try container.decodeIfPresent(Double.self, forKey: .gate_gps_y) ?? -1
         output_order = try container.decodeIfPresent(Double.self, forKey: .output_order) ?? -1
         use_wo = try container.decodeIfPresent(Double.self, forKey: .use_wo) ?? -1
         del_wo = try container.decodeIfPresent(Double.self, forKey: .del_wo) ?? -1
-        insert_user_no = try container.decodeIfPresent(Double.self, forKey: .insert_user_no) ?? -1
+        insert_user_no = try container.decodeIfPresent(Int.self, forKey: .insert_user_no) ?? -1
         insert_datetime = try container.decodeIfPresent(String.self, forKey: .insert_datetime) ?? "알 수 없음"
-        update_user_no = try container.decodeIfPresent(Double.self, forKey: .update_user_no) ?? -1
+        update_user_no = try container.decodeIfPresent(Int.self, forKey: .update_user_no) ?? -1
         update_datetime = try container.decodeIfPresent(String.self, forKey: .update_datetime) ?? "알 수 없음"
-        delete_user_no = try container.decodeIfPresent(Double.self, forKey: .delete_user_no) ?? -1
+        delete_user_no = try container.decodeIfPresent(Int.self, forKey: .delete_user_no) ?? -1
         delete_datetime = try container.decodeIfPresent(String.self, forKey: .delete_datetime) ?? "알 수 없음"
         insert_user_name = try container.decodeIfPresent(String.self, forKey: .insert_user_name) ?? "알 수 없음"
         update_user_name = try container.decodeIfPresent(String.self, forKey: .update_user_name) ?? "알 수 없음"

@@ -55,6 +55,53 @@
             </objects>
             <point key="canvasLocation" x="1349" y="-58"/>
         </scene>
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="sL1-Mt-ZOE">
+            <objects>
+                <viewController storyboardIdentifier="PrivacyPolicyViewController" id="GHw-Sh-NU3" customClass="PrivacyPolicyViewController" customModule="VGS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Sd2-Gi-djh">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWx-Dd-rq7">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="xMV-r4-pYX"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Title" id="AvH-32-Ti5"/>
+                                </items>
+                            </navigationBar>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ABp-UD-vRa">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ChI-0Z-XQl"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ABp-UD-vRa" firstAttribute="leading" secondItem="ChI-0Z-XQl" secondAttribute="leading" id="S53-Za-9m3"/>
+                            <constraint firstItem="ABp-UD-vRa" firstAttribute="top" secondItem="KWx-Dd-rq7" secondAttribute="bottom" id="YKT-AJ-VOu"/>
+                            <constraint firstItem="KWx-Dd-rq7" firstAttribute="leading" secondItem="ChI-0Z-XQl" secondAttribute="leading" id="jqq-Mx-GMT"/>
+                            <constraint firstItem="KWx-Dd-rq7" firstAttribute="top" secondItem="ChI-0Z-XQl" secondAttribute="top" id="qIT-Hf-9V7"/>
+                            <constraint firstItem="ChI-0Z-XQl" firstAttribute="bottom" secondItem="ABp-UD-vRa" secondAttribute="bottom" id="qet-8K-MnK"/>
+                            <constraint firstItem="ChI-0Z-XQl" firstAttribute="trailing" secondItem="ABp-UD-vRa" secondAttribute="trailing" id="tjN-lg-XM0"/>
+                            <constraint firstItem="KWx-Dd-rq7" firstAttribute="trailing" secondItem="ChI-0Z-XQl" secondAttribute="trailing" id="vpe-pA-H6i"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="navBar" destination="KWx-Dd-rq7" id="FUc-mb-ACD"/>
+                        <outlet property="webView" destination="ABp-UD-vRa" id="SmD-pB-soQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P2x-tH-ls8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="507.63358778625951" y="647.18309859154931"/>
+        </scene>
         <!--Navi View Controller-->
         <scene sceneID="Fas-hx-trH">
             <objects>

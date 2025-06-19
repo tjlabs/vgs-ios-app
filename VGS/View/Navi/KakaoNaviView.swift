@@ -65,7 +65,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         
         var latitude_goal = 37.16270985567856
         var longitude_goal = 127.32467624370436
-        var name_goal = "GATE#6"
+        var name_goal = "GATE #6"
         
 //        var latitude_start = latitude_goal
 //        var longitude_start = longitude_goal
@@ -74,7 +74,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         if let info = VehicleInfoManager.shared.getVehicleInfo() {
             latitude_goal = Double(info.gate_gps_x ?? 37.16270985567856)
             longitude_goal = Double(info.gate_gps_y ?? 127.32467624370436)
-            name_goal = info.target_gate_name ?? "GATE#6"
+            name_goal = info.target_gate_name ?? "GATE #6"
         }
 
         guard let sdkInstance = KNSDK.sharedInstance() else { return }
@@ -258,6 +258,17 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         $0.text = "영내 도착"
     }
     
+    private let simulationButtonTitle = UILabel().then {
+        $0.backgroundColor = .clear
+        $0.font = UIFont.notoSansBold(size: 14)
+        $0.textColor = .white
+        $0.textAlignment = .center
+        $0.adjustsFontSizeToFitWidth = true
+        $0.minimumScaleFactor = 0.2
+        $0.text = "목적지에서 지도 전환"
+    }
+    private var simulationTapCount: Int = 0
+    
     var naviView = KNNaviView.init()
     var routePriority: KNRoutePriority = .time
     var routeAvoidOption: KNRouteAvoidOption = .none
@@ -328,6 +339,14 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         forceGuidanceEndButtonTitle.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
         }
+        
+        addSubview(simulationButtonTitle)
+        simulationButtonTitle.snp.makeConstraints { make in
+            make.width.equalTo(140)
+            make.height.equalTo(totalHeight*0.06)
+            make.trailing.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(60)
+        }
     }
     
     private func setNaviViewOption() { }
@@ -351,6 +370,27 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 self.delegate?.isArrival(.EXTERNAL)
             })
         })
+    }
+    
+    private func setupSimulationButtonAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSimulationButton))
+        simulationButtonTitle.isUserInteractionEnabled = true
+        simulationButtonTitle.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleSimulationButton() {
+        simulationTapCount += 1
+        if simulationTapCount >= 5 {
+            SimulationPath.isSimulation = true
+            self.routeGuidance.stop()
+            self.isStartReported = true
+            self.isGuideEnded = true
+            self.delegate?.isArrival(.EXTERNAL)
+        }
+    }
+    
+    public func resetSimulationTapCount() {
+        self.simulationTapCount = 0
     }
     
     private func checkArrived(curLat: Double, curLon: Double) {
@@ -489,7 +529,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     setNaviViewOption()
                     locationStartTime = Date()
                     containerView.addSubview(naviView)
-                    self.forceGuidanceEndButton.isHidden = false
+//                    self.forceGuidanceEndButton.isHidden = false
                     guidance.start(with: trip, priority: routePriority, avoidOptions: routeAvoidOption.rawValue)
                 } else {
                     print("(VGS) Error : Cannot get shared guidance")
@@ -537,6 +577,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                 DispatchQueue.main.async {
                     self.setupLayout()
                     self.setupForceGuidanceEndButtonAction()
+                    self.setupSimulationButtonAction()
                 }
                 if knError == nil {
                     DispatchQueue.main.async {

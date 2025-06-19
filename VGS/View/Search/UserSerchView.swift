@@ -13,6 +13,7 @@ class UserSerchView: UIView {
     var onCellSelected: ((VehicleInfo) -> Void)?
     var onSearchInvalid: ((String) -> Void)?
     var onSearchFail: (() -> Void)?
+    var onPublicLogin: (() -> Void)?
     
     private var selectView: SelectView?
     var isChecked = false
@@ -94,10 +95,29 @@ class UserSerchView: UIView {
     private let searchButtonTitleLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.font = UIFont.notoSansBold(size: 48)
+        label.font = UIFont.notoSansBold(size: 40)
         label.textColor = .white
         label.textAlignment = .center
         label.text = "출입 조회"
+        return label
+    }()
+    
+    private let publicLoginButton: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hex: "#BDBDBD")
+        view.alpha = 0.8
+        view.cornerRadius = 15
+        view.addShadow(location: .rightBottom, color: .black, opacity: 0.2)
+        return view
+    }()
+    
+    private let publicLoginButtonTitleLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.font = UIFont.notoSansBold(size: 40)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "일반 사용자"
         return label
     }()
     
@@ -167,15 +187,39 @@ class UserSerchView: UIView {
             make.top.bottom.trailing.equalToSuperview()
         }
         
+//        addSubview(searchButton)
+//        searchButton.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(40)
+//            make.height.equalTo(80)
+//            make.bottom.equalToSuperview().inset(60)
+//        }
+        
+//        searchButton.addSubview(searchButtonTitleLabel)
+//        searchButtonTitleLabel.snp.makeConstraints { make in
+//            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
+//        }
+        
         addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(40)
-            make.height.equalTo(90)
-            make.bottom.equalToSuperview().inset(60)
+            make.height.equalTo(80)
+            make.top.equalTo(checkBoxTitleLabel.snp.bottom).offset(60)
         }
         
         searchButton.addSubview(searchButtonTitleLabel)
         searchButtonTitleLabel.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
+        }
+        
+        addSubview(publicLoginButton)
+        publicLoginButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(40)
+            make.height.equalTo(80)
+            make.top.equalTo(searchButton.snp.bottom).offset(20)
+        }
+        
+        publicLoginButton.addSubview(publicLoginButtonTitleLabel)
+        publicLoginButtonTitleLabel.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview().inset(5)
         }
     }
@@ -185,6 +229,7 @@ class UserSerchView: UIView {
         setupKeyboardDismissal()
         setupSaveAction()
         setupSearchAction()
+        setupPublicLoginAction()
     }
     
     private func bindTextField() {
@@ -325,6 +370,24 @@ class UserSerchView: UIView {
         vehicleNumberHintLabel.textColor = .red
         vehicleNumberHintLabel.text = "잘못된 입력"
         vehicleNumberHintLabel.isHidden = false
+    }
+    
+    private func setupPublicLoginAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handlePublicLoginButton))
+        publicLoginButton.isUserInteractionEnabled = true
+        publicLoginButton.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handlePublicLoginButton() {
+        UIView.animate(withDuration: 0.1,
+                       animations: {
+            self.publicLoginButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.publicLoginButton.transform = .identity
+            }
+            self.onPublicLogin?()
+        })
     }
     
     private func showSelectView(vehicleInfoList: [VehicleInfo]) {

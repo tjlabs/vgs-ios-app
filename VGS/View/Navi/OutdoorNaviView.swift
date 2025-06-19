@@ -38,7 +38,8 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     private var userMarkerImageView: UIImageView?
 
     private let driverStateButton = UIView().then {
-        $0.backgroundColor = UIColor(hex: "#E47325")
+//        $0.backgroundColor = UIColor(hex: "#E47325")
+        $0.backgroundColor = UIColor(hex: "#00B050")
         $0.alpha = 1.0
         $0.cornerRadius = 15
         $0.addShadow(location: .rightBottom, color: .black, opacity: 0.2)
@@ -51,6 +52,15 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
         $0.textAlignment = .center
         $0.text = "진입 요청"
     }
+    
+    private var publicDriverLabel = UILabel().then {
+        $0.backgroundColor = .clear
+        $0.font = UIFont.notoSansBold(size: 42)
+        $0.textColor = .black
+        $0.textAlignment = .center
+        $0.isHidden = true
+        $0.text = "항공사진 길안내"
+    }
 
     let mapView = TJLabsNaviView()
 
@@ -60,7 +70,7 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
     private var imageMapMarker: UIImage?
 
     private var isGuiding: Bool = false
-    private var curButtonState: ButtonState = .NONE
+    private var curButtonState: ButtonState = .WAIT
     
     init() {
         super.init(frame: .zero)
@@ -69,6 +79,7 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
         
         setupLayout()
         bindActions()
+        checkPublicUser()
     }
 
     required init?(coder: NSCoder) {
@@ -103,6 +114,21 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
         driverStateButton.addSubview(driverStateButtonTitleLabel)
         driverStateButtonTitleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
+        }
+        
+        addSubview(publicDriverLabel)
+        publicDriverLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(70)
+            make.bottom.equalToSuperview().inset(30)
+        }
+    }
+    
+    func checkPublicUser() {
+        if VehicleInfoManager.shared.isPublicUser {
+            publicDriverLabel.isHidden = false
+            driverStateButton.isHidden = true
+            driverStateButtonTitleLabel.isHidden = true
         }
     }
 
@@ -148,6 +174,41 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             make.edges.equalToSuperview()
         }
     }
+    
+    private func showFinishDialogView() {
+        let dialogView = DialogView(contentViewHeight: 240)
+        dialogView.setDialogString(title: "작업 종료", message: "현장 작업이 모두 종료되었으면 확인 버튼을 눌러주세요.")
+        dialogView.onConfirm = { [weak self] in
+            self?.curButtonState = .EXIT
+            self?.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
+            self?.driverStateButtonTitleLabel.text = "운행 종료"
+        }
+
+        self.addSubview(dialogView)
+        dialogView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    private func showQuitDialogView() {
+        let dialogView = DialogView(contentViewHeight: 260)
+        dialogView.setDialogString(title: "운행 종료", message: "모든 운행이 종료되었으면 확인을 눌러주세요.\n확인을 누르면 앱이 종료됩니다.")
+        dialogView.onConfirm = { [weak self] in
+            self?.curButtonState = .NONE
+            self?.mapView.stopTimer()
+            self?.isGuiding = false
+            
+            self?.driverStateButton.backgroundColor = .black
+            self?.driverStateButtonTitleLabel.textColor = .white
+            self?.driverStateButtonTitleLabel.text = "앱 종료"
+            self?.forceQuit()
+        }
+
+        self.addSubview(dialogView)
+        dialogView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
 
     func startOutdoor() {
         self.isGuiding = true
@@ -172,18 +233,10 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             self.driverStateButtonTitleLabel.text = "작업 종료"
         } else if curState == .FINISH {
             // FINISH -> EXIT
-            self.curButtonState = .EXIT
-            self.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
-            self.driverStateButtonTitleLabel.text = "운행 종료"
+            showFinishDialogView()
         } else {
             // EXIT !!
-            mapView.stopTimer()
-            self.isGuiding = false
-            self.curButtonState = .NONE
-            self.driverStateButton.backgroundColor = .black
-            self.driverStateButtonTitleLabel.textColor = .white
-            self.driverStateButtonTitleLabel.text = "앱 종료"
-            self.forceQuit()
+            showQuitDialogView()
         }
     }
     

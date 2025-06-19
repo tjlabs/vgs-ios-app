@@ -1,7 +1,7 @@
 
 
 class SimulationPath {
-    static var isSimulation: Bool = true
+    static var isSimulation: Bool = false
 
     static var pathIndex = 0
 

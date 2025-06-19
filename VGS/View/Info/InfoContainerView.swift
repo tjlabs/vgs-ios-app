@@ -23,6 +23,7 @@ class InfoContainerView: UIView {
         backgroundColor = .white
         setupLayout()
         bindActions()
+        checkPublicUser()
     }
     
     required init?(coder: NSCoder) {
@@ -70,6 +71,12 @@ class InfoContainerView: UIView {
     private func bindActions() {
         logoutView.onLogoutTapped = {
             self.onLogoutTapped?()
+        }
+    }
+    
+    private func checkPublicUser() {
+        if VehicleInfoManager.shared.isPublicUser {
+            self.vehicleInfoView.isHidden = true
         }
     }
 }

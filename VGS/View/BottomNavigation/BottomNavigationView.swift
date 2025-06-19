@@ -7,10 +7,11 @@ import RxRelay
 import Then
 
 protocol BottomNavigationViewDelegate: AnyObject {
-    func didTapNavigationItem(_ title: String, from previousTitle: String)
+    func didTapNavigationItem(_ id: Int, from previousId: Int)
 }
 
 struct NavigationItem {
+    let id: Int
     let title: String
     let imageName: String
 }
@@ -20,7 +21,7 @@ class BottomNavigationView: UIView {
     
     var navigationItems = [NavigationItem]()
     var navigationItemViews = [UIView]()
-    var currentViewName: String = ""
+    var currentViewId: Int = -1
     
     private let bottomNavigationTopLine: UIView = {
         let view = UIView()
@@ -71,23 +72,25 @@ class BottomNavigationView: UIView {
     }
     
     private func makeNavigationBarItems() {
-        navigationItems.append(NavigationItem(title: "길안내", imageName: "ic_bottom_navigation"))
-        navigationItems.append(NavigationItem(title: "출입 정보", imageName: "ic_bottom_user"))
+        navigationItems.append(NavigationItem(id: 0, title: "길안내", imageName: "ic_bottom_navigation"))
+        
+        let navItemTitle: String = VehicleInfoManager.shared.isPublicUser ? "일반 사용자" : "출입 정보"
+        navigationItems.append(NavigationItem(id: 1, title: navItemTitle, imageName: "ic_bottom_user"))
         
         for item in navigationItems {
             navigationItemViews.append(NavigationBarItem(title: item.title, imageName: item.imageName))
         }
         
         // Set Initial View
-        self.currentViewName = "길안내"
-        updateNavigationBarItems(with: self.currentViewName)
+        self.currentViewId = 0
+        updateNavigationBarItems(with: self.currentViewId)
     }
     
-    private func updateNavigationBarItems(with title: String) {
+    private func updateNavigationBarItems(with id: Int) {
         for (index, itemView) in navigationItemViews.enumerated() {
             guard let navigationBarItem = itemView as? NavigationBarItem else { continue }
             let currentImageName = navigationItems[index].imageName
-            if navigationItems[index].title == title {
+            if navigationItems[index].id == id {
                 let updatedImageName = currentImageName + "_fill"
                 navigationBarItem.updateImage(named: updatedImageName)
                 navigationBarItem.updateLabelColor(color: UIColor(hex: "#E47325"))
@@ -116,28 +119,28 @@ class BottomNavigationView: UIView {
     
     @objc private func navigationBarItemTapped(_ sender: UITapGestureRecognizer) {
         guard let tappedView = sender.view as? NavigationBarItem else { return }
-        handleNavigationAction(for: navigationItems[tappedView.tag].title)
+        handleNavigationAction(for: navigationItems[tappedView.tag].id)
     }
     
-    private func handleNavigationAction(for title: String) {
-        delegate?.didTapNavigationItem(title, from: currentViewName)
+    private func handleNavigationAction(for id: Int) {
+        delegate?.didTapNavigationItem(id, from: currentViewId)
         
-        if self.currentViewName != title {
-            switch title {
-            case "길안내":
-                if currentViewName == "출입 정보" {
+        if self.currentViewId != id {
+            switch id {
+            case 0:
+                if currentViewId == 1 {
                     // 출입 정보 -> 길안내
                 }
-                updateNavigationBarItems(with: title)
-            case "출입 정보":
-                if currentViewName == "길안내" {
+                updateNavigationBarItems(with: id)
+            case 1:
+                if currentViewId == 0 {
                     // 길안내 -> 출입정보
                 }
-                updateNavigationBarItems(with: title)
+                updateNavigationBarItems(with: id)
             default:
                 print("Unknown navigation item tapped")
             }
-            self.currentViewName = title
+            self.currentViewId = id
         }
     }
 }

@@ -1,43 +1,43 @@
 
 import UIKit
 import Combine
-import TmapUISDK
-import TmapNaviSDK
-import VSMSDK
+//import TmapUISDK
+//import TmapNaviSDK
+//import VSMSDK
 
-class NaviViewController: UIViewController, CLLocationManagerDelegate, UISDKMapViewDelegate {
-    func viewDidLoad(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
+class NaviViewController: UIViewController, CLLocationManagerDelegate {
+//    func viewDidLoad(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
+//        // TO-DO
+//    }
+//    
+//    func viewWillAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
+//        // TO-DO
+//    }
+//    
+//    func viewDidAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
+//        // TO-DO
+//    }
+//    
+//    func viewWillDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
+//        // TO-DO
+//    }
+//    
+//    func viewDidDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
+//        // TO-DO
+//    }
+//    
+//    func markerSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
+//        // TO-DO
+//        return false
+//    }
+//    
+//    func calloutPopupSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
+//        // TO-DO
+//        return false
+//    }
     
-    func viewWillAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
     
-    func viewDidAppear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewWillDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func viewDidDisappear(_ mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) {
-        // TO-DO
-    }
-    
-    func markerSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
-        // TO-DO
-        return false
-    }
-    
-    func calloutPopupSelected(_ marker: VSMMarkerBase, addedMapView mapView: VSMNavigationView, mapViewType type: TmapUISDK.MapViewFunctionType) -> Bool {
-        // TO-DO
-        return false
-    }
-    
-    
-    private var naviView: VSMNavigationView?
+//    private var naviView: VSMNavigationView?
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
     private var currentAddress: String = "현재 위치"
