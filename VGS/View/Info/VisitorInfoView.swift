@@ -48,7 +48,7 @@ class VisitorInfoView: UIView {
     
     private let gateTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "목적지 게이트"
@@ -58,10 +58,13 @@ class VisitorInfoView: UIView {
     
     private let gateDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "M15X"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -78,7 +81,7 @@ class VisitorInfoView: UIView {
     
     private let placeTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "방문현장"
@@ -88,10 +91,13 @@ class VisitorInfoView: UIView {
     
     private let placeDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "CUB"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -108,7 +114,7 @@ class VisitorInfoView: UIView {
     
     private let factoryManagerTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "공종담당자(S)"
@@ -118,10 +124,13 @@ class VisitorInfoView: UIView {
     
     private let factoryManagerDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "관리자"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -138,7 +147,7 @@ class VisitorInfoView: UIView {
     
     private let placeManagerTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "현장담당자(P)"
@@ -148,10 +157,13 @@ class VisitorInfoView: UIView {
     
     private let placeManagerDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "190"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -168,7 +180,7 @@ class VisitorInfoView: UIView {
     
     private let durationTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "출입 기간"
@@ -178,10 +190,13 @@ class VisitorInfoView: UIView {
     
     private let durationDateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "2025-02-25 ~ 2025-03-25"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -220,7 +235,7 @@ class VisitorInfoView: UIView {
         }
         gateTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(140)
+            make.width.equalTo(180)
         }
         gateStackView.addArrangedSubview(gateDataLabel)
         
@@ -231,7 +246,7 @@ class VisitorInfoView: UIView {
         }
         placeTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(140)
+            make.width.equalTo(180)
         }
         placeStackView.addArrangedSubview(placeDataLabel)
         
@@ -242,7 +257,7 @@ class VisitorInfoView: UIView {
         }
         factoryManagerTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(140)
+            make.width.equalTo(180)
         }
         factoryManagerStackView.addArrangedSubview(factoryManagerDataLabel)
         
@@ -253,7 +268,7 @@ class VisitorInfoView: UIView {
         }
         placeManagerTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(140)
+            make.width.equalTo(180)
         }
         placeManagerStackView.addArrangedSubview(placeManagerDataLabel)
         

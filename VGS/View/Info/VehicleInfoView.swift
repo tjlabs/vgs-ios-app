@@ -48,7 +48,7 @@ class VehicleInfoView: UIView {
     
     private let vehicleNumberTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "차량 번호"
@@ -58,10 +58,13 @@ class VehicleInfoView: UIView {
     
     private let vehicleNumberDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "1111"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -78,7 +81,7 @@ class VehicleInfoView: UIView {
     
     private let vehicleTypeTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "차종"
@@ -88,10 +91,13 @@ class VehicleInfoView: UIView {
     
     private let vehicleTypeDataLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 20)
+        label.font = UIFont.notoSansBold(size: 28)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "덤프트럭"
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
         return label
     }()
     
@@ -157,7 +163,7 @@ class VehicleInfoView: UIView {
         vehicleNumberStackView.addArrangedSubview(vehicleNumberTitleLabel)
         vehicleNumberTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(100)
+            make.width.equalTo(150)
         }
         vehicleNumberStackView.addArrangedSubview(vehicleNumberDataLabel)
         
@@ -165,7 +171,7 @@ class VehicleInfoView: UIView {
         vehicleTypeStackView.addArrangedSubview(vehicleTypeTitleLabel)
         vehicleTypeTitleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalTo(100)
+            make.width.equalTo(150)
         }
         vehicleTypeStackView.addArrangedSubview(vehicleTypeDataLabel)
         
