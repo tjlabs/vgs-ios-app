@@ -2,6 +2,7 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import AVFoundation
 
 class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDelegate, KNGuidance_GuideStateDelegate, KNGuidance_RouteGuideDelegate, KNGuidance_VoiceGuideDelegate, KNGuidance_SafetyGuideDelegate, KNGuidance_LocationGuideDelegate, KNGuidance_CitsGuideDelegate, CLLocationManagerDelegate {
     
@@ -163,7 +164,6 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     func guidance(_ aGuidance: KNGuidance, willPlayVoiceGuide aVoiceGuide: KNGuide_Voice) {
-        // TO-DO
         self.naviView.guidance(aGuidance, willPlayVoiceGuide: aVoiceGuide)
     }
     
@@ -273,7 +273,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     var routePriority: KNRoutePriority = .time
     var routeAvoidOption: KNRouteAvoidOption = .none
     var routeGuidance = KNGuidance()
-    var naviVolume: Float = 1.0
+    var naviVolume: Float = 10.0
     var isGuideEnded: Bool = false
     
     var isAuthGranted: Bool = false
@@ -289,6 +289,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     
     init() {
         super.init(frame: .zero)
+        setNaviViewOption()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
@@ -349,7 +350,21 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         }
     }
     
-    private func setNaviViewOption() { }
+    private func setNaviViewOption() {
+        self.setupAudioSession()
+    }
+    
+    
+    private func setupAudioSession() {
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .default, options: [.duckOthers])
+            try session.setActive(true)
+            print("🎧 AVAudioSession 설정 완료")
+        } catch {
+            print("❌ AVAudioSession 설정 실패: \(error)")
+        }
+    }
     
     private func setupForceGuidanceEndButtonAction() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleForceGuidanceEndButton))

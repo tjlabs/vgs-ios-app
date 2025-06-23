@@ -102,36 +102,6 @@
             </objects>
             <point key="canvasLocation" x="507.63358778625951" y="647.18309859154931"/>
         </scene>
-        <!--Navi View Controller-->
-        <scene sceneID="Fas-hx-trH">
-            <objects>
-                <viewController storyboardIdentifier="NaviViewController" id="TCh-ep-VbM" customClass="NaviViewController" customModule="VGS" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="B8H-iK-BAn">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="peL-uA-n4n"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ALp-cc-UjC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1349" y="648"/>
-        </scene>
-        <!--Outdoor Navi View Controller-->
-        <scene sceneID="FCb-vw-AyH">
-            <objects>
-                <viewController storyboardIdentifier="OutdoorNaviViewController" id="Y7z-T8-CMt" customClass="OutdoorNaviViewController" customModule="VGS" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="d7S-uz-WYk">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="ZH8-Vu-MbO"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0yE-cI-H0Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2189" y="-65"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="3GX-2y-N92">
             <objects>

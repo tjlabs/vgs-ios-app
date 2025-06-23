@@ -131,23 +131,12 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         dialogView.onConfirm = { [weak self] in
             self?.kakaoNaviView.removeFromSuperview()
             self?.outdoorNaviView.setIsHidden(isHidden: false)
-//            self?.moveToOutdoorNaviVC()
         }
         
         view.addSubview(dialogView)
         dialogView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-    
-    private func moveToOutdoorNaviVC() {
-        let estimatedArrivalTime = calArrivalTimeString(secondsToArrival: 1)
-        PositionManager.shared.updateArrivalTime(estimatedArrivalTime)
-        PositionManager.shared.position.current_location = "영내"
-        PositionManager.shared.setNaviType(type: .OUTDOOR)
-        guard let outdoorNaviVC = self.storyboard?.instantiateViewController(withIdentifier: "OutdoorNaviViewController") as? OutdoorNaviViewController else { return }
-        outdoorNaviVC.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(outdoorNaviVC, animated: true)
     }
     
     // Timer
