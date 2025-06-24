@@ -140,7 +140,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         view.addSubview(tmapNaviView)
         tmapNaviView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(self.bottomNavigationHeight-20)
+            make.bottom.equalToSuperview().inset(self.bottomNavigationHeight)
         }
         
         view.addSubview(bottomNavigationView)
