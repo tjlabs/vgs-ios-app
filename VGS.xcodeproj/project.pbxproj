@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */; };
 		73CF818A34D4B5A17815D7FD /* Pods_VGS_VGSUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2FC649EE7F3767B21A4FE85 /* Pods_VGS_VGSUITests.framework */; };
+		B35114482E0A61E3006DDE79 /* TmapUISDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35114452E0A61E3006DDE79 /* TmapUISDK.xcframework */; };
+		B35114492E0A61E3006DDE79 /* TmapUISDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B35114452E0A61E3006DDE79 /* TmapUISDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B351144A2E0A61E3006DDE79 /* VSMSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35114462E0A61E3006DDE79 /* VSMSDK.xcframework */; };
+		B351144B2E0A61E3006DDE79 /* VSMSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B35114462E0A61E3006DDE79 /* VSMSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B351144C2E0A61E3006DDE79 /* TmapNaviSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35114472E0A61E3006DDE79 /* TmapNaviSDK.xcframework */; };
+		B351144D2E0A61E3006DDE79 /* TmapNaviSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B35114472E0A61E3006DDE79 /* TmapNaviSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; };
 		B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B3F51BF72DFFFBEF0069CD8A /* FirebaseAnalytics */; };
@@ -44,6 +50,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				B351144D2E0A61E3006DDE79 /* TmapNaviSDK.xcframework in Embed Frameworks */,
+				B351144B2E0A61E3006DDE79 /* VSMSDK.xcframework in Embed Frameworks */,
+				B35114492E0A61E3006DDE79 /* TmapUISDK.xcframework in Embed Frameworks */,
 				B38965352DFBF48300563C45 /* TJLabsAuth.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -62,6 +71,9 @@
 		B33A9E3D2DCAF44000E093E6 /* VGSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B33A9E472DCAF44000E093E6 /* VGSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VGSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B34EC7262DE0510600531DBB /* KN-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KN-Bridging-Header.h"; sourceTree = "<group>"; };
+		B35114452E0A61E3006DDE79 /* TmapUISDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapUISDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapUISDK.xcframework"; sourceTree = "<group>"; };
+		B35114462E0A61E3006DDE79 /* VSMSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VSMSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/VSMSDK.xcframework"; sourceTree = "<group>"; };
+		B35114472E0A61E3006DDE79 /* TmapNaviSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TmapNaviSDK.xcframework; path = "../[IOS]TMapNaviSDK_1.20/lib/TmapNaviSDK.xcframework"; sourceTree = "<group>"; };
 		B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; name = TJLabsAuth.xcframework; path = "../Frameworks/TJLabsAuth-sdk-ios/xcframeworks/TJLabsAuth.xcframework"; sourceTree = "<group>"; };
 		B38964E82DFBEEE300563C45 /* TJLabsAuth.xcframework */ = {isa = PBXFileReference; expectedSignature = "AppleDeveloperProgram:G75UAV755N:TJLABS Corp."; lastKnownFileType = wrapper.xcframework; path = TJLabsAuth.xcframework; sourceTree = "<group>"; };
 		D0069715B92AFDE72915F2B6 /* Pods-VGS-VGSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VGS-VGSUITests.release.xcconfig"; path = "Target Support Files/Pods-VGS-VGSUITests/Pods-VGS-VGSUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,12 +117,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B351144C2E0A61E3006DDE79 /* TmapNaviSDK.xcframework in Frameworks */,
 				536BAEAA88018D06FDD40A65 /* Pods_VGS.framework in Frameworks */,
 				B3F51BF82DFFFBEF0069CD8A /* FirebaseAnalytics in Frameworks */,
 				B3F51BFA2DFFFBEF0069CD8A /* FirebaseCore in Frameworks */,
 				B3F51BFE2DFFFBEF0069CD8A /* FirebaseFirestore in Frameworks */,
+				B35114482E0A61E3006DDE79 /* TmapUISDK.xcframework in Frameworks */,
 				B3F51BFC2DFFFBEF0069CD8A /* FirebaseCrashlytics in Frameworks */,
 				B3F51C042E0006000069CD8A /* FirebaseAuth in Frameworks */,
+				B351144A2E0A61E3006DDE79 /* VSMSDK.xcframework in Frameworks */,
 				B38965342DFBF48300563C45 /* TJLabsAuth.xcframework in Frameworks */,
 				B3F51C002DFFFBEF0069CD8A /* FirebaseRemoteConfig in Frameworks */,
 			);
@@ -138,6 +153,9 @@
 		84B9FC8ECB82495BA6BC69CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B35114472E0A61E3006DDE79 /* TmapNaviSDK.xcframework */,
+				B35114452E0A61E3006DDE79 /* TmapUISDK.xcframework */,
+				B35114462E0A61E3006DDE79 /* VSMSDK.xcframework */,
 				B38964E92DFBEEE300563C45 /* xcframeworks */,
 				B38964B92DFBEA3100563C45 /* TJLabsAuth.xcframework */,
 				71F8B4F0F9D917EBB0774789 /* Pods_VGS.framework */,
