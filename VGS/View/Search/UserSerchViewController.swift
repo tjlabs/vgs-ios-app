@@ -11,6 +11,8 @@ class UserSearchViewController: UIViewController {
     let topView = TopView()
     let logoView = LogoView()
     let userSearchView = UserSerchView()
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     
     private let privacyPolicyLabel: UILabel = {
         let label = UILabel()
@@ -36,33 +38,58 @@ class UserSearchViewController: UIViewController {
     private func setupLayout() {
         view.addSubview(topView)
         topView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().inset(50)
-//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.height.equalTo(50)
         }
-        
-        view.addSubview(logoView)
-        logoView.snp.makeConstraints{ make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(topView.snp.bottom).offset(20)
-            make.height.equalTo(120)
-        }
-        
-        view.addSubview(userSearchView)
-        userSearchView.snp.makeConstraints{ make in
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(50)
-            make.top.equalTo(logoView.snp.bottom)
-        }
-        
+
         view.addSubview(privacyPolicyLabel)
-        privacyPolicyLabel.snp.makeConstraints{ make in
+        privacyPolicyLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
             make.width.equalTo(150)
             make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(5)
         }
+        
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(topView.snp.bottom)
+//            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(privacyPolicyLabel.snp.top)
+        }
+
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+        }
+
+        // logoView
+        contentView.addSubview(logoView)
+        logoView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(100)
+        }
+
+        // userSearchView
+        contentView.addSubview(userSearchView)
+        userSearchView.snp.makeConstraints { make in
+            make.top.equalTo(logoView.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(5)
+        }
+
+//        // privacyPolicyLabel
+//        contentView.addSubview(privacyPolicyLabel)
+//        privacyPolicyLabel.snp.makeConstraints { make in
+//            make.top.equalTo(userSearchView.snp.bottom).offset(20)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(150)
+//            make.height.equalTo(50)
+//            make.bottom.equalToSuperview().inset(40) // ⬅️ ✅ 콘텐츠 끝 위치 명시!
+//        }
     }
     
     private func bindActions() {

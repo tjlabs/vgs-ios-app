@@ -65,6 +65,7 @@ class InfoContainerView: UIView {
             make.leading.trailing.equalToSuperview().inset(10)
             make.top.equalTo(visitorInfoView.snp.bottom).offset(10)
             make.height.equalTo(165)
+            make.bottom.equalToSuperview().inset(5)
         }
     }
     

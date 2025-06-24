@@ -20,7 +20,7 @@ class UserSerchView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansBold(size: 48)
+        label.font = UIFont.notoSansBold(size: 46)
         label.textColor = .black
         label.textAlignment = .left
         label.text = "차량 번호"
@@ -35,7 +35,7 @@ class UserSerchView: UIView {
     
     private var vehicleNumberHintLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.notoSansMedium(size: 32)
+        label.font = UIFont.notoSansMedium(size: 30)
         label.textColor = UIColor(hex: "#BDBDBD")
         label.textAlignment = .left
         label.text = "정보를 입력해주세요"
@@ -44,7 +44,7 @@ class UserSerchView: UIView {
     
     private let vehicleNumberTextField: UITextField = {
         let textField = UITextField()
-        textField.font = UIFont.notoSansMedium(size: 32)
+        textField.font = UIFont.notoSansMedium(size: 30)
         textField.textAlignment = .left
         textField.textColor = .black
         textField.backgroundColor = .clear
@@ -137,14 +137,14 @@ class UserSerchView: UIView {
         titleLabel.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview().inset(60)
             make.top.equalToSuperview().inset(40)
-            make.height.equalTo(64)
+            make.height.equalTo(60)
         }
         
         addSubview(vehicleNumberContainerView)
         vehicleNumberContainerView.snp.makeConstraints{ make in
             make.leading.trailing.equalToSuperview().inset(40)
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.height.equalTo(75)
+            make.height.equalTo(70)
         }
         
         vehicleNumberContainerView.addSubview(vehicleNumberHintLabel)
@@ -214,6 +214,7 @@ class UserSerchView: UIView {
         addSubview(publicLoginButton)
         publicLoginButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(40)
+            make.bottom.equalToSuperview()
             make.height.equalTo(80)
             make.top.equalTo(searchButton.snp.bottom).offset(20)
         }
