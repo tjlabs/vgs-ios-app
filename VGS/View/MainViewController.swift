@@ -9,6 +9,44 @@ import TJLabsAuth
 
 class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviArrivalDelegate {
     
+    private var routeRequestFailCount = 0
+    
+    func onRouteRequestFailed() {
+        routeRequestFailCount += 1
+        
+        if truckMoveView == nil {
+            let truckView = TruckMoveView()
+            self.truckMoveView = truckView
+            
+            view.addSubview(truckView)
+            truckView.snp.makeConstraints { make in
+                make.top.leading.trailing.equalToSuperview()
+                make.bottom.equalToSuperview().inset(self.bottomNavigationHeight)
+            }
+            
+            truckView.onReRouteRequested = {
+                self.kakaoNaviView.setDriveAgain()
+            }
+            
+            truckView.onStartOutdoorNavi = {
+                self.truckMoveView?.removeFromSuperview()
+                self.truckMoveView = nil
+                
+                self.kakaoNaviView.removeFromSuperview()
+                self.outdoorNaviView.setIsHidden(isHidden: false)
+            }
+        }
+        
+        if routeRequestFailCount >= 3 {
+            truckMoveView?.showMapTransitionOption()
+        }
+    }
+    
+    func onReRouteRequestSuccessed() {
+        truckMoveView?.removeFromSuperview()
+        truckMoveView = nil
+    }
+    
     func isArrival(_ type: ArrivalType) {
         switch(type) {
         case .EXTERNAL:
@@ -52,6 +90,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     private var bottomNavigationHeight: CGFloat = 100
     let bottomNavigationView = BottomNavigationView()
     let kakaoNaviView = KakaoNaviView()
+    private var truckMoveView: TruckMoveView? = nil
     
     var infoContainerView: InfoContainerView?
     let outdoorNaviView = OutdoorNaviView()
@@ -92,7 +131,13 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     }
     
     private func bindActions() {
-
+        kakaoNaviView.onRouteRequestFailed = {
+            self.onRouteRequestFailed()
+        }
+        
+        kakaoNaviView.onReRouteRequestSuccessed = {
+            self.onReRouteRequestSuccessed()
+        }
     }
     
     func didTapNavigationItem(_ id: Int, from previousId: Int) {

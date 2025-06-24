@@ -6,7 +6,8 @@ target 'VGS' do
 
   # Pods for VGS
   pod 'SnapKit' 
-  pod 'Then' 
+  pod 'Then'
+  pod 'lottie-ios'
   #pod 'RxSwift', '~> 6.5.0'
   #pod 'RxCocoa', '~> 6.5.0'
   #pod 'Kingfisher', '7.10.0'

@@ -6,6 +6,9 @@ import AVFoundation
 
 class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDelegate, KNGuidance_GuideStateDelegate, KNGuidance_RouteGuideDelegate, KNGuidance_VoiceGuideDelegate, KNGuidance_SafetyGuideDelegate, KNGuidance_LocationGuideDelegate, KNGuidance_CitsGuideDelegate, CLLocationManagerDelegate {
     
+    var onReRouteRequestSuccessed: (() -> Void)?
+    var onRouteRequestFailed: (() -> Void)?
+    
     func naviViewGuideEnded(_ aNaviView: KNNaviView) {
         // TO-DO
         print("(VGS) naviViewGuideEnded")
@@ -446,6 +449,70 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         return R * c
     }
     
+    public func setDriveAgain() {
+        // Test Drive
+//        let latitude_start = 37.495758
+//        let longitude_start = 127.038249
+//        let name_start = "Start Point"
+        
+        // 도착 점은 COEX
+//        let latitude_goal = 37.513109
+//        let longitude_goal = 127.058375
+//        let name_goal = "Goal Point"
+        
+        print("(VGS) setDrive : currentCoord = \(currentCoordinate)")
+        let latitude_start = currentCoordinate?.latitude ?? 37.495758
+        let longitude_start = currentCoordinate?.longitude ?? 127.038249
+        let name_start = currentAddress
+
+        let latitude_goal = 37.16270985567856
+        let longitude_goal = 127.32467624370436
+        let name_goal = "GATE#6"
+        
+        // 도착점은 현장
+//        if let info = VehicleInfoManager.shared.getVehicleInfo() {
+//            latitude_goal = Double(info.gate_gps_x ?? 37.164209)
+//            longitude_goal = Double(info.gate_gps_y ?? 127.323388)
+//            name_goal = info.target_gate_name ?? "정문"
+//        }
+
+        let vias: [KNPOI] = []
+        
+        guard let sdkInstance = KNSDK.sharedInstance() else {
+            self.onRouteRequestFailed?()
+            print("(VGS) Error : Failed to get SDK instance")
+            return
+        }
+        
+        var startCoord: [Int32] = [0, 0]
+        if let startKATEC = convertWGS84ToKATEC(lon: longitude_start, lat: latitude_start) {
+            print("(VGS) start KATEC = \(startKATEC)")
+            startCoord[0] = startKATEC.x
+            startCoord[1] = startKATEC.y
+        }
+        var goalCoord: [Int32] = [0, 0]
+        if let goalKATEC = convertWGS84ToKATEC(lon: longitude_goal, lat: latitude_goal) {
+            print("(VGS) goal KATEC = \(goalKATEC)")
+            goalCoord[0] = goalKATEC.x
+            goalCoord[1] = goalKATEC.y
+        }
+
+        let start = KNPOI(name: name_start, x: startCoord[0], y: startCoord[1])
+        let goal = KNPOI(name: name_goal, x: goalCoord[0], y: goalCoord[1])
+        
+        sdkInstance.makeTrip(withStart: start, goal: goal, vias: vias) { [self] (aError, aTrip) in
+            if let error = aError {
+                // 경로 생성 실패
+                self.onRouteRequestFailed?()
+                print("(VGS) Failed to create trip : \(String(describing: aError))")
+            } else if let trip = aTrip {
+                // 경로 생성 성공
+                print("(VGS) Trip created successfully : \(trip)")
+                self.requestRoute(for: trip, re: true)
+            }
+        }
+    }
+    
     private func setDrive() {
         // Test Drive
 //        let latitude_start = 37.495758
@@ -476,6 +543,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         let vias: [KNPOI] = []
         
         guard let sdkInstance = KNSDK.sharedInstance() else {
+            self.onRouteRequestFailed?()
             print("(VGS) Error : Failed to get SDK instance")
             return
         }
@@ -499,18 +567,23 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         sdkInstance.makeTrip(withStart: start, goal: goal, vias: vias) { [self] (aError, aTrip) in
             if let error = aError {
                 // 경로 생성 실패
+                self.onRouteRequestFailed?()
                 print("(VGS) Failed to create trip : \(String(describing: aError))")
             } else if let trip = aTrip {
                 // 경로 생성 성공
                 print("(VGS) Trip created successfully : \(trip)")
-                self.requestRoute(for: trip)
+                self.requestRoute(for: trip, re: false)
             }
         }
     }
     
-    private func requestRoute(for trip: KNTrip) {
+    private func requestRoute(for trip: KNTrip, re: Bool) {
         trip.route(with: routePriority, avoidOptions: routeAvoidOption.rawValue) { [weak self] (aError, aRoutes) in
-            guard let self = self else { return }
+            guard let self = self else {
+                self?.onRouteRequestFailed?()
+                return
+            }
+            
             if let error = aError {
                 // 경로 요청 실패
 //                isAuthGranted = true
@@ -518,7 +591,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
 //
 //                isGuideEnded = true
 //                delegate?.isArrival(.EXTERNAL)
-                
+                self.onRouteRequestFailed?()
                 print("(VGS) Failed to request route : \(String(describing: aError))")
             } else if let routes = aRoutes {
                 // 경로 요청 성공
@@ -536,6 +609,10 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     self.routeGuidance = guidance
                     
                     // 주행 UI 생성
+                    if re {
+                        self.onReRouteRequestSuccessed?()
+                    }
+                    
                     naviView = KNNaviView(guidance: guidance, trip: trip, routeOption: routePriority, avoidOption: routeAvoidOption.rawValue)
                     naviView.frame = containerView.bounds
                     naviView.guideStateDelegate = self
@@ -547,6 +624,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
 //                    self.forceGuidanceEndButton.isHidden = false
                     guidance.start(with: trip, priority: routePriority, avoidOptions: routeAvoidOption.rawValue)
                 } else {
+                    self.onRouteRequestFailed?()
                     print("(VGS) Error : Cannot get shared guidance")
                 }
             }
@@ -595,11 +673,14 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
                     self.setupSimulationButtonAction()
                 }
                 if knError == nil {
+//                    self.onRouteRequestFailed?()
                     DispatchQueue.main.async {
 //                        self.setupLayout()
 //                        self.setupForceGuidanceEndButtonAction()
                         self.setDrive()
                     }
+                } else {
+                    self.onRouteRequestFailed?()
                 }
             }
         }

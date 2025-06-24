@@ -13,6 +13,7 @@ PODS:
     - LocationCocoaPod (= 1.103.82)
     - RealmSwift (= 10.49.3)
   - LocationCocoaPod (1.103.82)
+  - lottie-ios (4.5.2)
   - MarqueeLabel (4.5.0)
   - PinLayout (1.10.5)
   - ReactorKit (3.2.0):
@@ -52,6 +53,7 @@ DEPENDENCIES:
   - KeychainAccess
   - Kingfisher
   - KNSDK-UI
+  - lottie-ios
   - MarqueeLabel
   - PinLayout
   - ReactorKit
@@ -78,6 +80,7 @@ SPEC REPOS:
     - Kingfisher
     - KNSDK-UI
     - LocationCocoaPod
+    - lottie-ios
     - MarqueeLabel
     - PinLayout
     - ReactorKit
@@ -108,6 +111,7 @@ SPEC CHECKSUMS:
   Kingfisher: a18f05d3b6d37d8650ee4a3e61d57a28fc6207f6
   KNSDK-UI: 45c80cacc1ce368cb2a5649b7db8f7295fce9648
   LocationCocoaPod: c7a1a983360063c0acb333a096b4ca124623c7c9
+  lottie-ios: 96784afc26ea031d3e2b6cae342a4b8915072489
   MarqueeLabel: 4b46d196abd253448e830cbd976f9eacc3af0849
   PinLayout: f6c2b63a5a5b24864064e1d15c67de41b4e74748
   ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
@@ -126,6 +130,6 @@ SPEC CHECKSUMS:
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
   Yoga: 636ce73bd247407928a7df089f3bc3675916b3ff
 
-PODFILE CHECKSUM: 33dac72f9135fcf44a4206c6f6d9f239c7a3208a
+PODFILE CHECKSUM: bd87a0e45cebe69ec89ccc388823c19c7c1ed1de
 
 COCOAPODS: 1.16.2
