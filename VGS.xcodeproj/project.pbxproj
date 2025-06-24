@@ -433,7 +433,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Firebase Crashlytics dSYM Upload Script for SPM\n\n# === [변경 필요한 부분] ===\nUPLOAD_SYMBOLS=\"/Users/leo/Library/Developer/Xcode/DerivedData/VGS-emaluljcjbldgaehugjicksiinww/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols\"\nGOOGLESERVICE_INFO_PLIST=\"${PROJECT_DIR}/VGS/GoogleService-Info.plist\"\n\n# === [자동 dSYM 경로 지정] ===\nDSYM_PATH=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n# === [업로드 실행] ===\nif [ -f \"${UPLOAD_SYMBOLS}\" ]; then\n  echo \"🟡 Firebase Crashlytics: Uploading dSYM...\"\n  \"${UPLOAD_SYMBOLS}\" -gsp \"${GOOGLESERVICE_INFO_PLIST}\" -p ios \"${DSYM_PATH}\"\nelse\n  echo \"🔴 upload-symbols not found. Skipping dSYM upload.\"\nfi\n";
+			shellScript = "# Firebase Crashlytics dSYM Upload Script for SPM\n\n# === [변경 필요한 부분] ===\nUPLOAD_SYMBOLS=\"/Users/leo/Library/Developer/Xcode/DerivedData/VGS-emaluljcjbldgaehugjicksiinww/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols\"\nGOOGLESERVICE_INFO_PLIST=\"$(find \"${PROJECT_DIR}\" -name GoogleService-Info.plist | head -n 1)\"\n\n# === [자동 dSYM 경로 지정] ===\nDSYM_PATH=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n\n# === [업로드 실행] ===\nif [ -f \"${UPLOAD_SYMBOLS}\" ]; then\n  echo \"🟡 Firebase Crashlytics: Uploading dSYM...\"\n  \"${UPLOAD_SYMBOLS}\" -gsp \"${GOOGLESERVICE_INFO_PLIST}\" -p ios \"${DSYM_PATH}\"\nelse\n  echo \"🔴 upload-symbols not found. Skipping dSYM upload.\"\nfi\n";
 		};
 		C6268895BBFA4AE5471C998C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
