@@ -420,7 +420,6 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
     func embedTMapNavi() {
         let sdkAvail = self.sdkInitComplete
         if sdkAvail, let sdkVC = TmapUISDKManager.shared.getViewController() {
-            // 3. sdkVC를 child로 추가 (iOS fragment-like pattern)
             self.addChild(sdkVC)
             tmapNaviView.addSubview(sdkVC.view)
             sdkVC.view.translatesAutoresizingMaskIntoConstraints = false
@@ -432,7 +431,6 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
             ])
             sdkVC.didMove(toParent: self)
             
-            // 4. 경로 요청 (SDK에 따라 이 시점에서 호출 가능)
             let latitude_goal = 37.16270985567856
             let longitude_goal = 127.32467624370436
             let name_goal = "GATE#6"
