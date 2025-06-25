@@ -116,6 +116,12 @@ class UserSearchViewController: UIViewController {
             }
         }
         
+        userSearchView.onSearchInvalid = { _ in
+            DispatchQueue.main.async {
+                self.showToastWithIcon(message: "차량번호에 공백이 있습니다.")
+            }
+        }
+        
         userSearchView.onPublicLogin = {
             self.movePublicToMainVC()
         }

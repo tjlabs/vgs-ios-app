@@ -18,12 +18,19 @@ class UserSerchView: UIView {
     private var selectView: SelectView?
     var isChecked = false
     
+    var isDemoUser = false
+    let demoUser = VehicleInfo(dummy: true)
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.notoSansBold(size: 46)
         label.textColor = .black
         label.textAlignment = .left
-        label.text = "차량 번호"
+        label.text = "차량 번호 입력"
+        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -38,7 +45,7 @@ class UserSerchView: UIView {
         label.font = UIFont.notoSansMedium(size: 30)
         label.textColor = UIColor(hex: "#BDBDBD")
         label.textAlignment = .left
-        label.text = "정보를 입력해주세요"
+        label.text = "11티1234"
         return label
     }()
     
@@ -243,7 +250,7 @@ class UserSerchView: UIView {
                 if !text.isEmpty {
                     self.lineView.backgroundColor = .black
                     self.vehicleNumberHintLabel.textColor = UIColor(hex: "#BDBDBD")
-                    self.vehicleNumberHintLabel.text = "정보를 입력해주세요"
+                    self.vehicleNumberHintLabel.text = "11티1234"
                 }
             })
             .disposed(by: disposeBag)
@@ -316,9 +323,18 @@ class UserSerchView: UIView {
         let vehicleNumber = self.vehicleNumberTextField.text ?? ""
         
         if isValid {
+            if self.isDemoUser {
+                VehicleInfoManager.shared.isDemoUser = true
+                VehicleInfoManager.shared.userCarNumber = vehicleNumber
+                VehicleInfoManager.shared.saveCarNumberToCache()
+                self.onCellSelected?(self.demoUser)
+                return
+            }
+            
             SearchManager.shared.getSearchList(url: USER_SEARCH_URL, input: vehicleNumber, completion: { [self] statusCode, returnedString in
-//                print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
+                print("(SearchView) getSearchList : \(statusCode) , \(returnedString)")
                 if statusCode == 200 {
+                    VehicleInfoManager.shared.isDemoUser = false
                     VehicleInfoManager.shared.userCarNumber = vehicleNumber
                     VehicleInfoManager.shared.saveCarNumberToCache()
                     
@@ -348,16 +364,21 @@ class UserSerchView: UIView {
     
     private func validateUser() -> Bool {
         guard let text = vehicleNumberTextField.text, !text.isEmpty else {
-            self.onSearchFail?()
+            self.onSearchInvalid?("")
 //            applyInvalidUserUI()
             return false
+        }
+        
+        if text == "999데9999" {
+            self.isDemoUser = true
+            return true
         }
 
         let containsWhitespace = text.contains { $0.isWhitespace }
         let containsSpecialCharacters = text.range(of: "[^가-힣a-zA-Z0-9]", options: .regularExpression) != nil
         
         if containsWhitespace || containsSpecialCharacters {
-            self.onSearchFail?()
+            self.onSearchInvalid?(text)
 //            applyInvalidUserUI()
             return false
         }

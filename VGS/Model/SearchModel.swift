@@ -178,6 +178,87 @@ struct VehicleInfo: Codable {
     }
 }
 
+extension VehicleInfo {
+    init(dummy: Bool) {
+        self.id = "9999"
+        self.no = 1
+        self.access_reg_no = 0
+        self.company_no = 0
+        self.vehicle_no = 0
+        self.driver_no = 0
+        self.const_charger_no = 0
+        self.mat_charger_no = 0
+        self.access_start_date = "2025-06-01T14:59:59Z"
+        self.access_end_date = "2030-08-24T14:59:59Z"
+        self.vehicle_class = nil
+        self.work_type_no = 0
+        self.company_name = "TJLABS"
+        self.company_contact = nil
+        self.vehicle_reg_no = "999데9999"
+        self.driver_name = "신*현"
+        self.driver_contact = "010-****-****"
+        self.const_charger_name = "현장담당자"
+        self.const_charger_contact = nil
+        self.mat_charger_name = "자재담당자"
+        self.mat_charger_contact = nil
+        self.pre_reg_wo = false
+        self.reg_permit_wo = false
+        self.tag_issue_wo = nil
+        self.sk_manager_permit_wo = nil
+        self.mat_manager_permit_wo = nil
+        self.system_manager_permit_wo = nil
+        self.stay_permit_hour = 0
+        self.request_div = nil
+        self.visit_div = nil
+        self.visit_div_name = ""
+        self.mat_list = ""
+        self.in_request_wo = false
+        self.in_permit_wo = false
+        self.request_div_name = nil
+        self.vehicle_type_name = "레미콘"
+        self.vehicle_class_name = nil
+        self.work_type_name = " 건축"
+        self.vehicle_type = "레미콘"
+        self.tag_issue_no = nil
+        self.vehicle_region_div = "yongin"
+        self.vehicle_region_div_name = "용인"
+        self.target_x = nil
+        self.target_y = nil
+        self.target_floor_no = nil
+        self.target_building_no = nil
+        self.target_sector_no = nil
+        self.target_floor_code = nil
+        self.target_building_code = nil
+        self.target_sector_code = "hyy-nz2"
+        self.target_gate_no = 2
+        self.target_gate_name = "GATE #6"
+        self.target_gate_code = "gate_6"
+        self.destination_spot_no = 76
+        self.destination_spot_name = "WWT 목적지"
+        self.destination_spot_code = "wwt_2"
+        self.buffer_parking_lot_no = -1
+        self.buffer_parking_lot_name = "알 수 없음"
+        self.buffer_parking_lot_code = "알 수 없음"
+        self.gate_gps_x = 37.163349
+        self.gate_gps_y = 127.325228
+        self.output_order = 0
+        self.use_wo = 0
+        self.del_wo = 0
+        self.insert_user_no = 0
+        self.insert_datetime = ""
+        self.update_user_no = 0
+        self.update_datetime = ""
+        self.delete_user_no = nil
+        self.delete_datetime = nil
+        self.insert_user_name = ""
+        self.update_user_name = ""
+        self.delete_user_name = nil
+        self.use_wo_name = nil
+        self.del_wo_name = nil
+        self.total_count = 1
+    }
+}
+
 struct UserProfile {
     var carNumber: String = ""
     

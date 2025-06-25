@@ -17,7 +17,7 @@ enum RoadType: String {
 }
 
 class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
-    
+    var isForceMode: Bool = true
     var isAuthGranted: Bool = false
     
     private var mapImageView = UIImageView()
@@ -308,8 +308,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             zoomButton.bottomAnchor.constraint(equalTo: myLocationButton.topAnchor, constant: -10)
         ])
         
-        zoomButton.isHidden = false
-        myLocationButton.isHidden = false
+        zoomButton.isHidden = true
+        myLocationButton.isHidden = true
     }
     
     private func setupButtonActions() {
@@ -393,6 +393,10 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
         }
     }
     
+    public func setButtonHidden(isHidden: Bool) {
+        zoomButton.isHidden = isHidden
+        myLocationButton.isHidden = isHidden
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
@@ -414,8 +418,8 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
             }
             
             PositionManager.shared.updateCurrentLocation(lat: coord[0], lon: coord[1])
-            
-            let speedKmh = SimulationPath.isSimulation ? 12 : location.speed*3.6
+            let locationSpeed = location.speed < 0 ? 0 : location.speed*3.6
+            let speedKmh = SimulationPath.isSimulation ? 12 : locationSpeed
 //            let speedKmh: Double = 35
             PositionManager.shared.position.speed = speedKmh
             self.currentSpeed = speedKmh
@@ -441,7 +445,9 @@ class TJLabsNaviView: UIView, UIScrollViewDelegate, CLLocationManagerDelegate {
                 convertedHeading += 360
             }
             
-            updateUserCoord(pixelCoord: converted, heading: convertedHeading)
+            if !isForceMode {
+                updateUserCoord(pixelCoord: converted, heading: convertedHeading)
+            }
 //            plotUserCoordWithZoomAndRotation(pixelCoord: converted, heading: convertedHeading)
         }
     }

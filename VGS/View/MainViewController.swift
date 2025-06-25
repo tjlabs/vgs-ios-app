@@ -73,7 +73,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         
         bottomNavigationView.delegate = self
         kakaoNaviView.delegate = self
-        
+        outdoorNaviView.setIsForceMode(isForce: true)
         startTimer()
         
         NotificationCenter.default.addObserver(self,
@@ -175,6 +175,7 @@ class MainViewController: UIViewController, BottomNavigationViewDelegate, NaviAr
         let dialogView = DialogView(contentViewHeight: 180)
         dialogView.onConfirm = { [weak self] in
             self?.kakaoNaviView.removeFromSuperview()
+            self?.outdoorNaviView.setIsForceMode(isForce: false)
             self?.outdoorNaviView.setIsHidden(isHidden: false)
         }
         

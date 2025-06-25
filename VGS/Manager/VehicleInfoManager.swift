@@ -6,6 +6,7 @@ class VehicleInfoManager {
     static let shared = VehicleInfoManager()
     
     var isPublicUser: Bool = false
+    var isDemoUser: Bool = false
     var isLoadFromCache: Bool = false
     var userCarNumber: String = ""
     

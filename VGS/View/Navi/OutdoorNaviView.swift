@@ -93,6 +93,18 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             startOutdoor()
         }
     }
+    
+    func setIsForceMode(isForce: Bool) {
+        mapView.isForceMode = isForce
+        
+        let isButtonHidden = isForce ? true : false
+        mapView.setButtonHidden(isHidden: isButtonHidden)
+        publicDriverLabel.isHidden = !isButtonHidden
+        driverStateButton.isHidden = isButtonHidden
+        driverStateButtonTitleLabel.isHidden = isButtonHidden
+        
+        self.checkPublicUser()
+    }
 
     private func setupLayout() {
         addSubview(containerView)
