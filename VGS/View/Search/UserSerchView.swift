@@ -194,23 +194,12 @@ class UserSerchView: UIView {
             make.top.bottom.trailing.equalToSuperview()
         }
         
-//        addSubview(searchButton)
-//        searchButton.snp.makeConstraints { make in
-//            make.leading.trailing.equalToSuperview().inset(40)
-//            make.height.equalTo(80)
-//            make.bottom.equalToSuperview().inset(60)
-//        }
-        
-//        searchButton.addSubview(searchButtonTitleLabel)
-//        searchButtonTitleLabel.snp.makeConstraints { make in
-//            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
-//        }
-        
         addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(40)
             make.height.equalTo(80)
             make.top.equalTo(checkBoxTitleLabel.snp.bottom).offset(60)
+            make.bottom.equalToSuperview().inset(60)
         }
         
         searchButton.addSubview(searchButtonTitleLabel)
@@ -218,18 +207,30 @@ class UserSerchView: UIView {
             make.leading.trailing.top.bottom.equalToSuperview().inset(5)
         }
         
-        addSubview(publicLoginButton)
-        publicLoginButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(40)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(80)
-            make.top.equalTo(searchButton.snp.bottom).offset(20)
-        }
-        
-        publicLoginButton.addSubview(publicLoginButtonTitleLabel)
-        publicLoginButtonTitleLabel.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
-        }
+//        addSubview(searchButton)
+//        searchButton.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(40)
+//            make.height.equalTo(80)
+//            make.top.equalTo(checkBoxTitleLabel.snp.bottom).offset(60)
+//        }
+//        
+//        searchButton.addSubview(searchButtonTitleLabel)
+//        searchButtonTitleLabel.snp.makeConstraints { make in
+//            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
+//        }
+//        
+//        addSubview(publicLoginButton)
+//        publicLoginButton.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview().inset(40)
+//            make.bottom.equalToSuperview()
+//            make.height.equalTo(80)
+//            make.top.equalTo(searchButton.snp.bottom).offset(20)
+//        }
+//        
+//        publicLoginButton.addSubview(publicLoginButtonTitleLabel)
+//        publicLoginButtonTitleLabel.snp.makeConstraints { make in
+//            make.leading.trailing.top.bottom.equalToSuperview().inset(5)
+//        }
     }
     
     private func bindActions() {

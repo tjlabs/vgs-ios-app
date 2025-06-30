@@ -268,6 +268,7 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
         $0.textAlignment = .center
         $0.adjustsFontSizeToFitWidth = true
         $0.minimumScaleFactor = 0.2
+        $0.isHidden = true
         $0.text = "목적지에서 지도 전환"
     }
     private var simulationTapCount: Int = 0
@@ -391,6 +392,11 @@ class KakaoNaviView: UIView, KNNaviView_GuideStateDelegate, KNNaviView_StateDele
     }
     
     private func setupSimulationButtonAction() {
+        if VehicleInfoManager.shared.isDemoUser {
+            self.simulationButtonTitle.isHidden = false
+        } else {
+            self.simulationButtonTitle.isHidden = true
+        }
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSimulationButton))
         simulationButtonTitle.isUserInteractionEnabled = true
         simulationButtonTitle.addGestureRecognizer(tapGesture)

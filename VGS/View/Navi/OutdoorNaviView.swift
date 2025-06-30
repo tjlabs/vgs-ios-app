@@ -194,6 +194,7 @@ class OutdoorNaviView: UIView, UIScrollViewDelegate {
             self?.curButtonState = .EXIT
             self?.driverStateButton.backgroundColor = UIColor(hex: "#C00000")
             self?.driverStateButtonTitleLabel.text = "운행 종료"
+            PositionManager.shared.updateZoneId(id: 0)
         }
 
         self.addSubview(dialogView)

@@ -108,6 +108,7 @@ struct UserPosition: Codable {
     var target_gate_no: Double?
     var speed: Double?
     var current_location: String?
+    var zone_id: Int?
 //    var sector_code: String?
 //    var building_code: String?
 //    var floor_code: String?

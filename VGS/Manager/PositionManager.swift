@@ -32,10 +32,13 @@ class PositionManager {
         
         switch(self.naviType) {
         case .EXTERNAL:
+            self.position.zone_id = 0
             print("(PositionManager) setNaviType : EXTERNAL")
         case .OUTDOOR:
+            self.position.zone_id = 1
             print("(PositionManager) setNaviType : OUTDOOR")
         case .INDOOR:
+            self.position.zone_id = 1
             print("(PositionManager) setNaviType : INDOOR")
         }
     }
@@ -59,6 +62,10 @@ class PositionManager {
         self.position.current_gps_x = lat
         self.position.current_gps_y = lon
         tryPostIfReady()
+    }
+    
+    func updateZoneId(id: Int) {
+        self.position.zone_id = id
     }
     
     func sendData() {
